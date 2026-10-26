@@ -345,9 +345,10 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
         "5% تخمینی کمیشن: Rs. " + lastRoute.commission + "\n" +
         "تخمینی ڈرائیور رقم: Rs. " + lastRoute.driverAmount;
     }
-
+    const bookingId = "RLN-" + Date.now().toString().slice(-8);
     const message = [
       "🚘 Ride Lahore New - نئی بکنگ",
+      "Booking ID: " + bookingId,
       "",
       "مسافر کا نام: " + name,
       "فون نمبر: " + phone,
