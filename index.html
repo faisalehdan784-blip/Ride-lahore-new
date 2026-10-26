@@ -1,493 +1,384 @@
 <!DOCTYPE html>
 <html lang="ur">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#123c2b">
-  <title>Ride Lahore | Carpool & Rent a Car</title>
-  <meta name="description" content="Lahore mein carpool, pick and drop aur rent a car booking ke liye Ride Lahore se rabta karein.">
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: #202820;
-      background: #f4f7f4;
-      line-height: 1.6;
-    }
-    header {
-      background: #123c2b;
-      color: white;
-      padding: 16px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .logo { font-size: 25px; font-weight: bold; }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 14px;
-      font-size: 14px;
-    }
-    .hero {
-      padding: 55px 6%;
-      background: linear-gradient(135deg, #123c2b, #24754c);
-      color: white;
-      text-align: center;
-    }
-    .hero h1 { font-size: clamp(30px, 6vw, 48px); margin: 0 0 12px; }
-    .hero p { font-size: 18px; }
-    .button {
-      display: inline-block;
-      background: #f4c542;
-      color: #173522;
-      padding: 12px 20px;
-      border: 0;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .container { width: min(1050px, 92%); margin: 28px auto; }
-    .section-title { text-align: center; margin-bottom: 20px; }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 15px;
-    }
-    .card, .panel {
-      background: white;
-      padding: 20px;
-      border-radius: 13px;
-      box-shadow: 0 3px 14px #0000000c;
-    }
-    .card { text-align: center; }
-    .car-icon { font-size: 38px; }
-    .price { color: #17683e; font-weight: bold; }
-    form { display: grid; gap: 14px; }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-    }
-    label { display: block; font-weight: bold; margin-bottom: 5px; }
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5ce;
-      border-radius: 8px;
-      font: inherit;
-      background: white;
-    }
-    textarea { min-height: 85px; resize: vertical; }
-    #map {
-      height: 330px;
-      border-radius: 10px;
-      margin-top: 12px;
-      z-index: 1;
-    }
-    .notice {
-      background: #fff7dc;
-      padding: 13px;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-    .result {
-      background: #e8f5eb;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 10px 0;
-    }
-    .result strong { color: #145c32; }
-    .full-button { width: 100%; font-size: 16px; }
-    .whatsapp {
-      background: #168b4c;
-      color: white;
-      text-align: center;
-      padding: 16px;
-      border-radius: 10px;
-      display: block;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    footer {
-      margin-top: 35px;
-      background: #123c2b;
-      color: white;
-      text-align: center;
-      padding: 25px 12px;
-    }
-    @media (max-width: 500px) {
-      header { justify-content: center; text-align: center; }
-      nav a { margin: 0 5px; }
-      .hero { padding: 38px 5%; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ride Lahore New | Carpool & Rent a Car</title>
+<meta name="description" content="Lahore carpool, pick and drop, and rent a car booking service.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--green:#087f5b;--dark:#12352b;--light:#f2f8f5;--orange:#ffb703}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#20312b}
+header{background:var(--dark);color:white;padding:20px 15px;text-align:center}
+header h1{margin:0 0 8px;font-size:28px}
+header p{margin:5px 0;color:#e4f3eb}
+nav{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;padding:13px;background:#fff}
+nav a{color:var(--green);text-decoration:none;font-weight:bold}
+.hero{padding:30px 16px;text-align:center;background:#e3f4eb}
+.hero h2{font-size:27px;margin:0 0 10px;color:var(--dark)}
+.hero p{line-height:1.7}
+.container{max-width:950px;margin:20px auto;padding:0 12px}
+.card{background:#fff;padding:20px;border-radius:14px;margin-bottom:18px;box-shadow:0 3px 14px #0000000c}
+h2,h3{color:var(--dark)}
+label{display:block;font-weight:bold;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbd8d1;border-radius:8px;font-size:16px;background:white}
+textarea{min-height:75px;resize:vertical}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+button,.button{display:inline-block;border:0;border-radius:9px;padding:13px 17px;font-size:16px;font-weight:bold;cursor:pointer;text-decoration:none;text-align:center}
+.primary{background:var(--green);color:white}
+.secondary{background:#e6f2eb;color:#15543d}
+.whatsapp{background:#168b50;color:white;width:100%;margin-top:14px}
+button:disabled{opacity:.5;cursor:not-allowed}
+#map{height:330px;width:100%;border-radius:10px;z-index:1}
+.result{background:#edf8f1;padding:15px;border-radius:10px;line-height:1.8;margin-top:14px}
+.small{font-size:13px;color:#63746b;line-height:1.6}
+.cars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.car{border:1px solid #dce7df;border-radius:10px;padding:13px;text-align:center}
+.car .emoji{font-size:36px}
+.car strong{display:block;margin:7px 0}
+footer{text-align:center;padding:25px;background:var(--dark);color:white;line-height:1.8}
+.notice{background:#fff5d9;padding:12px;border-radius:8px;font-size:14px;line-height:1.6}
+@media(max-width:600px){.grid,.cars{grid-template-columns:1fr}header h1{font-size:24px}.hero h2{font-size:23px}.card{padding:15px}#map{height:280px}}
+</style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">🚘 Ride Lahore</div>
-  <nav>
-    <a href="#services">Services</a>
-    <a href="#booking">Booking</a>
-    <a href="#contact">Contact</a>
-  </nav>
+  <h1>🚘 Ride Lahore New</h1>
+  <p>Carpool • Pick & Drop • Rent a Car</p>
+  <p>آپ کا سفر، ہماری ذمہ داری</p>
 </header>
 
+<nav>
+  <a href="#booking">Book a Ride</a>
+  <a href="#services">Services</a>
+  <a href="#rates">Rates</a>
+  <a href="#safety">Safety</a>
+</nav>
+
 <section class="hero">
-  <h1>Lahore Mein Safar Ab Asaan</h1>
-  <p>Carpool • Pick & Drop • Rent a Car</p>
-  <p>Apni ride ki details dein aur WhatsApp par booking request bhejein.</p>
-  <a class="button" href="#booking">Book Your Ride</a>
+  <h2>لاہور میں اپنی رائیڈ بک کریں</h2>
+  <p>اپنی پک اَپ لوکیشن اور منزل درج کریں، فاصلہ معلوم کریں اور بکنگ WhatsApp پر بھیجیں۔</p>
+  <a class="button primary" href="#booking">ابھی رائیڈ بک کریں</a>
 </section>
 
-<main>
-  <section class="container" id="services">
-    <h2 class="section-title">Hamari Services</h2>
-    <div class="cards">
-      <div class="card">
-        <div class="car-icon">🚗</div>
-        <h3>Carpool</h3>
-        <p>Milte-julte routes par safar ke liye ride request bhejein.</p>
+<main class="container">
+
+<section class="card" id="services">
+  <h2>ہماری سروسز</h2>
+  <div class="cars">
+    <div class="car"><div class="emoji">🚗</div><strong>Carpool</strong><p>مشترکہ سفر</p></div>
+    <div class="car"><div class="emoji">🚙</div><strong>Private Ride</strong><p>ذاتی گاڑی اور ڈرائیور</p></div>
+    <div class="car"><div class="emoji">🛣️</div><strong>Pick & Drop</strong><p>روزانہ آنے جانے کی سہولت</p></div>
+  </div>
+</section>
+
+<section class="card" id="rates">
+  <h2>کرایہ اور کمیشن</h2>
+  <p>ابتدائی اندازہ: <strong>60 روپے فی کلومیٹر</strong></p>
+  <p>سروس کمیشن: <strong>5%</strong> (اندازاً کرائے پر)</p>
+  <p class="small">یہ ابتدائی نمونہ ریٹ ہیں، حتمی کرایہ ڈرائیور اور مسافر کی رضامندی، گاڑی، انتظار اور دیگر اخراجات کے مطابق طے کریں۔</p>
+</section>
+
+<section class="card" id="booking">
+  <h2>📋 رائیڈ بکنگ فارم</h2>
+  <form id="bookingForm">
+    <div class="grid">
+      <div>
+        <label for="customerName">مسافر کا نام *</label>
+        <input id="customerName" required placeholder="اپنا نام لکھیں">
       </div>
-      <div class="card">
-        <div class="car-icon">🚕</div>
-        <h3>Pick & Drop</h3>
-        <p>Ghar, office, school aur university ke safar ke liye.</p>
+      <div>
+        <label for="phone">موبائل نمبر *</label>
+        <input id="phone" type="tel" required placeholder="03XXXXXXXXX">
       </div>
-      <div class="card">
-        <div class="car-icon">🚙</div>
-        <h3>Rent a Car</h3>
-        <p>Apni zaroorat aur safar ki details bhejein.</p>
+      <div>
+        <label for="service">سروس منتخب کریں *</label>
+        <select id="service" required>
+          <option value="Carpool">Carpool / مشترکہ سفر</option>
+          <option value="Private Ride">Private Ride / ذاتی رائیڈ</option>
+          <option value="Pick and Drop">Pick & Drop</option>
+          <option value="Rent a Car">Rent a Car</option>
+        </select>
+      </div>
+      <div>
+        <label for="car">گاڑی منتخب کریں *</label>
+        <select id="car" required>
+          <option value="Economy">Economy - عام گاڑی</option>
+          <option value="Sedan">Sedan - فیملی گاڑی</option>
+          <option value="SUV">SUV - بڑی گاڑی</option>
+        </select>
+      </div>
+      <div>
+        <label for="pickup">پک اَپ لوکیشن *</label>
+        <input id="pickup" required placeholder="مثلاً Iqbal Town Lahore">
+      </div>
+      <div>
+        <label for="destination">منزل *</label>
+        <input id="destination" required placeholder="مثلاً Raiwind Road Lahore">
+      </div>
+      <div>
+        <label for="rideDate">سفر کی تاریخ *</label>
+        <input id="rideDate" type="date" required>
+      </div>
+      <div>
+        <label for="rideTime">سفر کا وقت *</label>
+        <input id="rideTime" type="time" required>
+      </div>
+      <div>
+        <label for="passengers">مسافروں کی تعداد *</label>
+        <select id="passengers" required>
+          <option value="1">1 مسافر</option>
+          <option value="2">2 مسافر</option>
+          <option value="3">3 مسافر</option>
+          <option value="4">4 مسافر</option>
+          <option value="5">5 مسافر</option>
+          <option value="6">6 مسافر</option>
+        </select>
+      </div>
+      <div>
+        <label for="notes">اضافی ہدایات</label>
+        <input id="notes" placeholder="سامان، واپسی وغیرہ">
       </div>
     </div>
-  </section>
 
-  <section class="container">
-    <h2 class="section-title">Gaari aur Ibtidai Kiraya</h2>
-    <div class="cards">
-      <div class="card">
-        <div class="car-icon">🚗</div>
-        <h3>660cc</h3>
-        <p class="price">Rs. 60 / km</p>
-      </div>
-      <div class="card">
-        <div class="car-icon">🚘</div>
-        <h3>800–1000cc</h3>
-        <p class="price">Rs. 80 / km</p>
-      </div>
-      <div class="card">
-        <div class="car-icon">🚙</div>
-        <h3>1001–1300cc</h3>
-        <p class="price">Rs. 100 / km</p>
-      </div>
-      <div class="card">
-        <div class="car-icon">🚖</div>
-        <h3>1301–1500cc</h3>
-        <p class="price">Rs. 120 / km</p>
-      </div>
+    <p class="small">لوکیشن کے لیے انگریزی میں علاقے اور Lahore لکھیں تاکہ نقشے پر تلاش آسان ہو۔</p>
+    <button type="button" class="primary" id="mapButton" style="width:100%;margin-top:14px">📍 نقشے پر راستہ اور کرایہ معلوم کریں</button>
+    <p id="status" role="status" aria-live="polite"></p>
+    <div id="map"></div>
+
+    <div class="result" id="fareResult">
+      <strong>آپ کے سفر کی تفصیل</strong>
+      <p>پک اَپ اور منزل درج کرکے نقشے والا بٹن دبائیں۔</p>
     </div>
-    <p class="notice">
-      Note: Yeh sirf misaali rates hain, tasdeeq-shuda market rates nahi.
-      Final kiraya driver, route, waqt, toll aur service ke mutabiq confirm hoga.
-    </p>
-  </section>
 
-  <section class="container" id="booking">
-    <div class="panel">
-      <h2 class="section-title">Ride Booking Form</h2>
-      <p>Apni maloomat bharein. Booking request WhatsApp par bheji jayegi.</p>
+    <button type="submit" class="whatsapp">🟢 WhatsApp پر بکنگ بھیجیں</button>
+  </form>
+</section>
 
-      <form id="bookingForm">
-        <div class="form-grid">
-          <div>
-            <label for="name">Aap ka naam *</label>
-            <input id="name" required maxlength="80" placeholder="Apna naam likhein">
-          </div>
-          <div>
-            <label for="phone">Mobile number *</label>
-            <input id="phone" required type="tel" maxlength="20" placeholder="03XXXXXXXXX">
-          </div>
-          <div>
-            <label for="service">Service *</label>
-            <select id="service" required>
-              <option value="Carpool">Carpool</option>
-              <option value="Pick and Drop">Pick & Drop</option>
-              <option value="Rent a Car">Rent a Car</option>
-            </select>
-          </div>
-          <div>
-            <label for="car">Gaari ka type *</label>
-            <select id="car" required>
-              <option value="660cc" data-rate="60">660cc — Rs. 60/km</option>
-              <option value="800-1000cc" data-rate="80">800–1000cc — Rs. 80/km</option>
-              <option value="1001-1300cc" data-rate="100">1001–1300cc — Rs. 100/km</option>
-              <option value="1301-1500cc" data-rate="120">1301–1500cc — Rs. 120/km</option>
-              <option value="1501-1800cc" data-rate="150">1501–1800cc — Rs. 150/km</option>
-              <option value="1801-2000cc" data-rate="180">1801–2000cc — Rs. 180/km</option>
-            </select>
-          </div>
-          <div>
-            <label for="pickup">Pickup location *</label>
-            <input id="pickup" required placeholder="Misal: Iqbal Town, Lahore">
-          </div>
-          <div>
-            <label for="destination">Destination *</label>
-            <input id="destination" required placeholder="Misal: Raiwind Road, Lahore">
-          </div>
-          <div>
-            <label for="date">Safar ki tareekh *</label>
-            <input id="date" required type="date">
-          </div>
-          <div>
-            <label for="time">Safar ka waqt *</label>
-            <input id="time" required type="time">
-          </div>
-          <div>
-            <label for="passengers">Passengers ki tadaad *</label>
-            <select id="passengers" required>
-              <option value="1">1 passenger</option>
-              <option value="2">2 passengers</option>
-              <option value="3">3 passengers</option>
-              <option value="4">4 passengers</option>
-              <option value="5">5 passengers</option>
-              <option value="6">6 passengers</option>
-            </select>
-          </div>
-        </div>
+<section class="card" id="safety">
+  <h2>🔐 حفاظت اور تصدیق</h2>
+  <p>ڈرائیور کی شناخت، ڈرائیونگ لائسنس، گاڑی کی تفصیلات اور مسافر کے فون کی تصدیق بکنگ سے پہلے ضروری سمجھی جائے۔</p>
+  <div class="notice">
+    <strong>اہم:</strong> یہ ویب سائٹ ابھی شناختی کارڈ یا لائسنس اپ لوڈ، اکاؤنٹ لاگ اِن، یا خودکار تصدیق کا نظام نہیں رکھتی۔ براہِ راست CNIC کی تصاویر اس عوامی فارم میں نہ ڈالیں۔ تصدیق کے لیے محفوظ سرور اور محدود رسائی والا انتظام درکار ہے۔
+  </div>
+</section>
 
-        <div>
-          <label for="notes">Mazeed maloomat (optional)</label>
-          <textarea id="notes" maxlength="500" placeholder="Return trip, luggage ya koi aur zaroorat"></textarea>
-        </div>
-
-        <div class="notice">
-          Map ke liye pickup aur destination ka naam English mein likhein.
-          Phir distance estimate karne ke liye button dabayein.
-        </div>
-
-        <button class="button full-button" type="button" id="mapButton">
-          Map par Route aur Distance Dekhein
-        </button>
-
-        <div id="map" aria-label="Lahore route map"></div>
-
-        <div class="result" id="fareResult" aria-live="polite">
-          <strong>Kiraya estimate:</strong>
-          <p>Route calculate karne ke baad yahan distance aur misaali kiraya nazar aayega.</p>
-        </div>
-
-        <button class="button full-button" type="submit">
-          WhatsApp Par Booking Request Bhejein
-        </button>
-      </form>
-    </div>
-  </section>
-
-  <section class="container">
-    <div class="panel">
-      <h2>Safety aur Privacy</h2>
-      <ul>
-        <li>Safar se pehle driver aur gaari ki details confirm karein.</li>
-        <li>Driver aur passenger dono apni hifazat ka khayal rakhein.</li>
-        <li>Apna CNIC ya doosre sensitive documents public jagah par share na karein.</li>
-        <li>Yeh website filhal booking request bhejti hai; driver verification khud nahi karti.</li>
-      </ul>
-      <p class="notice">
-        Yeh initial website version hai. Is mein secure accounts, CNIC/license
-        verification, live driver tracking, online payment aur automatic commission
-        transfer abhi shamil nahi.
-      </p>
-    </div>
-  </section>
-
-  <section class="container" id="contact">
-    <div class="panel">
-      <h2>Ride Lahore se Rabta</h2>
-      <p>Booking aur service details WhatsApp par bhejein.</p>
-      <a class="whatsapp" href="https://wa.me/923091588042" target="_blank" rel="noopener">
-        WhatsApp: 0309 1588042
-      </a>
-    </div>
-  </section>
 </main>
 
 <footer>
-  <strong>Ride Lahore</strong>
-  <p>Carpool • Pick & Drop • Rent a Car</p>
-  <p>© <span id="year"></span> Ride Lahore. All rights reserved.</p>
+  <strong>Ride Lahore New</strong><br>
+  Lahore, Pakistan<br>
+  بکنگ WhatsApp پر بھیجیں: 0309 1588042
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
+(() => {
+  "use strict";
+
   const $ = id => document.getElementById(id);
+  const BUSINESS_PHONE = "923091588042";
+  const RATE_PER_KM = 60;
+  const COMMISSION_RATE = 0.05;
 
-  $("year").textContent = new Date().getFullYear();
-
-  const today = new Date();
-  $("date").min = [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, "0"),
-    String(today.getDate()).padStart(2, "0")
-  ].join("-");
-
-  let routeDistance = null;
   let map = null;
   let routeLayer = null;
   let pickupMarker = null;
   let destinationMarker = null;
-  let mapReady = false;
+  let lastRoute = null;
 
-  function setupMap() {
-    if (mapReady || typeof L === "undefined") return;
+  function showStatus(message, isError = false) {
+    $("status").textContent = message;
+    $("status").style.color = isError ? "#b42318" : "#087f5b";
+  }
+
+  function initializeMap() {
+    if (map) return;
 
     map = L.map("map").setView([31.5204, 74.3587], 11);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19
     }).addTo(map);
-
-    mapReady = true;
   }
 
   async function geocode(place) {
-    const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=pk&q="
-      + encodeURIComponent(place + ", Lahore, Pakistan");
+    const query = place.toLowerCase().includes("lahore")
+      ? place
+      : place + ", Lahore, Pakistan";
 
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Location search failed");
+    const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="
+      + encodeURIComponent(query);
 
-    const data = await response.json();
-    if (!data.length) {
-      throw new Error("Location nahi mili: " + place);
+    const response = await fetch(url, {
+      headers: { "Accept": "application/json" }
+    });
+
+    if (!response.ok) throw new Error("لوکیشن تلاش نہیں ہو سکی۔");
+
+    const results = await response.json();
+
+    if (!results.length) {
+      throw new Error("لوکیشن نہیں ملی۔ علاقے کا نام انگریزی میں لکھ کر دوبارہ کوشش کریں۔");
     }
 
-    return [Number(data[0].lat), Number(data[0].lon)];
+    return {
+      lat: Number(results[0].lat),
+      lon: Number(results[0].lon),
+      name: results[0].display_name
+    };
   }
 
-  function showFare() {
-    if (routeDistance === null) return;
+  async function getRoute() {
+    const pickupText = $("pickup").value.trim();
+    const destinationText = $("destination").value.trim();
 
-    const option = $("car").selectedOptions[0];
-    const rate = Number(option.dataset.rate);
-    const fare = Math.round(routeDistance * rate);
-    const commission = Math.round(fare * 0.05);
-    const driverAmount = fare - commission;
-
-    $("fareResult").innerHTML = `
-      <strong>Distance:</strong> ${routeDistance.toFixed(1)} km
-      <br><strong>Misaali kiraya:</strong> Rs. ${fare.toLocaleString("en-PK")}
-      <br><strong>5% commission ki misaal:</strong> Rs. ${commission.toLocaleString("en-PK")}
-      <br><strong>Driver amount ki misaal:</strong> Rs. ${driverAmount.toLocaleString("en-PK")}
-      <p>Yeh one-way estimate hai, final fare nahi. Commission aur driver amount sirf hisaabi misaal hain.</p>
-    `;
-  }
-
-  $("car").addEventListener("change", showFare);
-
-  $("mapButton").addEventListener("click", async () => {
-    const pickup = $("pickup").value.trim();
-    const destination = $("destination").value.trim();
-    const result = $("fareResult");
-
-    if (!pickup || !destination) {
-      alert("Pickup aur destination dono likhein.");
+    if (!pickupText || !destinationText) {
+      showStatus("پک اَپ اور منزل دونوں درج کریں۔", true);
       return;
     }
 
-    result.textContent = "Route calculate ho raha hai. Internet zaroori hai...";
+    const button = $("mapButton");
+    button.disabled = true;
+    button.textContent = "⏳ راستہ تلاش ہو رہا ہے...";
+    showStatus("لوکیشن تلاش کی جا رہی ہے۔ براہ کرم انتظار کریں۔");
 
     try {
-      setupMap();
+      initializeMap();
 
-      const start = await geocode(pickup);
-      const end = await geocode(destination);
+      const start = await geocode(pickupText);
+      const end = await geocode(destinationText);
 
-      const url = https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson;
+      const routeURL =
+        "https://router.project-osrm.org/route/v1/driving/" +
+        start.lon + "," + start.lat + ";" +
+        end.lon + "," + end.lat +
+        "?overview=full&geometries=geojson";
 
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Route service available nahi.");
+      const response = await fetch(routeURL);
+
+      if (!response.ok) throw new Error("راستے کی سروس اس وقت دستیاب نہیں۔");
 
       const data = await response.json();
 
       if (!data.routes || !data.routes.length) {
-        throw new Error("Is route ka distance nahi mil saka.");
+        throw new Error("اس منزل تک ڈرائیونگ راستہ نہیں ملا۔");
       }
 
-      routeDistance = data.routes[0].distance / 1000;
+      const route = data.routes[0];
+      const distanceKm = route.distance / 1000;
+      const durationMin = Math.round(route.duration / 60);
+      const fare = Math.round(distanceKm * RATE_PER_KM);
+      const commission = Math.round(fare * COMMISSION_RATE);
+      const driverAmount = fare - commission;
+
+      lastRoute = {
+        distanceKm,
+        durationMin,
+        fare,
+        commission,
+        driverAmount,
+        start,
+        end
+      };
 
       if (routeLayer) map.removeLayer(routeLayer);
       if (pickupMarker) map.removeLayer(pickupMarker);
       if (destinationMarker) map.removeLayer(destinationMarker);
 
-      pickupMarker = L.marker(start).addTo(map).bindPopup("Pickup");
-      destinationMarker = L.marker(end).addTo(map).bindPopup("Destination");
+      routeLayer = L.geoJSON(route.geometry, {
+        style: { color: "#087f5b", weight: 6 }
+      }).addTo(map);
 
-      routeLayer = L.geoJSON(data.routes[0].geometry).addTo(map);
+      pickupMarker = L.marker([start.lat, start.lon])
+        .addTo(map).bindPopup("پک اَپ: " + pickupText);
+
+      destinationMarker = L.marker([end.lat, end.lon])
+        .addTo(map).bindPopup("منزل: " + destinationText);
+
       map.fitBounds(routeLayer.getBounds(), { padding: [25, 25] });
 
-      showFare();
-    } catch (error) {
-      routeDistance = null;
-      result.textContent = error.message
-        + " Aap pickup aur destination ke naam dobara check karein. Agar map service kaam na kare to booking WhatsApp par bhej sakte hain.";
-    }
-  });
+      $("fareResult").innerHTML = `
+        <strong>✅ سفر کا اندازہ</strong>
+        <p>فاصلہ: <strong>${distanceKm.toFixed(1)} کلومیٹر</strong></p>
+        <p>متوقع ڈرائیونگ وقت: <strong>${durationMin} منٹ</strong></p>
+        <p>اندازاً کل کرایہ: <strong>Rs. ${fare.toLocaleString("en-PK")}</strong></p>
+        <p>5% کمیشن: <strong>Rs. ${commission.toLocaleString("en-PK")}</strong></p>
+        <p>کمیشن نکالنے کے بعد ڈرائیور کی رقم: <strong>Rs. ${driverAmount.toLocaleString("en-PK")}</strong></p>
+        <p class="small">یہ صرف اندازہ ہے، حتمی کرایہ نہیں۔ اصل قیمت سفر سے پہلے طے کریں۔ کمیشن کی رقم اسی تخمینے پر ہے۔</p>
+      `;
 
-  $("bookingForm").addEventListener("submit", event => {
+      showStatus("راستہ اور کرایہ معلوم ہوگیا۔ اب WhatsApp پر بکنگ بھیج سکتے ہیں۔");
+    } catch (error) {
+      showStatus(error.message || "مسئلہ پیش آیا۔ انٹرنیٹ چیک کرکے دوبارہ کوشش کریں۔", true);
+    } finally {
+      button.disabled = false;
+      button.textContent = "📍 نقشے پر راستہ اور کرایہ معلوم کریں";
+      if (map) setTimeout(() => map.invalidateSize(), 100);
+    }
+  }
+
+  $("mapButton").addEventListener("click", getRoute);
+
+  $("bookingForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const name = $("name").value.trim();
+    const name = $("customerName").value.trim();
     const phone = $("phone").value.trim();
-    const service = $("service").value;
-    const car = $("car").value;
     const pickup = $("pickup").value.trim();
     const destination = $("destination").value.trim();
-    const date = $("date").value;
-    const time = $("time").value;
-    const passengers = $("passengers").value;
-    const notes = $("notes").value.trim();
 
-    let fareText = "Abhi calculate nahi hua";
-    if (routeDistance !== null) {
-      const rate = Number($("car").selectedOptions[0].dataset.rate);
-      fareText = "Rs. " + Math.round(routeDistance * rate).toLocaleString("en-PK")
-        + " (taqreebi, " + routeDistance.toFixed(1) + " km)";
+    if (!name || !phone || !pickup || !destination) {
+      showStatus("تمام لازمی خانے پُر کریں۔", true);
+      return;
+    }
+
+    let routeDetails = "فاصلہ اور کرایہ ابھی معلوم نہیں کیا گیا۔";
+
+    if (lastRoute) {
+      routeDetails =
+        "فاصلہ: " + lastRoute.distanceKm.toFixed(1) + " کلومیٹر\n" +
+        "اندازاً کرایہ: Rs. " + lastRoute.fare + "\n" +
+        "5% تخمینی کمیشن: Rs. " + lastRoute.commission + "\n" +
+        "تخمینی ڈرائیور رقم: Rs. " + lastRoute.driverAmount;
     }
 
     const message = [
-      "Assalam-o-Alaikum, Ride Lahore booking request:",
+      "🚘 Ride Lahore New - نئی بکنگ",
       "",
-      "Naam: " + name,
-      "Phone: " + phone,
-      "Service: " + service,
-      "Gaari: " + car,
-      "Pickup: " + pickup,
-      "Destination: " + destination,
-      "Tareekh: " + date,
-      "Waqt: " + time,
-      "Passengers: " + passengers,
-      "Kiraya: " + fareText,
-      "Mazeed maloomat: " + (notes || "Nahi"),
+      "مسافر کا نام: " + name,
+      "فون نمبر: " + phone,
+      "سروس: " + $("service").value,
+      "گاڑی: " + $("car").value,
+      "پک اَپ: " + pickup,
+      "منزل: " + destination,
+      "تاریخ: " + $("rideDate").value,
+      "وقت: " + $("rideTime").value,
+      "مسافر: " + $("passengers").value,
+      "اضافی ہدایات: " + ($("notes").value.trim() || "کوئی نہیں"),
       "",
-      "Meherbani karke availability aur final fare confirm karein."
+      routeDetails,
+      "",
+      "براہ کرم رائیڈ کی دستیابی اور حتمی کرایہ کی تصدیق کریں۔"
     ].join("\n");
 
-    const whatsappURL = "https://wa.me/923091588042?text="
-      + encodeURIComponent(message);
+    const whatsappURL =
+      "https://wa.me/" + BUSINESS_PHONE + "?text=" +
+      encodeURIComponent(message);
 
-    window.open(whatsappURL, "_blank", "noopener");
+    window.open(whatsappURL, "_blank");
   });
+
+  const today = new Date();
+  const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+    .toISOString().split("T")[0];
+
+  $("rideDate").min = localDate;
+  $("rideDate").value = localDate;
+})();
 </script>
 
 </body>
