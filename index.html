@@ -64,6 +64,42 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
 </section>
 
 <main class="container">
+<section class="card" id="account">
+  <h2>🔐 Ride Lahore New اکاؤنٹ</h2>
+
+  <label for="accountRole">اکاؤنٹ کی قسم</label>
+  <select id="accountRole">
+    <option value="passenger">مسافر</option>
+    <option value="driver">ڈرائیور</option>
+  </select>
+
+  <label for="accountName">پورا نام</label>
+  <input id="accountName" autocomplete="name" required
+         placeholder="اپنا پورا نام">
+
+  <label for="accountPhone">موبائل نمبر</label>
+  <input id="accountPhone" type="tel" autocomplete="tel"
+         placeholder="03XXXXXXXXX">
+
+  <label for="accountEmail">ای میل</label>
+  <input id="accountEmail" type="email" autocomplete="email"
+         placeholder="name@example.com" required>
+
+  <label for="accountPassword">پاس ورڈ</label>
+  <input id="accountPassword" type="password"
+         autocomplete="new-password" minlength="8"
+         placeholder="کم از کم 8 حروف" required>
+
+  <button type="button" class="primary" id="signupButton">
+    نیا اکاؤنٹ بنائیں
+  </button>
+
+  <button type="button" class="secondary" id="loginButton">
+    لاگ اِن کریں
+  </button>
+
+  <p id="accountStatus" role="status" aria-live="polite"></p>
+</section>
 
 <section class="card" id="services">
   <h2>ہماری سروسز</h2>
@@ -174,11 +210,62 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
   "use strict";
 
   const $ = id => document.getElementById(id);
+  const SUPABASE_URL = "https://ijktavdlwkxkvpgqixbr.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "اپنی_PUBLISHABLE_KEY_یہاں_لکھیں";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const accountStatus = document.getElementById("accountStatus");
+
+document.getElementById("signupButton").addEventListener("click", async () => {
+  const name = document.getElementById("accountName").value.trim();
+  const phone = document.getElementById("accountPhone").value.trim();
+  const role = document.getElementById("accountRole").value;
+  const email = document.getElementById("accountEmail").value.trim();
+  const password = document.getElementById("accountPassword").value;
+
+  if (!name || !email || password.length < 8) {
+    accountStatus.textContent = "نام، ای میل اور کم از کم 8 حروف کا پاس ورڈ درج کریں۔";
+    return;
+  }
+
+  accountStatus.textContent = "اکاؤنٹ بنایا جا رہا ہے۔۔۔";
+
+  const { error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { full_name: name, phone, role }
+    }
+  });
+
+  accountStatus.textContent = error
+    ? "خرابی: " + error.message
+    : "رجسٹریشن کی درخواست مکمل ہوگئی۔ ای میل تصدیق بھی درکار ہو سکتی ہے۔";
+});
+
+document.getElementById("loginButton").addEventListener("click", async () => {
+  const email = document.getElementById("accountEmail").value.trim();
+  const password = document.getElementById("accountPassword").value;
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  accountStatus.textContent = error
+    ? "لاگ اِن میں خرابی: " + error.message
+    : "لاگ اِن کامیاب ہوگیا۔";
+});
   const BUSINESS_PHONE = "923091588042";
   const RATE_PER_KM = 60;
   const COMMISSION_RATE = 0.05;
@@ -323,55 +410,7 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
 
   $("mapButton").addEventListener("click", getRoute);
 
-  $("bookingForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    const name = $("customerName").value.trim();
-    const phone = $("phone").value.trim();
-    const pickup = $("pickup").value.trim();
-    const destination = $("destination").value.trim();
-
-    if (!name || !phone || !pickup || !destination) {
-      showStatus("تمام لازمی خانے پُر کریں۔", true);
-      return;
-    }
-
-    let routeDetails = "فاصلہ اور کرایہ ابھی معلوم نہیں کیا گیا۔";
-
-    if (lastRoute) {
-      routeDetails =
-        "فاصلہ: " + lastRoute.distanceKm.toFixed(3) + " کلومیٹر\n" +
-        "اندازاً کرایہ: Rs. " + lastRoute.fare + "\n" +
-        "5% تخمینی کمیشن: Rs. " + lastRoute.commission + "\n" +
-        "تخمینی ڈرائیور رقم: Rs. " + lastRoute.driverAmount;
-    }
-    const bookingId = "RLN-" + Date.now().toString().slice(-8);
-    const message = [
-      "🚘 Ride Lahore New - نئی بکنگ",
-      "Booking ID: " + bookingId,
-      "",
-      "مسافر کا نام: " + name,
-      "فون نمبر: " + phone,
-      "سروس: " + $("service").value,
-      "گاڑی: " + $("car").value,
-      "پک اَپ: " + pickup,
-      "منزل: " + destination,
-      "تاریخ: " + $("rideDate").value,
-      "وقت: " + $("rideTime").value,
-      "مسافر: " + $("passengers").value,
-      "اضافی ہدایات: " + ($("notes").value.trim() || "کوئی نہیں"),
-      "",
-      routeDetails,
-      "",
-      "براہ کرم رائیڈ کی دستیابی اور حتمی کرایہ کی تصدیق کریں۔"
-    ].join("\n");
-
-    const whatsappURL =
-      "https://wa.me/" + BUSINESS_PHONE + "?text=" +
-      encodeURIComponent(message);
-
-    window.open(whatsappURL, "_blank");
-  });
+ 
 
   const today = new Date();
   const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
