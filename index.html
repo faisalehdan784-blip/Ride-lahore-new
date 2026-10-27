@@ -381,7 +381,85 @@ document.getElementById("loginButton").addEventListener("click", async () => {
   $("mapButton").addEventListener("click", getRoute);
 
  
+// Ride Lahore New: booking submission
+  document.getElementById("bookingForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
 
+    const status = document.getElementById("status");
+    const submitButton = document.querySelector('#bookingForm button[type="submit"]');
+
+    if (!lastRoute) {
+      status.textContent = "پہلے راستہ اور کرایہ معلوم کرنے والا بٹن دبائیں۔";
+      return;
+    }
+
+    const booking = {
+      customer_name: document.getElementById("customerName").value.trim(),
+      customer_phone: document.getElementById("phone").value.trim(),
+      service_type: document.getElementById("service").value,
+      car_type: document.getElementById("car").value,
+      pickup: document.getElementById("pickup").value.trim(),
+      destination: document.getElementById("destination").value.trim(),
+      ride_date: document.getElementById("rideDate").value,
+      ride_time: document.getElementById("rideTime").value,
+      passengers: Number(document.getElementById("passengers").value),
+      notes: document.getElementById("notes").value.trim(),
+      distance_km: Number(lastRoute.distanceKm.toFixed(2)),
+      fare: lastRoute.fare,
+      commission: lastRoute.commission,
+      driver_amount: lastRoute.driverAmount,
+      status: "pending"
+    };
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "بکنگ بھیجی جا رہی ہے...";
+    }
+
+    try {
+      const { error } = await supabaseClient
+        .from("bookings")
+        .insert([booking]);
+
+      if (error) throw error;
+
+      const message = [
+        "نئی رائیڈ بکنگ - Ride Lahore New",
+        "نام: " + booking.customer_name,
+        "فون: " + booking.customer_phone,
+        "سروس: " + booking.service_type,
+        "گاڑی: " + booking.car_type,
+        "پک اَپ: " + booking.pickup,
+        "منزل: " + booking.destination,
+        "تاریخ: " + booking.ride_date,
+        "وقت: " + booking.ride_time,
+        "مسافر: " + booking.passengers,
+        "فاصلہ: " + booking.distance_km + " کلومیٹر",
+        "اندازاً کرایہ: Rs. " + booking.fare,
+        "5% کمیشن: Rs. " + booking.commission,
+        "ڈرائیور کی رقم: Rs. " + booking.driver_amount,
+        "اضافی ہدایات: " + (booking.notes || "کوئی نہیں")
+      ].join("\n");
+
+      status.textContent = "بکنگ Supabase میں محفوظ ہوگئی۔ WhatsApp کھولا جا رہا ہے۔";
+
+      const whatsappUrl =
+        "https://wa.me/" + BUSINESS_PHONE +
+        "?text=" + encodeURIComponent(message);
+
+      window.location.href = whatsappUrl;
+
+    } catch (error) {
+      console.error("Booking error:", error);
+      status.textContent =
+        "بکنگ محفوظ نہیں ہوئی: " + (error.message || "دوبارہ کوشش کریں۔");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "🟢 WhatsApp پر بکنگ بھیجیں";
+      }
+    }
+  });
   const today = new Date();
   const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
     .toISOString().split("T")[0];
