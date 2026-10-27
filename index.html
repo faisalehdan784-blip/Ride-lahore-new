@@ -417,14 +417,17 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     }
 
     try {
-      const { error } = await supabaseClient
-        .from("bookings")
-        .insert([booking]);
+  const { data: savedBooking, error } = await supabaseClient
+  .from("bookings")
+  .insert([booking])
+  .select("booking_id")
+  .single();
 
-      if (error) throw error;
-
-      const message = [
+if (error) throw error;
+      
+   const message = [
         "نئی رائیڈ بکنگ - Ride Lahore New",
+        "بکنگ نمبر: " + savedBooking.booking_id,
         "نام: " + booking.customer_name,
         "فون: " + booking.customer_phone,
         "سروس: " + booking.service_type,
