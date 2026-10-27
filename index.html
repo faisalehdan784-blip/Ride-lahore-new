@@ -279,16 +279,6 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     $("status").style.color = isError ? "#b42318" : "#087f5b";
   }
 
-  function initializeMap() {
-    if (map) return;
-
-    map = L.map("map").setView([31.5204, 74.3587], 11);
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19
-    }).addTo(map);
-  }
 
   async function geocode(place) {
     const query = place.toLowerCase().includes("lahore")
@@ -332,7 +322,6 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     showStatus("لوکیشن تلاش کی جا رہی ہے۔ براہ کرم انتظار کریں۔");
 
     try {
-      initializeMap();
 
       const start = await geocode(pickupText);
       const end = await geocode(destinationText);
@@ -370,22 +359,6 @@ document.getElementById("loginButton").addEventListener("click", async () => {
         end
       };
 
-      if (routeLayer) map.removeLayer(routeLayer);
-      if (pickupMarker) map.removeLayer(pickupMarker);
-      if (destinationMarker) map.removeLayer(destinationMarker);
-
-      routeLayer = L.geoJSON(route.geometry, {
-        style: { color: "#087f5b", weight: 6 }
-      }).addTo(map);
-
-      pickupMarker = L.marker([start.lat, start.lon])
-        .addTo(map).bindPopup("پک اَپ: " + pickupText);
-
-      destinationMarker = L.marker([end.lat, end.lon])
-        .addTo(map).bindPopup("منزل: " + destinationText);
-
-      map.fitBounds(routeLayer.getBounds(), { padding: [25, 25] });
-
       $("fareResult").innerHTML = `
         <strong>✅ سفر کا اندازہ</strong>
         <p>فاصلہ: <strong>${distanceKm.toFixed(1)} کلومیٹر</strong></p>
@@ -402,7 +375,6 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     } finally {
       button.disabled = false;
       button.textContent = "📍 نقشے پر راستہ اور کرایہ معلوم کریں";
-      if (map) setTimeout(() => map.invalidateSize(), 100);
     }
   }
 
