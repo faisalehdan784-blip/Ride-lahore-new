@@ -321,12 +321,13 @@ document.getElementById("loginButton").addEventListener("click", async () => {
       submitButton.disabled = false;
     }
   });
-});
-const driverCompanySelect = document.getElementById("driverCompany");
-const driverModelSelect = document.getElementById("driverCar");
+})
+  function setupDriverModels() {
+  const driverModelSelect = document.getElementById("driverCar");
 
-if (driverCompanySelect && driverModelSelect) {
-  driverCompanySelect.addEventListener("change", () => {
+  if (!driverCompanySelect || !driverModelSelect) return;
+
+  function updateModels() {
     const company = driverCompanySelect.value;
     driverModelSelect.replaceChildren();
 
@@ -345,8 +346,18 @@ if (driverCompanySelect && driverModelSelect) {
     });
 
     driverModelSelect.disabled = !company;
-  });
+  }
+
+  driverCompanySelect.addEventListener("change", updateModels);
+  updateModels();
 }
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupDriverModels);
+} else {
+  setupDriverModels();
+}
+  
   const BUSINESS_PHONE = "923091588042";
   document.addEventListener("DOMContentLoaded", () => {
   const button = document.getElementById("loadMyBookings");
