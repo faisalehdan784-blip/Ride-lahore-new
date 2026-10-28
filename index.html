@@ -55,8 +55,9 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
   <a href="#services">Services</a>
   <a href="#rates">Rates</a>
   <a href="#safety">Safety</a>
+  <a href="#my-bookings">My Bookings</a>
 </nav>
-
+  
 <section class="hero">
   <h2>لاہور میں اپنی رائیڈ بک کریں</h2>
   <p>اپنی پک اَپ لوکیشن اور منزل درج کریں، فاصلہ معلوم کریں اور بکنگ WhatsApp پر بھیجیں۔</p>
@@ -267,6 +268,76 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     : "لاگ اِن کامیاب ہوگیا۔";
 });
   const BUSINESS_PHONE = "923091588042";
+  document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("loadMyBookings");
+  const list = document.getElementById("myBookingsList");
+
+  if (!button || !list) return;
+
+  button.addEventListener("click", async () => {
+    list.textContent = "بکنگز لوڈ ہو رہی ہیں...";
+    button.disabled = true;
+
+    try {
+      const { data: { user }, error: authError } =
+        await supabaseClient.auth.getUser();
+
+      if (authError) throw authError;
+
+      if (!user) {
+        list.textContent = "پہلے اپنے اکاؤنٹ میں Login کریں۔";
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("bookings")
+        .select("booking_id, service_type, pickup, destination, ride_date, ride_time, fare, status")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      list.replaceChildren();
+
+      if (!data || data.length === 0) {
+        list.textContent = "آپ کی کوئی بکنگ نہیں ملی۔";
+        return;
+      }
+
+      data.forEach((booking) => {
+        const card = document.createElement("div");
+        card.style.cssText =
+          "border:1px solid #ccc;padding:12px;margin:12px 0;border-radius:8px";
+
+        const heading = document.createElement("h3");
+        heading.textContent = "بکنگ نمبر: " + (booking.booking_id || "—");
+        card.appendChild(heading);
+
+        [
+          ["سروس", booking.service_type],
+          ["پک اَپ", booking.pickup],
+          ["منزل", booking.destination],
+          ["تاریخ", booking.ride_date],
+          ["وقت", booking.ride_time],
+          ["کرایہ", booking.fare == null ? "—" : "Rs. " + booking.fare],
+          ["اسٹیٹس", booking.status]
+        ].forEach(([label, value]) => {
+          const p = document.createElement("p");
+          p.textContent = label + ": " + (value ?? "—");
+          card.appendChild(p);
+        });
+
+        list.appendChild(card);
+      });
+    } catch (error) {
+      console.error("My Bookings error:", error);
+      list.textContent =
+        "بکنگز لوڈ نہیں ہو سکیں۔ دوبارہ Login کرکے کوشش کریں۔";
+    } finally {
+      button.disabled = false;
+    }
+  });
+});
   const RATE_PER_KM = 60;
   const COMMISSION_RATE = 0.05;
 
@@ -454,7 +525,6 @@ if (error) throw error;
         "?text=" + encodeURIComponent(message);
 
       window.location.href = whatsappUrl;
-
     } catch (error) {
       console.error("Booking error:", error);
       status.textContent =
@@ -474,6 +544,14 @@ if (error) throw error;
   $("rideDate").value = localDate;
 })();
 </script>
-
+<section id="my-bookings">
+  <h2>My Bookings — میری بکنگز</h2>
+  <button type="button" id="loadMyBookings">
+    میری بکنگز دیکھیں
+  </button>
+  <div id="myBookingsList">
+    اپنی بکنگز دیکھنے کے لیے بٹن دبائیں۔
+  </div>
+</section>
 </body>
 </html>
