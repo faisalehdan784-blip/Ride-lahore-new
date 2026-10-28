@@ -321,7 +321,39 @@ document.getElementById("loginButton").addEventListener("click", async () => {
       submitButton.disabled = false;
     }
   });
+const driverModels = {
+    Suzuki: ["Alto", "Cultus", "Wagon R", "Swift", "Mehran", "Bolan", "Every", "APV"],
+    Toyota: ["Corolla", "Yaris", "Vitz", "Aqua", "Prius", "Passo", "Fortuner", "Hilux"],
+    Honda: ["City", "Civic", "BR-V", "HR-V", "Vezel"],
+    Kia: ["Picanto", "Sportage", "Sorento", "Stonic"],
+    Hyundai: ["Tucson", "Elantra", "Sonata", "Porter"],
+    Changan: ["Alsvin", "Oshan X7", "Karvaan"],
+    Other: ["Other model"]
+  };
 
+  const driverCompanySelect = document.getElementById("driverCompany");
+  const driverModelSelect = document.getElementById("driverCar");
+
+  if (driverCompanySelect && driverModelSelect) {
+    driverCompanySelect.addEventListener("change", function () {
+      const company = driverCompanySelect.value;
+      driverModelSelect.replaceChildren();
+
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "ماڈل منتخب کریں";
+      driverModelSelect.appendChild(placeholder);
+
+      (driverModels[company] || []).forEach(function (model) {
+        const option = document.createElement("option");
+        option.value = model;
+        option.textContent = model;
+        driverModelSelect.appendChild(option);
+      });
+
+      driverModelSelect.disabled = !company;
+    });
+  }
     try {
       const { data: { user }, error: authError } =
         await supabaseClient.auth.getUser();
