@@ -223,7 +223,9 @@ const supabaseClient = window.supabase.createClient(
 );
 
 const accountStatus = document.getElementById("accountStatus");
-
+ if (!window.supabase) {
+  accountStatus.textContent = "Supabase لوڈ نہیں ہوا۔ صفحہ دوبارہ کھولیں۔";
+} 
 document.getElementById("signupButton").addEventListener("click", async () => {
   const name = document.getElementById("accountName").value.trim();
   const phone = document.getElementById("accountPhone").value.trim();
@@ -375,7 +377,7 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     } finally {
       button.disabled = false;
       button.textContent = "📍 نقشے پر راستہ اور کرایہ معلوم کریں";
-    }const booking = {
+    }
   }
 
   $("mapButton").addEventListener("click", getRoute);
