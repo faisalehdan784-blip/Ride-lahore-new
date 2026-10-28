@@ -321,53 +321,6 @@ document.getElementById("loginButton").addEventListener("click", async () => {
       submitButton.disabled = false;
     }
   });
-})
-  function setupDriverModels() {
-  const driverModelSelect = document.getElementById("driverCar");
-
-  if (!driverCompanySelect || !driverModelSelect) return;
-
-  function updateModels() {
-    const company = driverCompanySelect.value;
-    driverModelSelect.replaceChildren();
-
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = company
-      ? "ماڈل منتخب کریں"
-      : "پہلے کمپنی منتخب کریں";
-    driverModelSelect.appendChild(placeholder);
-
-    (driverModels[company] || []).forEach((model) => {
-      const option = document.createElement("option");
-      option.value = model;
-      option.textContent = model;
-      driverModelSelect.appendChild(option);
-    });
-
-    driverModelSelect.disabled = !company;
-  }
-
-  driverCompanySelect.addEventListener("change", updateModels);
-  updateModels();
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", setupDriverModels);
-} else {
-  setupDriverModels();
-}
-  
-  const BUSINESS_PHONE = "923091588042";
-  document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("loadMyBookings");
-  const list = document.getElementById("myBookingsList");
-
-  if (!button || !list) return;
-
-  button.addEventListener("click", async () => {
-    list.textContent = "بکنگز لوڈ ہو رہی ہیں...";
-    button.disabled = true;
 
     try {
       const { data: { user }, error: authError } =
@@ -627,6 +580,52 @@ if (error) throw error;
       }
     }
   });
+  function setupDriverModels() {
+  const companySelect = document.getElementById("driverCompany");
+  const modelSelect = document.getElementById("driverCar");
+
+  if (!companySelect || !modelSelect) return;
+
+  const models = {
+    Suzuki: ["Alto", "Cultus", "Wagon R", "Swift", "Mehran", "Bolan", "Every", "APV"],
+    Toyota: ["Corolla", "Yaris", "Vitz", "Aqua", "Prius", "Passo", "Fortuner", "Hilux", "Land Cruiser"],
+    Honda: ["City", "Civic", "BR-V", "HR-V", "Vezel"],
+    Kia: ["Picanto", "Sportage", "Sorento", "Stonic"],
+    Hyundai: ["Tucson", "Elantra", "Sonata", "Porter"],
+    Changan: ["Alsvin", "Oshan X7", "Karvaan"],
+    Other: ["Other model"]
+  };
+
+  function updateModels() {
+    const company = companySelect.value;
+    modelSelect.replaceChildren();
+
+    const firstOption = document.createElement("option");
+    firstOption.value = "";
+    firstOption.textContent = company
+      ? "ماڈل منتخب کریں"
+      : "پہلے کمپنی منتخب کریں";
+    modelSelect.appendChild(firstOption);
+
+    (models[company] || []).forEach(function (model) {
+      const option = document.createElement("option");
+      option.value = model;
+      option.textContent = model;
+      modelSelect.appendChild(option);
+    });
+
+    modelSelect.disabled = !company;
+  }
+
+  companySelect.addEventListener("change", updateModels);
+  updateModels();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupDriverModels);
+} else {
+  setupDriverModels();
+}
   const today = new Date();
   const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
     .toISOString().split("T")[0];
