@@ -298,7 +298,8 @@ document.getElementById("loginButton").addEventListener("click", async () => {
         driver_name: document.getElementById("driverName").value.trim(),
         driver_phone: document.getElementById("driverPhone").value.trim(),
         driver_email: document.getElementById("driverEmail").value.trim(),
-        car_model: document.getElementById("driverCar").value.trim(),
+        car_company: document.getElementById("driverCompany").value,
+        car_model: document.getElementById("driverCar").value,
         car_number: document.getElementById("driverCarNumber").value.trim(),
         license_number: document.getElementById("driverLicense").value.trim()
       };
@@ -321,6 +322,56 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     }
   });
 });
+  const driverModels = {
+  Suzuki: [
+    "Alto", "Cultus", "Wagon R", "Swift",
+    "Mehran", "Bolan", "Every", "APV"
+  ],
+  Toyota: [
+    "Corolla", "Yaris", "Vitz", "Aqua",
+    "Prius", "Passo", "Fortuner", "Hilux",
+    "Land Cruiser"
+  ],
+  Honda: [
+    "City", "Civic", "BR-V", "HR-V", "Vezel"
+  ],
+  Kia: [
+    "Picanto", "Sportage", "Sorento", "Stonic"
+  ],
+  Hyundai: [
+    "Tucson", "Elantra", "Sonata", "Porter"
+  ],
+  Changan: [
+    "Alsvin", "Oshan X7", "Karvaan"
+  ],
+  Other: ["Other model"]
+};
+
+const driverCompanySelect = document.getElementById("driverCompany");
+const driverModelSelect = document.getElementById("driverCar");
+
+if (driverCompanySelect && driverModelSelect) {
+  driverCompanySelect.addEventListener("change", () => {
+    const company = driverCompanySelect.value;
+    driverModelSelect.replaceChildren();
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = company
+      ? "ماڈل منتخب کریں"
+      : "پہلے کمپنی منتخب کریں";
+    driverModelSelect.appendChild(placeholder);
+
+    (driverModels[company] || []).forEach((model) => {
+      const option = document.createElement("option");
+      option.value = model;
+      option.textContent = model;
+      driverModelSelect.appendChild(option);
+    });
+
+    driverModelSelect.disabled = !company;
+  });
+}
   const BUSINESS_PHONE = "923091588042";
   document.addEventListener("DOMContentLoaded", () => {
   const button = document.getElementById("loadMyBookings");
@@ -622,8 +673,22 @@ if (error) throw error;
     <input type="email" id="driverEmail" required>
 
     <label>گاڑی کا نام اور ماڈل</label>
-    <input type="text" id="driverCar" required>
+<label for="driverCompany">گاڑی کی کمپنی منتخب کریں</label>
+<select id="driverCompany" required>
+  <option value="">کمپنی منتخب کریں</option>
+  <option value="Suzuki">Suzuki</option>
+  <option value="Toyota">Toyota</option>
+  <option value="Honda">Honda</option>
+  <option value="Kia">Kia</option>
+  <option value="Hyundai">Hyundai</option>
+  <option value="Changan">Changan</option>
+  <option value="Other">Other</option>
+</select>
 
+<label for="driverCar">گاڑی کا ماڈل منتخب کریں</label>
+<select id="driverCar" required disabled>
+  <option value="">پہلے کمپنی منتخب کریں</option>
+</select>
     <label>گاڑی کا رجسٹریشن نمبر</label>
     <input type="text" id="driverCarNumber" required>
 
