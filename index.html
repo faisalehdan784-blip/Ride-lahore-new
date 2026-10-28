@@ -6,44 +6,141 @@
 <title>Ride Lahore New | Carpool & Rent a Car</title>
 <meta name="description" content="Lahore carpool, pick and drop, and rent a car booking service.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
-:root{--green:#087f5b;--dark:#12352b;--light:#f2f8f5;--orange:#ffb703}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#20312b}
-header{background:var(--dark);color:white;padding:20px 15px;text-align:center}
-header h1{margin:0 0 8px;font-size:28px}
-header p{margin:5px 0;color:#e4f3eb}
-nav{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;padding:13px;background:#fff}
-nav a{color:var(--green);text-decoration:none;font-weight:bold}
-.hero{padding:30px 16px;text-align:center;background:#e3f4eb}
-.hero h2{font-size:27px;margin:0 0 10px;color:var(--dark)}
-.hero p{line-height:1.7}
-.container{max-width:950px;margin:20px auto;padding:0 12px}
-.card{background:#fff;padding:20px;border-radius:14px;margin-bottom:18px;box-shadow:0 3px 14px #0000000c}
-h2,h3{color:var(--dark)}
-label{display:block;font-weight:bold;margin:12px 0 6px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #cbd8d1;border-radius:8px;font-size:16px;background:white}
-textarea{min-height:75px;resize:vertical}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-button,.button{display:inline-block;border:0;border-radius:9px;padding:13px 17px;font-size:16px;font-weight:bold;cursor:pointer;text-decoration:none;text-align:center}
-.primary{background:var(--green);color:white}
-.secondary{background:#e6f2eb;color:#15543d}
-.whatsapp{background:#168b50;color:white;width:100%;margin-top:14px}
-button:disabled{opacity:.5;cursor:not-allowed}
-#map{height:330px;width:100%;border-radius:10px;z-index:1}
-.result{background:#edf8f1;padding:15px;border-radius:10px;line-height:1.8;margin-top:14px}
-.small{font-size:13px;color:#63746b;line-height:1.6}
-.cars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.car{border:1px solid #dce7df;border-radius:10px;padding:13px;text-align:center}
-.car .emoji{font-size:36px}
-.car strong{display:block;margin:7px 0}
-footer{text-align:center;padding:25px;background:var(--dark);color:white;line-height:1.8}
-.notice{background:#fff5d9;padding:12px;border-radius:8px;font-size:14px;line-height:1.6}
-@media(max-width:600px){.grid,.cars{grid-template-columns:1fr}header h1{font-size:24px}.hero h2{font-size:23px}.card{padding:15px}#map{height:280px}}
+:root {
+  --green: #087f5b;
+  --dark: #12352b;
+  --light: #f2f8f5;
+  --orange: #ffb703;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7f6;
+  color: #20312b;
+}
+header {
+  background: var(--dark);
+  color: white;
+  padding: 20px 15px;
+  text-align: center;
+}
+header h1 { margin: 0 0 8px; font-size: 28px; }
+header p { margin: 5px 0; color: #e4f3eb; }
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 13px;
+  background: white;
+}
+nav a {
+  color: var(--green);
+  text-decoration: none;
+  font-weight: bold;
+}
+.hero {
+  padding: 30px 16px;
+  text-align: center;
+  background: #e3f4eb;
+}
+.hero h2 { font-size: 27px; margin: 0 0 10px; color: var(--dark); }
+.hero p { line-height: 1.7; }
+.container { max-width: 950px; margin: 20px auto; padding: 0 12px; }
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 14px #0000000c;
+}
+h2, h3 { color: var(--dark); }
+label { display: block; font-weight: bold; margin: 12px 0 6px; }
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd8d1;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+}
+textarea { min-height: 75px; resize: vertical; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+button, .button {
+  display: inline-block;
+  border: 0;
+  border-radius: 9px;
+  padding: 13px 17px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+.primary { background: var(--green); color: white; }
+.secondary { background: #e6f2eb; color: #15543d; }
+.whatsapp {
+  background: #168b50;
+  color: white;
+  width: 100%;
+  margin-top: 14px;
+}
+button:disabled { opacity: .5; cursor: not-allowed; }
+#map { height: 330px; width: 100%; border-radius: 10px; z-index: 1; }
+.result {
+  background: #edf8f1;
+  padding: 15px;
+  border-radius: 10px;
+  line-height: 1.8;
+  margin-top: 14px;
+}
+.small { font-size: 13px; color: #63746b; line-height: 1.6; }
+.cars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.car {
+  border: 1px solid #dce7df;
+  border-radius: 10px;
+  padding: 13px;
+  text-align: center;
+}
+.car .emoji { font-size: 36px; }
+.car strong { display: block; margin: 7px 0; }
+footer {
+  text-align: center;
+  padding: 25px;
+  background: var(--dark);
+  color: white;
+  line-height: 1.8;
+}
+.notice {
+  background: #fff5d9;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.status { line-height: 1.7; overflow-wrap: anywhere; }
+@media(max-width:600px) {
+  .grid, .cars { grid-template-columns: 1fr; }
+  header h1 { font-size: 24px; }
+  .hero h2 { font-size: 23px; }
+  .card { padding: 15px; }
+  #map { height: 280px; }
+}
 </style>
 </head>
-<body>
 
+<body>
 <header>
   <h1>🚘 Ride Lahore New</h1>
   <p>Carpool • Pick & Drop • Rent a Car</p>
@@ -58,14 +155,15 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
   <a href="#my-bookings">My Bookings</a>
   <a href="#driver-registration">Driver Registration</a>
 </nav>
-  
+
 <section class="hero">
   <h2>لاہور میں اپنی رائیڈ بک کریں</h2>
-  <p>اپنی پک اَپ لوکیشن اور منزل درج کریں، فاصلہ معلوم کریں اور بکنگ WhatsApp پر بھیجیں۔</p>
+  <p>پک اَپ لوکیشن اور منزل درج کریں، فاصلہ معلوم کریں اور WhatsApp پر بکنگ بھیجیں۔</p>
   <a class="button primary" href="#booking">ابھی رائیڈ بک کریں</a>
 </section>
 
 <main class="container">
+
 <section class="card" id="account">
   <h2>🔐 Ride Lahore New اکاؤنٹ</h2>
 
@@ -76,61 +174,71 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
   </select>
 
   <label for="accountName">پورا نام</label>
-  <input id="accountName" autocomplete="name" required
-         placeholder="اپنا پورا نام">
+  <input id="accountName" autocomplete="name" placeholder="اپنا پورا نام">
 
   <label for="accountPhone">موبائل نمبر</label>
-  <input id="accountPhone" type="tel" autocomplete="tel"
-         placeholder="03XXXXXXXXX">
+  <input id="accountPhone" type="tel" autocomplete="tel" placeholder="03XXXXXXXXX">
 
   <label for="accountEmail">ای میل</label>
-  <input id="accountEmail" type="email" autocomplete="email"
-         placeholder="name@example.com" required>
+  <input id="accountEmail" type="email" autocomplete="email" placeholder="name@example.com">
 
   <label for="accountPassword">پاس ورڈ</label>
-  <input id="accountPassword" type="password"
-         autocomplete="new-password" minlength="8"
-         placeholder="کم از کم 8 حروف" required>
+  <input id="accountPassword" type="password" autocomplete="current-password"
+         minlength="8" placeholder="کم از کم 8 حروف">
 
-  <button type="button" class="primary" id="signupButton">
-    نیا اکاؤنٹ بنائیں
-  </button>
+  <button type="button" class="primary" id="signupButton">نیا اکاؤنٹ بنائیں</button>
+  <button type="button" class="secondary" id="loginButton">لاگ اِن کریں</button>
+  <button type="button" class="secondary" id="logoutButton">لاگ آؤٹ</button>
 
-  <button type="button" class="secondary" id="loginButton">
-    لاگ اِن کریں
-  </button>
-
-  <p id="accountStatus" role="status" aria-live="polite"></p>
+  <p id="accountStatus" class="status" role="status" aria-live="polite"></p>
 </section>
 
 <section class="card" id="services">
   <h2>ہماری سروسز</h2>
   <div class="cars">
-    <div class="car"><div class="emoji">🚗</div><strong>Carpool</strong><p>مشترکہ سفر</p></div>
-    <div class="car"><div class="emoji">🚙</div><strong>Private Ride</strong><p>ذاتی گاڑی اور ڈرائیور</p></div>
-    <div class="car"><div class="emoji">🛣️</div><strong>Pick & Drop</strong><p>روزانہ آنے جانے کی سہولت</p></div>
+    <div class="car">
+      <div class="emoji">🚗</div>
+      <strong>Carpool</strong>
+      <p>مشترکہ سفر</p>
+    </div>
+    <div class="car">
+      <div class="emoji">🚙</div>
+      <strong>Private Ride</strong>
+      <p>ذاتی گاڑی اور ڈرائیور</p>
+    </div>
+    <div class="car">
+      <div class="emoji">🛣️</div>
+      <strong>Pick & Drop</strong>
+      <p>روزانہ آنے جانے کی سہولت</p>
+    </div>
   </div>
 </section>
 
 <section class="card" id="rates">
   <h2>کرایہ اور کمیشن</h2>
   <p>ابتدائی اندازہ: <strong>60 روپے فی کلومیٹر</strong></p>
-  <p>سروس کمیشن: <strong>5%</strong> (اندازاً کرائے پر)</p>
-  <p class="small">یہ ابتدائی نمونہ ریٹ ہیں، حتمی کرایہ ڈرائیور اور مسافر کی رضامندی، گاڑی، انتظار اور دیگر اخراجات کے مطابق طے کریں۔</p>
+  <p>سروس کمیشن: <strong>5%</strong></p>
+  <p class="small">
+    یہ ابتدائی اندازہ ہے۔ حتمی کرایہ سفر سے پہلے طے کریں۔
+    انتظار، ٹول اور دیگر اضافی اخراجات الگ ہو سکتے ہیں۔
+  </p>
 </section>
 
 <section class="card" id="booking">
   <h2>📋 رائیڈ بکنگ فارم</h2>
+
   <form id="bookingForm">
     <div class="grid">
       <div>
         <label for="customerName">مسافر کا نام *</label>
         <input id="customerName" required placeholder="اپنا نام لکھیں">
       </div>
+
       <div>
         <label for="phone">موبائل نمبر *</label>
         <input id="phone" type="tel" required placeholder="03XXXXXXXXX">
       </div>
+
       <div>
         <label for="service">سروس منتخب کریں *</label>
         <select id="service" required>
@@ -140,30 +248,36 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
           <option value="Rent a Car">Rent a Car</option>
         </select>
       </div>
+
       <div>
-        <label for="car">گاڑی منتخب کریں *</label>
+        <label for="car">گاڑی کی قسم *</label>
         <select id="car" required>
           <option value="Economy">Economy - عام گاڑی</option>
           <option value="Sedan">Sedan - فیملی گاڑی</option>
           <option value="SUV">SUV - بڑی گاڑی</option>
         </select>
       </div>
+
       <div>
         <label for="pickup">پک اَپ لوکیشن *</label>
         <input id="pickup" required placeholder="مثلاً Iqbal Town Lahore">
       </div>
+
       <div>
         <label for="destination">منزل *</label>
-        <input id="destination" required placeholder="مثلاً Raiwind Road Lahore">
+        <input id="destination" required placeholder="مثلاً Lake City Lahore">
       </div>
+
       <div>
         <label for="rideDate">سفر کی تاریخ *</label>
         <input id="rideDate" type="date" required>
       </div>
+
       <div>
         <label for="rideTime">سفر کا وقت *</label>
         <input id="rideTime" type="time" required>
       </div>
+
       <div>
         <label for="passengers">مسافروں کی تعداد *</label>
         <select id="passengers" required>
@@ -175,15 +289,23 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
           <option value="6">6 مسافر</option>
         </select>
       </div>
+
       <div>
         <label for="notes">اضافی ہدایات</label>
         <input id="notes" placeholder="سامان، واپسی وغیرہ">
       </div>
     </div>
 
-    <p class="small">لوکیشن کے لیے انگریزی میں علاقے اور Lahore لکھیں تاکہ نقشے پر تلاش آسان ہو۔</p>
-    <button type="button" class="primary" id="mapButton" style="width:100%;margin-top:14px">📍 نقشے پر راستہ اور کرایہ معلوم کریں</button>
-    <p id="status" role="status" aria-live="polite"></p>
+    <p class="small">
+      لوکیشن انگریزی میں لکھیں، مثلاً Iqbal Town Lahore۔
+    </p>
+
+    <button type="button" class="primary" id="mapButton"
+            style="width:100%;margin-top:14px">
+      📍 نقشے پر راستہ اور کرایہ معلوم کریں
+    </button>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
     <div id="map"></div>
 
     <div class="result" id="fareResult">
@@ -191,19 +313,73 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
       <p>پک اَپ اور منزل درج کرکے نقشے والا بٹن دبائیں۔</p>
     </div>
 
-    <button type="submit" class="whatsapp">🟢 WhatsApp پر بکنگ بھیجیں</button>
+    <button type="submit" class="whatsapp">
+      🟢 WhatsApp پر بکنگ بھیجیں
+    </button>
   </form>
 </section>
-
+</main>
 <section class="card" id="safety">
   <h2>🔐 حفاظت اور تصدیق</h2>
-  <p>ڈرائیور کی شناخت، ڈرائیونگ لائسنس، گاڑی کی تفصیلات اور مسافر کے فون کی تصدیق بکنگ سے پہلے ضروری سمجھی جائے۔</p>
+  <p>ڈرائیور کی شناخت، ڈرائیونگ لائسنس، گاڑی کی تفصیلات اور مسافر کے فون کی تصدیق ضروری ہے۔</p>
   <div class="notice">
-    <strong>اہم:</strong> یہ ویب سائٹ ابھی شناختی کارڈ یا لائسنس اپ لوڈ، اکاؤنٹ لاگ اِن، یا خودکار تصدیق کا نظام نہیں رکھتی۔ براہِ راست CNIC کی تصاویر اس عوامی فارم میں نہ ڈالیں۔ تصدیق کے لیے محفوظ سرور اور محدود رسائی والا انتظام درکار ہے۔
+    <strong>اہم:</strong> اس ویب سائٹ میں ابھی شناختی کارڈ کی تصاویر اپ لوڈ کرنے کا محفوظ نظام شامل نہیں۔ عوامی فارم میں CNIC کی تصاویر نہ ڈالیں۔
   </div>
 </section>
 
-</main>
+<section class="card" id="my-bookings">
+  <h2>My Bookings — میری بکنگز</h2>
+  <button type="button" class="primary" id="loadMyBookings">
+    میری بکنگز دیکھیں
+  </button>
+  <div id="myBookingsList" class="status">
+    اپنی بکنگز دیکھنے کے لیے بٹن دبائیں۔
+  </div>
+</section>
+
+<section class="card" id="driver-registration">
+  <h2>Driver Registration — ڈرائیور رجسٹریشن</h2>
+  <p>Ride Lahore New کے ساتھ ڈرائیور کے طور پر رجسٹر ہوں۔</p>
+
+  <form id="driverRegistrationForm">
+    <label for="driverName">پورا نام *</label>
+    <input type="text" id="driverName" required>
+
+    <label for="driverPhone">موبائل نمبر *</label>
+    <input type="tel" id="driverPhone" required placeholder="03XXXXXXXXX">
+
+    <label for="driverEmail">ای میل *</label>
+    <input type="email" id="driverEmail" required>
+
+    <label for="driverCompany">گاڑی کی کمپنی *</label>
+    <select id="driverCompany" required>
+      <option value="">پہلے کمپنی منتخب کریں</option>
+      <option value="Suzuki">Suzuki</option>
+      <option value="Toyota">Toyota</option>
+      <option value="Honda">Honda</option>
+      <option value="Kia">Kia</option>
+      <option value="Hyundai">Hyundai</option>
+      <option value="Changan">Changan</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="driverCar">گاڑی کا ماڈل *</label>
+    <select id="driverCar" required disabled>
+      <option value="">پہلے کمپنی منتخب کریں</option>
+    </select>
+
+    <label for="driverCarNumber">گاڑی کا رجسٹریشن نمبر *</label>
+    <input type="text" id="driverCarNumber" required>
+
+    <label for="driverLicense">ڈرائیونگ لائسنس نمبر *</label>
+    <input type="text" id="driverLicense" required>
+
+    <button type="submit" class="primary">
+      رجسٹریشن کی درخواست دیں
+    </button>
+    <p id="driverFormMessage" class="status" role="status"></p>
+  </form>
+</section>
 
 <footer>
   <strong>Ride Lahore New</strong><br>
@@ -213,117 +389,138 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
- (async () => { 
+(() => {
   "use strict";
- const $ = id => document.getElementById(id);
-const SUPABASE_URL ="https://ijktavdlwkxkvpgqixbr.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY ="sb_publishable_GXbAfXr3Q8yY5FtgAYDi4A_iFN4vLD4";
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
 
-const accountStatus = document.getElementById("accountStatus");
- if (!window.supabase) {
-  accountStatus.textContent = "Supabase لوڈ نہیں ہوا۔ صفحہ دوبارہ کھولیں۔";
-} 
-document.getElementById("signupButton").addEventListener("click", async () => {
-  const name = document.getElementById("accountName").value.trim();
-  const phone = document.getElementById("accountPhone").value.trim();
-  const role = document.getElementById("accountRole").value;
-  const email = document.getElementById("accountEmail").value.trim();
-  const password = document.getElementById("accountPassword").value;
+  const $ = id => document.getElementById(id);
 
-  if (!name || !email || password.length < 8) {
-    accountStatus.textContent = "نام، ای میل اور کم از کم 8 حروف کا پاس ورڈ درج کریں۔";
-    return;
+  const SUPABASE_URL =
+    "https://ijktavdlwkxkvpgqixbr.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_GXbAfXr3Q8yY5FtgAYDi4A_iFN4vLD4";
+
+  const BUSINESS_PHONE = "923091588042";
+  const RATE_PER_KM = 60;
+  const COMMISSION_RATE = 0.05;
+
+  let supabaseClient = null;
+  let map = null;
+  let routeLayer = null;
+  let pickupMarker = null;
+  let destinationMarker = null;
+  let lastRoute = null;
+
+  function showStatus(message, isError = false) {
+    $("status").textContent = message;
+    $("status").style.color = isError ? "#b42318" : "#087f5b";
   }
 
-  accountStatus.textContent = "اکاؤنٹ بنایا جا رہا ہے۔۔۔";
-
-  const { error } = await supabaseClient.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { full_name: name, phone, role }
+  function initSupabase() {
+    if (!window.supabase) {
+      $("accountStatus").textContent =
+        "Supabase لوڈ نہیں ہوا۔ انٹرنیٹ چیک کرکے صفحہ دوبارہ کھولیں۔";
+      return false;
     }
-  });
-
-  accountStatus.textContent = error
-    ? "خرابی: " + error.message
-    : "رجسٹریشن کی درخواست مکمل ہوگئی۔ ای میل تصدیق بھی درکار ہو سکتی ہے۔";
-});
-
-document.getElementById("loginButton").addEventListener("click", async () => {
-  const email = document.getElementById("accountEmail").value.trim();
-  const password = document.getElementById("accountPassword").value;
-
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  accountStatus.textContent = error
-    ? "لاگ اِن میں خرابی: " + error.message
-    : "لاگ اِن کامیاب ہوگیا۔";
-});
-   document.addEventListener("DOMContentLoaded", async () => {
-  const form = document.getElementById("driverRegistrationForm");
-  const message = document.getElementById("driverFormMessage");
-
-  if (!form || !message) return;
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const submitButton = form.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-    message.textContent = "درخواست محفوظ ہو رہی ہے...";
 
     try {
-      const { data: { user }, error: authError } =
-        await supabaseClient.auth.getUser();
+      supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+      return true;
+    } catch (error) {
+      $("accountStatus").textContent =
+        "Supabase شروع نہیں ہوسکا: " + error.message;
+      return false;
+    }
+  }
 
-      if (authError) throw authError;
+  async function signup() {
+    if (!supabaseClient) return;
 
-      if (!user) {
-        message.textContent =
-          "براہِ کرم پہلے اپنے اکاؤنٹ میں Login کریں۔";
-        return;
-      }
+    const name = $("accountName").value.trim();
+    const phone = $("accountPhone").value.trim();
+    const role = $("accountRole").value;
+    const email = $("accountEmail").value.trim();
+    const password = $("accountPassword").value;
 
-      const application = {
-        user_id: user.id,
-        driver_name: document.getElementById("driverName").value.trim(),
-        driver_phone: document.getElementById("driverPhone").value.trim(),
-        driver_email: document.getElementById("driverEmail").value.trim(),
-        car_company: document.getElementById("driverCompany").value,
-        car_model: document.getElementById("driverCar").value,
-        car_number: document.getElementById("driverCarNumber").value.trim(),
-        license_number: document.getElementById("driverLicense").value.trim()
-      };
+    if (!name || !email || password.length < 8) {
+      $("accountStatus").textContent =
+        "نام، ای میل اور کم از کم 8 حروف کا پاس ورڈ درج کریں۔";
+      return;
+    }
 
-      const { error } = await supabaseClient
-        .from("driver_applications")
-        .insert([application]);
+    $("accountStatus").textContent = "اکاؤنٹ بنایا جا رہا ہے۔۔۔";
+
+    try {
+      const { error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            phone,
+            role
+          }
+        }
+      });
 
       if (error) throw error;
 
-      message.textContent =
-        "آپ کی درخواست کامیابی سے جمع ہوگئی ہے۔ منظوری کا انتظار کریں۔";
-      form.reset();
+      $("accountStatus").textContent =
+        "رجسٹریشن کی درخواست مکمل ہوگئی۔ اگر ای میل تصدیق مانگی جائے تو اپنا ای میل چیک کریں۔";
     } catch (error) {
-      console.error("Driver registration error:", error);
-      message.textContent =
-        "درخواست جمع نہیں ہوئی۔ دوبارہ Login کرکے کوشش کریں۔";
-    } finally {
-      submitButton.disabled = false;
+      $("accountStatus").textContent =
+        "رجسٹریشن میں خرابی: " + error.message;
     }
-  });
-const driverModels = {
+  }
+
+  async function login() {
+    if (!supabaseClient) return;
+
+    const email = $("accountEmail").value.trim();
+    const password = $("accountPassword").value;
+
+    if (!email || !password) {
+      $("accountStatus").textContent =
+        "لاگ اِن کے لیے ای میل اور پاس ورڈ درج کریں۔";
+      return;
+    }
+
+    $("accountStatus").textContent = "لاگ اِن ہو رہا ہے۔۔۔";
+
+    try {
+      const { error } =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if (error) throw error;
+
+      $("accountStatus").textContent = "لاگ اِن کامیاب ہوگیا۔";
+    } catch (error) {
+      $("accountStatus").textContent =
+        "لاگ اِن میں خرابی: " + error.message;
+    }
+  }
+
+  async function logout() {
+    if (!supabaseClient) return;
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    $("accountStatus").textContent = error
+      ? "لاگ آؤٹ میں خرابی: " + error.message
+      : "آپ لاگ آؤٹ ہوگئے ہیں۔";
+  }
+
+  const driverModels = {
     Suzuki: ["Alto", "Cultus", "Wagon R", "Swift", "Mehran", "Bolan", "Every", "APV"],
-    Toyota: ["Corolla", "Yaris", "Vitz", "Aqua", "Prius", "Passo", "Fortuner", "Hilux"],
+    Toyota: ["Corolla", "Yaris", "Vitz", "Aqua", "Prius", "Passo", "Fortuner", "Hilux", "Land Cruiser"],
     Honda: ["City", "Civic", "BR-V", "HR-V", "Vezel"],
     Kia: ["Picanto", "Sportage", "Sorento", "Stonic"],
     Hyundai: ["Tucson", "Elantra", "Sonata", "Porter"],
@@ -331,29 +528,274 @@ const driverModels = {
     Other: ["Other model"]
   };
 
-  const driverCompanySelect = document.getElementById("driverCompany");
-  const driverModelSelect = document.getElementById("driverCar");
+  function setupDriverModels() {
+    const companySelect = $("driverCompany");
+    const modelSelect = $("driverCar");
 
-  if (driverCompanySelect && driverModelSelect) {
-    driverCompanySelect.addEventListener("change", function () {
-      const company = driverCompanySelect.value;
-      driverModelSelect.replaceChildren();
+    companySelect.addEventListener("change", () => {
+      const company = companySelect.value;
+      modelSelect.replaceChildren();
 
-      const placeholder = document.createElement("option");
-      placeholder.value = "";
-      placeholder.textContent = "ماڈل منتخب کریں";
-      driverModelSelect.appendChild(placeholder);
+      const firstOption = document.createElement("option");
+      firstOption.value = "";
+      firstOption.textContent = company
+        ? "ماڈل منتخب کریں"
+        : "پہلے کمپنی منتخب کریں";
 
-      (driverModels[company] || []).forEach(function (model) {
+      modelSelect.appendChild(firstOption);
+
+      (driverModels[company] || []).forEach(model => {
         const option = document.createElement("option");
         option.value = model;
         option.textContent = model;
-        driverModelSelect.appendChild(option);
+        modelSelect.appendChild(option);
       });
 
-      driverModelSelect.disabled = !company;
+      modelSelect.disabled = !company;
     });
   }
+
+  async function geocode(place) {
+    const query = place.toLowerCase().includes("lahore")
+      ? place
+      : place + ", Lahore, Pakistan";
+
+    const url =
+      "https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" +
+      encodeURIComponent(query);
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("لوکیشن تلاش نہیں ہو سکی۔ دوبارہ کوشش کریں۔");
+    }
+
+    const results = await response.json();
+
+    if (!results.length) {
+      throw new Error(
+        "لوکیشن نہیں ملی۔ علاقے کا نام انگریزی میں لکھیں۔"
+      );
+    }
+
+    return {
+      lat: Number(results[0].lat),
+      lon: Number(results[0].lon),
+      name: results[0].display_name
+    };
+  }
+  async function getRoute() {
+    const pickupText = $("pickup").value.trim();
+    const destinationText = $("destination").value.trim();
+
+    if (!pickupText || !destinationText) {
+      showStatus("پک اَپ اور منزل درج کریں۔", true);
+      return;
+    }
+
+    const button = $("mapButton");
+    button.disabled = true;
+    button.textContent = "راستہ تلاش ہو رہا ہے۔۔۔";
+
+    try {
+      const start = await geocode(pickupText);
+      const end = await geocode(destinationText);
+
+      const url =
+        "https://router.project-osrm.org/route/v1/driving/" +
+        start.lon + "," + start.lat + ";" +
+        end.lon + "," + end.lat +
+        "?overview=full&geometries=geojson";
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("راستے کی سروس دستیاب نہیں۔");
+
+      const data = await response.json();
+      if (!data.routes || !data.routes.length) {
+        throw new Error("ڈرائیونگ راستہ نہیں ملا۔");
+      }
+
+      const route = data.routes[0];
+      const distanceKm = route.distance / 1000;
+      const durationMin = Math.round(route.duration / 60);
+      const fare = Math.round(distanceKm * RATE_PER_KM);
+      const commission = Math.round(fare * COMMISSION_RATE);
+      const driverAmount = fare - commission;
+
+      lastRoute = {
+        distanceKm, durationMin, fare, commission,
+        driverAmount, start, end
+      };
+
+      if (!map) {
+        map = L.map("map").setView([start.lat, start.lon], 12);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors",
+          maxZoom: 19
+        }).addTo(map);
+      }
+
+      if (routeLayer) map.removeLayer(routeLayer);
+      if (pickupMarker) map.removeLayer(pickupMarker);
+      if (destinationMarker) map.removeLayer(destinationMarker);
+
+      routeLayer = L.geoJSON(route.geometry).addTo(map);
+      pickupMarker = L.marker([start.lat, start.lon])
+        .addTo(map).bindPopup("پک اَپ");
+      destinationMarker = L.marker([end.lat, end.lon])
+        .addTo(map).bindPopup("منزل");
+
+      map.fitBounds(routeLayer.getBounds(), { padding: [25, 25] });
+      setTimeout(() => map.invalidateSize(), 200);
+
+      $("fareResult").replaceChildren();
+
+      const details = [
+        ["فاصلہ", distanceKm.toFixed(1) + " کلومیٹر"],
+        ["متوقع وقت", durationMin + " منٹ"],
+        ["اندازاً کرایہ", "Rs. " + fare.toLocaleString("en-PK")],
+        ["5% کمیشن", "Rs. " + commission.toLocaleString("en-PK")],
+        ["کمیشن کے بعد ڈرائیور کی رقم", "Rs. " + driverAmount.toLocaleString("en-PK")]
+      ];
+
+      const heading = document.createElement("strong");
+      heading.textContent = "✅ سفر کا اندازہ";
+      $("fareResult").appendChild(heading);
+
+      details.forEach(([label, value]) => {
+        const p = document.createElement("p");
+        p.textContent = label + ": " + value;
+        $("fareResult").appendChild(p);
+      });
+
+      const note = document.createElement("p");
+      note.className = "small";
+      note.textContent = "یہ اندازاً کرایہ ہے، حتمی قیمت سفر سے پہلے طے کریں۔";
+      $("fareResult").appendChild(note);
+
+      showStatus("راستہ اور کرایہ معلوم ہوگیا۔");
+    } catch (error) {
+      showStatus(error.message || "راستہ معلوم نہیں ہوسکا۔", true);
+    } finally {
+      button.disabled = false;
+      button.textContent = "📍 نقشے پر راستہ اور کرایہ معلوم کریں";
+    }
+  }
+
+  async function submitBooking(event) {
+    event.preventDefault();
+
+    if (!lastRoute) {
+      showStatus("پہلے راستہ اور کرایہ معلوم کریں۔", true);
+      return;
+    }
+
+    const form = $("bookingForm");
+    if (!form.reportValidity()) return;
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+
+    const bookingId = "RL-" + Date.now();
+
+    let user = null;
+    if (supabaseClient) {
+      try {
+        const result = await supabaseClient.auth.getUser();
+        user = result.data.user;
+      } catch (_) {}
+    }
+
+    const booking = {
+      booking_id: bookingId,
+      user_id: user ? user.id : null,
+      customer_name: $("customerName").value.trim(),
+      customer_phone: $("phone").value.trim(),
+      service_type: $("service").value,
+      car_type: $("car").value,
+      pickup: $("pickup").value.trim(),
+      destination: $("destination").value.trim(),
+      ride_date: $("rideDate").value,
+      ride_time: $("rideTime").value,
+      passengers: Number($("passengers").value),
+      notes: $("notes").value.trim(),
+      distance_km: Number(lastRoute.distanceKm.toFixed(2)),
+      fare: lastRoute.fare,
+      commission: lastRoute.commission,
+      driver_amount: lastRoute.driverAmount,
+      status: "pending"
+    };
+
+    const message = [
+      "نئی رائیڈ بکنگ - Ride Lahore New",
+      "بکنگ نمبر: " + booking.booking_id,
+      "نام: " + booking.customer_name,
+      "فون: " + booking.customer_phone,
+      "سروس: " + booking.service_type,
+      "گاڑی: " + booking.car_type,
+      "پک اَپ: " + booking.pickup,
+      "منزل: " + booking.destination,
+      "تاریخ: " + booking.ride_date,
+      "وقت: " + booking.ride_time,
+      "مسافر: " + booking.passengers,
+      "فاصلہ: " + booking.distance_km + " کلومیٹر",
+      "اندازاً کرایہ: Rs. " + booking.fare,
+      "5% کمیشن: Rs. " + booking.commission,
+      "ڈرائیور کی رقم: Rs. " + booking.driver_amount,
+      "اضافی ہدایات: " + (booking.notes || "کوئی نہیں")
+    ].join("\n");
+
+    const whatsappUrl =
+      "https://wa.me/" + BUSINESS_PHONE +
+      "?text=" + encodeURIComponent(message);
+
+    submitButton.textContent = "بکنگ تیار ہو رہی ہے۔۔۔";
+
+    let saved = false;
+
+    try {
+      if (!supabaseClient) {
+        throw new Error("ڈیٹا بیس سے رابطہ دستیاب نہیں۔");
+      }
+
+      const { error } = await supabaseClient
+        .from("bookings")
+        .insert([booking]);
+
+      if (error) throw error;
+      saved = true;
+    } catch (error) {
+      console.error("Booking save error:", error);
+    }
+
+    if (saved) {
+      showStatus("بکنگ ڈیٹا بیس میں محفوظ ہوگئی۔ WhatsApp کھولیں۔");
+    } else {
+      showStatus(
+        "بکنگ ڈیٹا بیس میں محفوظ نہیں ہوئی۔ WhatsApp پر پیغام بھیجیں؛ ڈیٹا بیس کی پالیسی بھی چیک کرنا ہوگی۔",
+        true
+      );
+    }
+
+    // WhatsApp message opens even if database saving fails.
+    window.location.href = whatsappUrl;
+
+    submitButton.disabled = false;
+    submitButton.textContent = "🟢 WhatsApp پر بکنگ بھیجیں";
+  }
+
+  async function loadMyBookings() {
+    const list = $("myBookingsList");
+    const button = $("loadMyBookings");
+
+    if (!supabaseClient) {
+      list.textContent = "ڈیٹا بیس سے رابطہ دستیاب نہیں۔";
+      return;
+    }
+
+    button.disabled = true;
+    list.textContent = "بکنگز لوڈ ہو رہی ہیں۔۔۔";
+
     try {
       const { data: { user }, error: authError } =
         await supabaseClient.auth.getUser();
@@ -361,7 +803,7 @@ const driverModels = {
       if (authError) throw authError;
 
       if (!user) {
-        list.textContent = "پہلے اپنے اکاؤنٹ میں Login کریں۔";
+        list.textContent = "براہِ کرم پہلے لاگ اِن کریں۔";
         return;
       }
 
@@ -380,14 +822,14 @@ const driverModels = {
         return;
       }
 
-      data.forEach((booking) => {
+      data.forEach(booking => {
         const card = document.createElement("div");
         card.style.cssText =
           "border:1px solid #ccc;padding:12px;margin:12px 0;border-radius:8px";
 
-        const heading = document.createElement("h3");
-        heading.textContent = "بکنگ نمبر: " + (booking.booking_id || "—");
-        card.appendChild(heading);
+        const title = document.createElement("h3");
+        title.textContent = "بکنگ نمبر: " + (booking.booking_id || "—");
+        card.appendChild(title);
 
         [
           ["سروس", booking.service_type],
@@ -408,313 +850,121 @@ const driverModels = {
     } catch (error) {
       console.error("My Bookings error:", error);
       list.textContent =
-        "بکنگز لوڈ نہیں ہو سکیں۔ دوبارہ Login کرکے کوشش کریں۔";
+        "بکنگز لوڈ نہیں ہو سکیں۔ لاگ اِن اور ڈیٹا بیس کی پالیسی چیک کریں۔";
     } finally {
       button.disabled = false;
     }
-  });
-});
-  const RATE_PER_KM = 60;
-  const COMMISSION_RATE = 0.05;
-
-  let map = null;
-  let routeLayer = null;
-  let pickupMarker = null;
-  let destinationMarker = null;
-  let lastRoute = null;
-
-  function showStatus(message, isError = false) {
-    $("status").textContent = message;
-    $("status").style.color = isError ? "#b42318" : "#087f5b";
   }
 
-
-  async function geocode(place) {
-    const query = place.toLowerCase().includes("lahore")
-      ? place
-      : place + ", Lahore, Pakistan";
-
-    const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="
-      + encodeURIComponent(query);
-
-    const response = await fetch(url, {
-      headers: { "Accept": "application/json" }
-    });
-
-    if (!response.ok) throw new Error("لوکیشن تلاش نہیں ہو سکی۔");
-
-    const results = await response.json();
-
-    if (!results.length) {
-      throw new Error("لوکیشن نہیں ملی۔ علاقے کا نام انگریزی میں لکھ کر دوبارہ کوشش کریں۔");
-    }
-
-    return {
-      lat: Number(results[0].lat),
-      lon: Number(results[0].lon),
-      name: results[0].display_name
-    };
-  }
-
-  async function getRoute() {
-    const pickupText = $("pickup").value.trim();
-    const destinationText = $("destination").value.trim();
-
-    if (!pickupText || !destinationText) {
-      showStatus("پک اَپ اور منزل دونوں درج کریں۔", true);
-      return;
-    }
-
-    const button = $("mapButton");
-    button.disabled = true;
-    button.textContent = "⏳ راستہ تلاش ہو رہا ہے...";
-    showStatus("لوکیشن تلاش کی جا رہی ہے۔ براہ کرم انتظار کریں۔");
-
-    try {
-
-      const start = await geocode(pickupText);
-      const end = await geocode(destinationText);
-
-      const routeURL =
-        "https://router.project-osrm.org/route/v1/driving/" +
-        start.lon + "," + start.lat + ";" +
-        end.lon + "," + end.lat +
-        "?overview=full&geometries=geojson";
-
-      const response = await fetch(routeURL);
-
-      if (!response.ok) throw new Error("راستے کی سروس اس وقت دستیاب نہیں۔");
-
-      const data = await response.json();
-
-      if (!data.routes || !data.routes.length) {
-        throw new Error("اس منزل تک ڈرائیونگ راستہ نہیں ملا۔");
-      }
-
-      const route = data.routes[0];
-      const distanceKm = route.distance / 1000;
-      const durationMin = Math.round(route.duration / 60);
-      const fare = Math.round(distanceKm * RATE_PER_KM);
-      const commission = Math.round(fare * COMMISSION_RATE);
-      const driverAmount = fare - commission;
-
-      lastRoute = {
-        distanceKm,
-        durationMin,
-        fare,
-        commission,
-        driverAmount,
-        start,
-        end
-      };
-
-      $("fareResult").innerHTML = `
-        <strong>✅ سفر کا اندازہ</strong>
-        <p>فاصلہ: <strong>${distanceKm.toFixed(1)} کلومیٹر</strong></p>
-        <p>متوقع ڈرائیونگ وقت: <strong>${durationMin} منٹ</strong></p>
-        <p>اندازاً کل کرایہ: <strong>Rs. ${fare.toLocaleString("en-PK")}</strong></p>
-        <p>5% کمیشن: <strong>Rs. ${commission.toLocaleString("en-PK")}</strong></p>
-        <p>کمیشن نکالنے کے بعد ڈرائیور کی رقم: <strong>Rs. ${driverAmount.toLocaleString("en-PK")}</strong></p>
-        <p class="small">یہ صرف اندازہ ہے، حتمی کرایہ نہیں۔ اصل قیمت سفر سے پہلے طے کریں۔ کمیشن کی رقم اسی تخمینے پر ہے۔</p>
-      `;
-
-      showStatus("راستہ اور کرایہ معلوم ہوگیا۔ اب WhatsApp پر بکنگ بھیج سکتے ہیں۔");
-    } catch (error) {
-      showStatus(error.message || "مسئلہ پیش آیا۔ انٹرنیٹ چیک کرکے دوبارہ کوشش کریں۔", true);
-    } finally {
-      button.disabled = false;
-      button.textContent = "📍 نقشے پر راستہ اور کرایہ معلوم کریں";
-    }
-  }
-
-  $("mapButton").addEventListener("click", getRoute);
-
- 
-// Ride Lahore New: booking submission
-  document.getElementById("bookingForm").addEventListener("submit", async (event) => {
+  async function submitDriverRegistration(event) {
     event.preventDefault();
 
-    const status = document.getElementById("status");
-    const submitButton = document.querySelector('#bookingForm button[type="submit"]');
+    const form = $("driverRegistrationForm");
+    const message = $("driverFormMessage");
+    const button = form.querySelector('button[type="submit"]');
 
-    if (!lastRoute) {
-      status.textContent = "پہلے راستہ اور کرایہ معلوم کرنے والا بٹن دبائیں۔";
+    if (!supabaseClient) {
+      message.textContent = "ڈیٹا بیس سے رابطہ دستیاب نہیں۔";
       return;
     }
-    const bookingId = "RL-" + crypto.randomUUID();
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    const booking = {
-      booking_id: bookingId,
-      user_id: user ? user.id : null,
-      customer_name: document.getElementById("customerName").value.trim(),
-      customer_phone: document.getElementById("phone").value.trim(),
-      service_type: document.getElementById("service").value,
-      car_type: document.getElementById("car").value,
-      pickup: document.getElementById("pickup").value.trim(),
-      destination: document.getElementById("destination").value.trim(),
-      ride_date: document.getElementById("rideDate").value,
-      ride_time: document.getElementById("rideTime").value,
-      passengers: Number(document.getElementById("passengers").value),
-      notes: document.getElementById("notes").value.trim(),
-      distance_km: Number(lastRoute.distanceKm.toFixed(2)),
-      fare: lastRoute.fare,
-      commission: lastRoute.commission,
-      driver_amount: lastRoute.driverAmount,
-      status: "pending"
-    };
 
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "بکنگ بھیجی جا رہی ہے...";
-    }
+    button.disabled = true;
+    message.textContent = "درخواست جمع ہو رہی ہے۔۔۔";
 
     try {
-  const { error } = await supabaseClient
-  .from("bookings")
-  .insert([booking]);
+      const { data: { user }, error: authError } =
+        await supabaseClient.auth.getUser();
 
-if (error) throw error;
-      
-   const message = [
-        "نئی رائیڈ بکنگ - Ride Lahore New",
-        "بکنگ نمبر: " + bookingId,
-        "نام: " + booking.customer_name,
-        "فون: " + booking.customer_phone,
-        "سروس: " + booking.service_type,
-        "گاڑی: " + booking.car_type,
-        "پک اَپ: " + booking.pickup,
-        "منزل: " + booking.destination,
-        "تاریخ: " + booking.ride_date,
-        "وقت: " + booking.ride_time,
-        "مسافر: " + booking.passengers,
-        "فاصلہ: " + booking.distance_km + " کلومیٹر",
-        "اندازاً کرایہ: Rs. " + booking.fare,
-        "5% کمیشن: Rs. " + booking.commission,
-        "ڈرائیور کی رقم: Rs. " + booking.driver_amount,
-        "اضافی ہدایات: " + (booking.notes || "کوئی نہیں")
-      ].join("\n");
+      if (authError) throw authError;
 
-      status.textContent = "بکنگ Supabase میں محفوظ ہوگئی۔ WhatsApp کھولا جا رہا ہے۔";
-
-      const whatsappUrl =
-        "https://wa.me/" + BUSINESS_PHONE +
-        "?text=" + encodeURIComponent(message);
-
-      window.location.href = whatsappUrl;
-    } catch (error) {
-      console.error("Booking error:", error);
-      status.textContent =
-        "بکنگ محفوظ نہیں ہوئی: " + (error.message || "دوبارہ کوشش کریں۔");
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = "🟢 WhatsApp پر بکنگ بھیجیں";
+      if (!user) {
+        message.textContent = "براہِ کرم پہلے اکاؤنٹ میں لاگ اِن کریں۔";
+        return;
       }
-    }
-  });
-  function setupDriverModels() {
-  const companySelect = document.getElementById("driverCompany");
-  const modelSelect = document.getElementById("driverCar");
 
-  if (!companySelect || !modelSelect) return;
+      const application = {
+        user_id: user.id,
+        driver_name: $("driverName").value.trim(),
+        driver_phone: $("driverPhone").value.trim(),
+        driver_email: $("driverEmail").value.trim(),
+        car_company: $("driverCompany").value,
+        car_model: $("driverCar").value,
+        car_number: $("driverCarNumber").value.trim(),
+        license_number: $("driverLicense").value.trim()
+      };
 
-  const models = {
-    Suzuki: ["Alto", "Cultus", "Wagon R", "Swift", "Mehran", "Bolan", "Every", "APV"],
-    Toyota: ["Corolla", "Yaris", "Vitz", "Aqua", "Prius", "Passo", "Fortuner", "Hilux", "Land Cruiser"],
-    Honda: ["City", "Civic", "BR-V", "HR-V", "Vezel"],
-    Kia: ["Picanto", "Sportage", "Sorento", "Stonic"],
-    Hyundai: ["Tucson", "Elantra", "Sonata", "Porter"],
-    Changan: ["Alsvin", "Oshan X7", "Karvaan"],
-    Other: ["Other model"]
-  };
+      const { error } = await supabaseClient
+        .from("driver_applications")
+        .insert([application]);
 
-  function updateModels() {
-    const company = companySelect.value;
-    modelSelect.replaceChildren();
+      if (error) throw error;
 
-    const firstOption = document.createElement("option");
-    firstOption.value = "";
-    firstOption.textContent = company
-      ? "ماڈل منتخب کریں"
-      : "پہلے کمپنی منتخب کریں";
-    modelSelect.appendChild(firstOption);
+      message.textContent =
+        "درخواست جمع ہوگئی۔ منظوری کا انتظار کریں۔";
+      form.reset();
+      $("driverCar").disabled = true;
+      $("driverCar").replaceChildren();
 
-    (models[company] || []).forEach(function (model) {
       const option = document.createElement("option");
-      option.value = model;
-      option.textContent = model;
-      modelSelect.appendChild(option);
-    });
-
-    modelSelect.disabled = !company;
+      option.value = "";
+      option.textContent = "پہلے کمپنی منتخب کریں";
+      $("driverCar").appendChild(option);
+    } catch (error) {
+      console.error("Driver registration error:", error);
+      message.textContent =
+        "درخواست جمع نہیں ہوئی۔ لاگ اِن، ٹیبل اور RLS پالیسی چیک کریں۔";
+    } finally {
+      button.disabled = false;
+    }
   }
 
-  companySelect.addEventListener("change", updateModels);
-  updateModels();
-}
+  function setDateMinimum() {
+    const today = new Date();
+    const localDate = new Date(
+      today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().split("T")[0];
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", setupDriverModels);
-} else {
-  setupDriverModels();
-}
-  const today = new Date();
-  const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
-    .toISOString().split("T")[0];
+    $("rideDate").min = localDate;
+    $("rideDate").value = localDate;
+  }
 
-  $("rideDate").min = localDate;
-  $("rideDate").value = localDate;
+  function startApp() {
+    initSupabase();
+
+    $("signupButton").addEventListener("click", signup);
+    $("loginButton").addEventListener("click", login);
+    $("logoutButton").addEventListener("click", logout);
+    $("mapButton").addEventListener("click", getRoute);
+    $("bookingForm").addEventListener("submit", submitBooking);
+    $("loadMyBookings").addEventListener("click", loadMyBookings);
+    $("driverRegistrationForm").addEventListener(
+      "submit", submitDriverRegistration
+    );
+
+    setupDriverModels();
+    setDateMinimum();
+
+    if (window.L) {
+      map = L.map("map").setView([31.5204, 74.3587], 11);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+        maxZoom: 19
+      }).addTo(map);
+
+      setTimeout(() => map.invalidateSize(), 300);
+    } else {
+      showStatus("نقشے کی سروس لوڈ نہیں ہوئی۔ انٹرنیٹ چیک کریں۔", true);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startApp);
+  } else {
+    startApp();
+  }
 })();
 </script>
-<section id="my-bookings">
-  <h2>My Bookings — میری بکنگز</h2>
-  <button type="button" id="loadMyBookings">
-    میری بکنگز دیکھیں
-  </button>
-  <div id="myBookingsList">
-    اپنی بکنگز دیکھنے کے لیے بٹن دبائیں۔
-  </div>
-</section>
- <section id="driver-registration">
-  <h2>Driver Registration — ڈرائیور رجسٹریشن</h2>
-  <p>Ride Lahore New کے ساتھ ڈرائیور کے طور پر رجسٹر ہوں۔</p>
 
-  <form id="driverRegistrationForm">
-    <label>پورا نام</label>
-    <input type="text" id="driverName" required>
-
-    <label>موبائل نمبر</label>
-    <input type="tel" id="driverPhone" required>
-
-    <label>ای میل</label>
-    <input type="email" id="driverEmail" required>
-
-    <label>گاڑی کا نام اور ماڈل</label>
-<label for="driverCompany">گاڑی کی کمپنی منتخب کریں</label>
-<select id="driverCompany" required>
-  <option value="">کمپنی منتخب کریں</option>
-  <option value="Suzuki">Suzuki</option>
-  <option value="Toyota">Toyota</option>
-  <option value="Honda">Honda</option>
-  <option value="Kia">Kia</option>
-  <option value="Hyundai">Hyundai</option>
-  <option value="Changan">Changan</option>
-  <option value="Other">Other</option>
-</select>
-
-<label for="driverCar">گاڑی کا ماڈل منتخب کریں</label>
-<select id="driverCar" required disabled>
-  <option value="">پہلے کمپنی منتخب کریں</option>
-</select>
-    <label>گاڑی کا رجسٹریشن نمبر</label>
-    <input type="text" id="driverCarNumber" required>
-
-    <label>ڈرائیونگ لائسنس نمبر</label>
-    <input type="text" id="driverLicense" required>
-
-    <button type="submit">رجسٹریشن کی درخواست دیں</button>
-    <p id="driverFormMessage"></p>
-  </form>
-</section> 
 </body>
 </html>
