@@ -56,6 +56,7 @@ footer{text-align:center;padding:25px;background:var(--dark);color:white;line-he
   <a href="#rates">Rates</a>
   <a href="#safety">Safety</a>
   <a href="#my-bookings">My Bookings</a>
+  <a href="#driver-registration">Driver Registration</a>
 </nav>
   
 <section class="hero">
@@ -266,6 +267,59 @@ document.getElementById("loginButton").addEventListener("click", async () => {
   accountStatus.textContent = error
     ? "لاگ اِن میں خرابی: " + error.message
     : "لاگ اِن کامیاب ہوگیا۔";
+});
+  document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("driverRegistrationForm");
+  const message = document.getElementById("driverFormMessage");
+
+  if (!form || !message) return;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    message.textContent = "درخواست محفوظ ہو رہی ہے...";
+
+    try {
+      const { data: { user }, error: authError } =
+        await supabaseClient.auth.getUser();
+
+      if (authError) throw authError;
+
+      if (!user) {
+        message.textContent =
+          "براہِ کرم پہلے اپنے اکاؤنٹ میں Login کریں۔";
+        return;
+      }
+
+      const application = {
+        user_id: user.id,
+        driver_name: document.getElementById("driverName").value.trim(),
+        driver_phone: document.getElementById("driverPhone").value.trim(),
+        driver_email: document.getElementById("driverEmail").value.trim(),
+        car_model: document.getElementById("driverCar").value.trim(),
+        car_number: document.getElementById("driverCarNumber").value.trim(),
+        license_number: document.getElementById("driverLicense").value.trim()
+      };
+
+      const { error } = await supabaseClient
+        .from("driver_applications")
+        .insert([application]);
+
+      if (error) throw error;
+
+      message.textContent =
+        "آپ کی درخواست کامیابی سے جمع ہوگئی ہے۔ منظوری کا انتظار کریں۔";
+      form.reset();
+    } catch (error) {
+      console.error("Driver registration error:", error);
+      message.textContent =
+        "درخواست جمع نہیں ہوئی۔ دوبارہ Login کرکے کوشش کریں۔";
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
 });
   const BUSINESS_PHONE = "923091588042";
   document.addEventListener("DOMContentLoaded", () => {
@@ -553,5 +607,32 @@ if (error) throw error;
     اپنی بکنگز دیکھنے کے لیے بٹن دبائیں۔
   </div>
 </section>
+ <section id="driver-registration">
+  <h2>Driver Registration — ڈرائیور رجسٹریشن</h2>
+  <p>Ride Lahore New کے ساتھ ڈرائیور کے طور پر رجسٹر ہوں۔</p>
+
+  <form id="driverRegistrationForm">
+    <label>پورا نام</label>
+    <input type="text" id="driverName" required>
+
+    <label>موبائل نمبر</label>
+    <input type="tel" id="driverPhone" required>
+
+    <label>ای میل</label>
+    <input type="email" id="driverEmail" required>
+
+    <label>گاڑی کا نام اور ماڈل</label>
+    <input type="text" id="driverCar" required>
+
+    <label>گاڑی کا رجسٹریشن نمبر</label>
+    <input type="text" id="driverCarNumber" required>
+
+    <label>ڈرائیونگ لائسنس نمبر</label>
+    <input type="text" id="driverLicense" required>
+
+    <button type="submit">رجسٹریشن کی درخواست دیں</button>
+    <p id="driverFormMessage"></p>
+  </form>
+</section> 
 </body>
 </html>
