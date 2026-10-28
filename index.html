@@ -375,7 +375,7 @@ document.getElementById("loginButton").addEventListener("click", async () => {
     } finally {
       button.disabled = false;
       button.textContent = "📍 نقشے پر راستہ اور کرایہ معلوم کریں";
-    }
+    }const booking = {
   }
 
   $("mapButton").addEventListener("click", getRoute);
@@ -393,8 +393,10 @@ document.getElementById("loginButton").addEventListener("click", async () => {
       return;
     }
     const bookingId = "RL-" + crypto.randomUUID();
+    const { data: { user } } = await supabaseClient.auth.getUser();
     const booking = {
       booking_id: bookingId,
+      user_id: user ? user.id : null,
       customer_name: document.getElementById("customerName").value.trim(),
       customer_phone: document.getElementById("phone").value.trim(),
       service_type: document.getElementById("service").value,
