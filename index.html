@@ -395,6 +395,28 @@ footer {
 
     <label for="driverLicense">ڈرائیونگ لائسنس نمبر *</label>
     <input type="text" id="driverLicense" required>
+    <label for="driverPaymentMethod">ادائیگی کا اکاؤنٹ *</label>
+<select id="driverPaymentMethod" required>
+  <option value="">طریقہ منتخب کریں</option>
+  <option value="JazzCash">JazzCash</option>
+  <option value="Easypaisa">Easypaisa</option>
+</select>
+
+<label for="driverPaymentTitle">اکاؤنٹ ہولڈر کا نام *</label>
+<input
+  type="text"
+  id="driverPaymentTitle"
+  required
+  placeholder="اکاؤنٹ پر درج اصل نام"
+>
+
+<label for="driverPaymentNumber">ادائیگی اکاؤنٹ کا موبائل نمبر *</label>
+<input
+  type="tel"
+  id="driverPaymentNumber"
+  required
+  placeholder="03XXXXXXXXX"
+>
 
     <button type="submit" class="primary">
       رجسٹریشن کی درخواست دیں
@@ -903,8 +925,7 @@ footer {
         message.textContent = "براہِ کرم پہلے اکاؤنٹ میں لاگ اِن کریں۔";
         return;
       }
-
-      const application = {
+const application = {
         user_id: user.id,
         driver_name: $("driverName").value.trim(),
         driver_phone: $("driverPhone").value.trim(),
@@ -912,9 +933,11 @@ footer {
         car_company: $("driverCompany").value,
         car_model: $("driverCar").value,
         car_number: $("driverCarNumber").value.trim(),
-        license_number: $("driverLicense").value.trim()
+        license_number: $("driverLicense").value.trim(),
+        payment_method: $("driverPaymentMethod").value,
+        payment_account_title: $("driverPaymentTitle").value.trim(),
+        payment_account_number: $("driverPaymentNumber").value.trim()
       };
-
       const { error } = await supabaseClient
         .from("driver_applications")
         .insert([application]);
