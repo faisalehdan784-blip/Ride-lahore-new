@@ -986,7 +986,45 @@ function escapeAdminText(value) {
     panel.hidden = false;
     status.textContent = "Admin access verified.";
   }
+async function updateDriverStatus(driverId, newStatus) {
+  if (!["approved", "rejected"].includes(newStatus)) return;
 
+  const confirmed = confirm(
+    newStatus === "approved"
+      ? "Kya aap is driver ko approve karna chahte hain?"
+      : "Kya aap is driver ko reject karna chahte hain?"
+  );
+
+  if (!confirmed) return;
+
+  const { data: userData } = await supabaseClient.auth.getUser();
+
+  if (!userData.user) {
+    alert("Pehle login karein.");
+    return;
+  }
+
+  const { data: adminCheck, error: adminError } =
+    await supabaseClient.rpc("is_admin");
+
+  if (adminError || adminCheck !== true) {
+    alert("Admin permission verify nahi hui.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("driver_applications")
+    .update({ status: newStatus })
+    .eq("id", driverId);
+
+  if (error) {
+    alert("Status update nahi hua: " + error.message);
+    return;
+  }
+
+  alert("Driver status update ho gaya.");
+  await loadAdminDashboard();
+}
   async function loadAdminDashboard() {
     const status = $("adminStatus");
     status.textContent = "Dashboard loading...";
@@ -1025,11 +1063,44 @@ function escapeAdminText(value) {
           target.textContent = "Abhi koi record nahi mila.";
           continue;
         }
+if (table === "driver_applications") {
+  target.innerHTML = data.map(function (driver) {
+    const details = escapeAdminText(
+      JSON.stringify(driver, null, 2)
+    );
 
-        target.innerHTML =
-          "<pre style='white-space:pre-wrap;overflow-wrap:anywhere'>" +
-          escapeAdminText(JSON.stringify(data, null, 2)) +
-          "</pre>";
+    const status = String(driver.status || "pending");
+    const safeStatus = escapeAdminText(status);
+    const safeId = escapeAdminText(driver.id);
+
+    return `
+      <div style="border:1px solid #ccc;padding:12px;margin:10px 0;border-radius:8px">
+        <pre style="white-space:pre-wrap;overflow-wrap:anywhere">${details}</pre>
+        <p>Status: <strong>${safeStatus}</strong></p>
+        <button type="button" data-driver-id="${safeId}" data-driver-status="approved">
+          Approve
+        </button>
+        <button type="button" data-driver-id="${safeId}" data-driver-status="rejected">
+          Reject
+        </button>
+      </div>
+    `;
+  }).join("");
+
+  target.querySelectorAll("button[data-driver-id]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      updateDriverStatus(
+        button.dataset.driverId,
+        button.dataset.driverStatus
+      );
+    });
+  });
+} else {
+  target.innerHTML =
+    "<pre style='white-space:pre-wrap;overflow-wrap:anywhere'>" +
+    escapeAdminText(JSON.stringify(data, null, 2)) +
+    "</pre>";
+}
       }
 
       status.textContent = "Dashboard loading complete.";
