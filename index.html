@@ -339,6 +339,26 @@ footer {
 
   <h3>Driver Wallets & Commission</h3>
   <div id="adminWallets">Login and admin verification required.</div>
+  <h3>My Commission Payment Accounts</h3>
+
+<form id="platformPaymentForm">
+  <label for="platformPaymentMethod">Payment Method</label>
+  <select id="platformPaymentMethod" required>
+    <option value="JazzCash">JazzCash</option>
+    <option value="Easypaisa">Easypaisa</option>
+  </select>
+
+  <label for="platformPaymentTitle">Account Holder Name</label>
+  <input id="platformPaymentTitle" type="text" required>
+
+  <label for="platformPaymentNumber">Account Number</label>
+  <input id="platformPaymentNumber" type="tel" required>
+
+  <button type="submit">Save Payment Account</button>
+  <p id="platformPaymentMessage" role="status"></p>
+</form>
+
+<div id="platformPaymentAccounts"></div> 
 </section> 
 </main>
 <section class="card" id="safety">
@@ -1060,7 +1080,7 @@ async function updateDriverStatus(driverId, newStatus) {
           "Admin access nahi mila. Pehle apne account mein login karein.";
         return;
       }
-
+    await loadPlatformPaymentAccounts();
       const requests = [
         ["profiles", "adminCustomers"],
         ["driver_applications", "adminDrivers"],
@@ -1132,10 +1152,102 @@ if (table === "driver_applications") {
       status.textContent = "Dashboard load nahi hua. Console check karein.";
     }
   }
+  async function loadPlatformPaymentAccounts() {
+  const list = document.getElementById("platformPaymentAccounts");
+  const message = document.getElementById("platformPaymentMessage");
+
+  if (!list || !supabaseClient) return;
+
+  const { data, error } = await supabaseClient
+    .from("platform_payment_accounts")
+    .select("*")
+    .order("payment_method");
+
+  if (error) {
+    message.textContent = "اکاؤنٹس لوڈ نہیں ہوئے: " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    list.textContent = "ابھی کوئی اکاؤنٹ محفوظ نہیں ہے۔";
+    return;
+  }
+
+  list.innerHTML = data.map(function (account) {
+    return `
+      <div style="border:1px solid #ccc;padding:10px;margin:10px 0;border-radius:8px">
+        <strong>${escapeAdminText(account.payment_method)}</strong>
+        <p>Account Title: ${escapeAdminText(account.account_title)}</p>
+        <p>Account Number: ${escapeAdminText(account.account_number)}</p>
+      </div>
+    `;
+  }).join("");
+}
+
+async function savePlatformPaymentAccount(event) {
+  event.preventDefault();
+
+  const message = document.getElementById("platformPaymentMessage");
+  message.textContent = "محفوظ کیا جا رہا ہے...";
+
+  try {
+    const { data: userData, error: userError } =
+      await supabaseClient.auth.getUser();
+
+    if (userError || !userData.user) {
+      throw new Error("پہلے اپنے اکاؤنٹ میں لاگ اِن کریں۔");
+    }
+
+    const { data: adminCheck, error: adminError } =
+      await supabaseClient.rpc("is_admin");
+
+    if (adminError || adminCheck !== true) {
+      throw new Error("صرف Admin یہ اکاؤنٹ محفوظ کر سکتا ہے۔");
+    }
+
+    const paymentMethod =
+      document.getElementById("platformPaymentMethod").value;
+
+    const accountTitle =
+      document.getElementById("platformPaymentTitle").value.trim();
+
+    const accountNumber =
+      document.getElementById("platformPaymentNumber").value.trim();
+
+    if (!accountTitle || !accountNumber) {
+      throw new Error("اکاؤنٹ کا نام اور نمبر درج کریں۔");
+    }
+
+    const { error } = await supabaseClient
+      .from("platform_payment_accounts")
+      .upsert(
+        [{
+          payment_method: paymentMethod,
+          account_title: accountTitle,
+          account_number: accountNumber,
+          updated_at: new Date().toISOString()
+        }],
+        { onConflict: "payment_method" }
+      );
+
+    if (error) throw error;
+
+    message.textContent = "اکاؤنٹ کامیابی سے محفوظ ہوگیا۔";
+    document.getElementById("platformPaymentForm").reset();
+
+    await loadPlatformPaymentAccounts();
+  } catch (error) {
+    message.textContent = error.message;
+  }
+}
   function startApp() {
     initSupabase();
+   $("platformPaymentForm").addEventListener(
+  "submit",
+  savePlatformPaymentAccount
+); 
 $("adminLoadBtn").addEventListener("click", loadAdminDashboard);
-
+loadPlatformPaymentAccounts();
     supabaseClient.auth.onAuthStateChange(() => {
       checkAdminAccess();
     });
