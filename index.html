@@ -318,6 +318,28 @@ footer {
     </button>
   </form>
 </section>
+ <section id="adminPanel" hidden>
+  <h2>Ride Lahore New — Admin Panel</h2>
+  <p id="adminStatus">Admin access check required.</p>
+
+  <div>
+    <button type="button" id="adminLoadBtn">
+      Load Dashboard
+    </button>
+  </div>
+
+  <h3>Customers</h3>
+  <div id="adminCustomers">Login and admin verification required.</div>
+
+  <h3>Driver Applications</h3>
+  <div id="adminDrivers">Login and admin verification required.</div>
+
+  <h3>All Rides</h3>
+  <div id="adminRides">Login and admin verification required.</div>
+
+  <h3>Driver Wallets & Commission</h3>
+  <div id="adminWallets">Login and admin verification required.</div>
+</section> 
 </main>
 <section class="card" id="safety">
   <h2>🔐 حفاظت اور تصدیق</h2>
@@ -927,10 +949,104 @@ footer {
     $("rideDate").min = localDate;
     $("rideDate").value = localDate;
   }
+function escapeAdminText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (char) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[char];
+    });
+  }
 
+  async function checkAdminAccess() {
+    const panel = $("adminPanel");
+    const status = $("adminStatus");
+
+    if (!panel || !status || !supabaseClient) return;
+
+    const { data: userData, error: userError } =
+      await supabaseClient.auth.getUser();
+
+    if (userError || !userData.user) {
+      panel.hidden = true;
+      return;
+    }
+
+    const { data, error } = await supabaseClient.rpc("is_admin");
+
+    if (error || data !== true) {
+      panel.hidden = true;
+      console.log("Admin access check:", error || data);
+      return;
+    }
+
+    panel.hidden = false;
+    status.textContent = "Admin access verified.";
+  }
+
+  async function loadAdminDashboard() {
+    const status = $("adminStatus");
+    status.textContent = "Dashboard loading...";
+
+    try {
+      await checkAdminAccess();
+
+      if ($("adminPanel").hidden) {
+        status.textContent =
+          "Admin access nahi mila. Pehle apne account mein login karein.";
+        return;
+      }
+
+      const requests = [
+        ["profiles", "adminCustomers"],
+        ["driver_applications", "adminDrivers"],
+        ["bookings", "adminRides"],
+        ["driver_wallets", "adminWallets"]
+      ];
+
+      for (const [table, elementId] of requests) {
+        const target = $(elementId);
+        target.textContent = "Loading...";
+
+        const { data, error } = await supabaseClient
+          .from(table)
+          .select("*")
+          .limit(100);
+
+        if (error) {
+          target.textContent = "Error: " + error.message;
+          continue;
+        }
+
+        if (!data || data.length === 0) {
+          target.textContent = "Abhi koi record nahi mila.";
+          continue;
+        }
+
+        target.innerHTML =
+          "<pre style='white-space:pre-wrap;overflow-wrap:anywhere'>" +
+          escapeAdminText(JSON.stringify(data, null, 2)) +
+          "</pre>";
+      }
+
+      status.textContent = "Dashboard loading complete.";
+    } catch (error) {
+      console.error("Admin dashboard error:", error);
+      status.textContent = "Dashboard load nahi hua. Console check karein.";
+    }
+  }
   function startApp() {
     initSupabase();
+$("adminLoadBtn").addEventListener("click", loadAdminDashboard);
 
+    supabaseClient.auth.onAuthStateChange(() => {
+      checkAdminAccess();
+    });
+
+    checkAdminAccess();
     $("signupButton").addEventListener("click", signup);
     $("loginButton").addEventListener("click", login);
     $("logoutButton").addEventListener("click", logout);
