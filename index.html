@@ -1515,12 +1515,10 @@ async function savePlatformPaymentAccount(event) {
     if (!ridesBox.hasChildNodes()) {
       ridesBox.textContent = "آپ نے ابھی کوئی رائیڈ قبول نہیں کی۔";
     }
-
-  } catch (error) {
-    console.error("Driver Dashboard error:", error);
-    message.textContent =
-      "Dashboard لوڈ نہیں ہوا۔ دوبارہ کوشش کریں۔";
-  }
+} catch (error) {
+  console.error("Driver Dashboard error:", error);
+  message.textContent = "خرابی: " + (error.message || error);
+}
 } 
   function startApp() {
     initSupabase();
@@ -1543,7 +1541,8 @@ loadDriverDashboard();
     $("mapButton").addEventListener("click", getRoute);
     $("bookingForm").addEventListener("submit", submitBooking);
     $("loadMyBookings").addEventListener("click", loadMyBookings);
-    $("driverRegistrationForm").addEventListener(
+    $("d
+      riverRegistrationForm").addEventListener(
       "submit", submitDriverRegistration
     );
 
