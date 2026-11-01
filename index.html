@@ -1321,6 +1321,207 @@ async function savePlatformPaymentAccount(event) {
     message.textContent = error.message;
   }
 }
+ async function loadDriverDashboard() {
+  const message = $("driverDashboardMessage");
+  const profileBox = $("driverProfile");
+  const offersBox = $("availableRides");
+  const ridesBox = $("myDriverRides");
+
+  if (!supabaseClient) return;
+
+  try {
+    const { data: { user }, error: authError } =
+      await supabaseClient.auth.getUser();
+
+    if (authError) throw authError;
+
+    profileBox.replaceChildren();
+    offersBox.replaceChildren();
+    ridesBox.replaceChildren();
+
+    if (!user) {
+      message.textContent = "ڈرائیور ڈیش بورڈ دیکھنے کے لیے لاگ اِن کریں۔";
+      return;
+    }
+
+    const { data: driver, error: driverError } =
+      await supabaseClient
+        .from("driver_applications")
+        .select("driver_name, driver_phone, car_company, car_model, car_number, status")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+    if (driverError) throw driverError;
+
+    if (!driver) {
+      message.textContent = "آپ کی ڈرائیور رجسٹریشن نہیں ملی۔";
+      return;
+    }
+
+    if (driver.status !== "approved") {
+      message.textContent = "آپ کی درخواست ابھی منظور نہیں ہوئی۔";
+      return;
+    }
+
+    message.textContent = "آپ کا ڈرائیور اکاؤنٹ فعال ہے۔";
+
+    const profileTitle = document.createElement("h3");
+    profileTitle.textContent = "ڈرائیور پروفائل";
+    profileBox.appendChild(profileTitle);
+
+    [
+      ["نام", driver.driver_name],
+      ["فون", driver.driver_phone],
+      ["گاڑی", driver.car_company + " " + driver.car_model],
+      ["نمبر", driver.car_number]
+    ].forEach(([label, value]) => {
+      const p = document.createElement("p");
+      p.textContent = label + ": " + (value || "—");
+      profileBox.appendChild(p);
+    });
+
+    const { data: offers, error: offersError } =
+      await supabaseClient
+        .from("ride_offers")
+        .select("id, booking_id, status, created_at")
+        .eq("driver_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(30);
+
+    if (offersError) throw offersError;
+
+    if (!offers || offers.length === 0) {
+      offersBox.textContent = "ابھی کوئی نئی رائیڈ دستیاب نہیں۔";
+      ridesBox.textContent = "آپ کی قبول کردہ رائیڈز یہاں نظر آئیں گی۔";
+      return;
+    }
+
+    offersBox.replaceChildren();
+    ridesBox.replaceChildren();
+
+    for (const offer of offers) {
+      if (offer.status === "offered") {
+        const card = document.createElement("div");
+        card.style.cssText =
+          "border:1px solid #ccc;padding:12px;margin:12px 0;border-radius:8px";
+
+        const title = document.createElement("h3");
+        title.textContent = "🚘 نئی قریبی رائیڈ";
+        card.appendChild(title);
+
+        const info = document.createElement("p");
+        info.textContent = "بکنگ نمبر: " + offer.booking_id;
+        card.appendChild(info);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = "رائیڈ قبول کریں";
+
+        btn.addEventListener("click", async () => {
+          btn.disabled = true;
+          btn.textContent = "قبول ہو رہی ہے۔۔۔";
+
+          try {
+            const { data, error } =
+              await supabaseClient.rpc("accept_ride", {
+                p_offer_id: offer.id
+              });
+
+            if (error) throw error;
+
+            if (data === true) {
+              message.textContent = "مبارک ہو! رائیڈ آپ کو مل گئی۔";
+            } else {
+              message.textContent =
+                "یہ رائیڈ دوسرے ڈرائیور نے قبول کر لی ہے۔";
+            }
+
+            await loadDriverDashboard();
+          } catch (error) {
+            console.error("Accept ride error:", error);
+            message.textContent =
+              "رائیڈ قبول نہیں ہوئی۔ دوبارہ کوشش کریں۔";
+            btn.disabled = false;
+            btn.textContent = "رائیڈ قبول کریں";
+          }
+        });
+
+        card.appendChild(btn);
+        offersBox.appendChild(card);
+      }
+
+      if (offer.status === "expired") {
+        const p = document.createElement("p");
+        p.textContent =
+          "بکنگ " + offer.booking_id +
+          ": یہ رائیڈ دوسرے ڈرائیور نے قبول کر لی ہے۔";
+        offersBox.appendChild(p);
+      }
+
+      if (offer.status === "accepted") {
+        const { data: booking, error: bookingError } =
+          await supabaseClient
+            .from("bookings")
+            .select("booking_id, customer_name, customer_phone, pickup, destination, ride_date, ride_time, fare, status")
+            .eq("id", offer.booking_id)
+            .eq("driver_id", user.id)
+            .maybeSingle();
+
+        if (bookingError) throw bookingError;
+        if (!booking) continue;
+
+        const card = document.createElement("div");
+        card.style.cssText =
+          "border:1px solid #087f5b;padding:12px;margin:12px 0;border-radius:8px";
+
+        const title = document.createElement("h3");
+        title.textContent = "✅ آپ کی قبول کردہ رائیڈ";
+        card.appendChild(title);
+
+        [
+          ["کسٹمر", booking.customer_name],
+          ["فون", booking.customer_phone],
+          ["پک اَپ", booking.pickup],
+          ["منزل", booking.destination],
+          ["تاریخ", booking.ride_date],
+          ["وقت", booking.ride_time],
+          ["کرایہ", "Rs. " + booking.fare]
+        ].forEach(([label, value]) => {
+          const p = document.createElement("p");
+          p.textContent = label + ": " + (value || "—");
+          card.appendChild(p);
+        });
+
+        const phone = String(booking.customer_phone || "")
+          .replace(/\D/g, "");
+
+        if (phone) {
+          const link = document.createElement("a");
+          link.href = "https://wa.me/" + phone;
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.textContent = "کسٹمر کو WhatsApp پیغام بھیجیں";
+          card.appendChild(link);
+        }
+
+        ridesBox.appendChild(card);
+      }
+    }
+
+    if (!offersBox.hasChildNodes()) {
+      offersBox.textContent = "ابھی کوئی نئی رائیڈ نہیں۔";
+    }
+
+    if (!ridesBox.hasChildNodes()) {
+      ridesBox.textContent = "آپ نے ابھی کوئی رائیڈ قبول نہیں کی۔";
+    }
+
+  } catch (error) {
+    console.error("Driver Dashboard error:", error);
+    message.textContent =
+      "Dashboard لوڈ نہیں ہوا۔ دوبارہ کوشش کریں۔";
+  }
+} 
   function startApp() {
     initSupabase();
    $("platformPaymentForm").addEventListener(
@@ -1329,11 +1530,13 @@ async function savePlatformPaymentAccount(event) {
 ); 
 $("adminLoadBtn").addEventListener("click", loadAdminDashboard);
 loadPlatformPaymentAccounts();
-    supabaseClient.auth.onAuthStateChange(() => {
-      checkAdminAccess();
-    });
+ supabaseClient.auth.onAuthStateChange(() => {
+  checkAdminAccess();
+  loadDriverDashboard();
+});
 
-    checkAdminAccess();
+checkAdminAccess();
+loadDriverDashboard(); 
     $("signupButton").addEventListener("click", signup);
     $("loginButton").addEventListener("click", login);
     $("logoutButton").addEventListener("click", logout);
