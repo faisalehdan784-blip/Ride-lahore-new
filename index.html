@@ -1528,13 +1528,15 @@ async function savePlatformPaymentAccount(event) {
 ); 
 $("adminLoadBtn").addEventListener("click", loadAdminDashboard);
 loadPlatformPaymentAccounts();
- supabaseClient.auth.onAuthStateChange(() => {
+if (supabaseClient) {
+  supabaseClient.auth.onAuthStateChange(() => {
+    checkAdminAccess();
+    loadDriverDashboard();
+  });
+
   checkAdminAccess();
   loadDriverDashboard();
-});
-
-checkAdminAccess();
-loadDriverDashboard(); 
+}
     $("signupButton").addEventListener("click", signup);
     $("loginButton").addEventListener("click", login);
     $("logoutButton").addEventListener("click", logout);
