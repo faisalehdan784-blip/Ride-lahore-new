@@ -359,6 +359,21 @@ footer {
 </form>
 
 <div id="platformPaymentAccounts"></div> 
+</section>
+ <section class="card" id="driverDashboard">
+  <h2>🚘 Driver Dashboard — ڈرائیور ڈیش بورڈ</h2>
+
+  <p id="driverDashboardMessage">
+    ڈرائیور ڈیش بورڈ دیکھنے کے لیے لاگ اِن کریں۔
+  </p>
+
+  <div id="driverProfile"></div>
+
+  <div id="availableRides">
+    دستیاب رائیڈز یہاں نظر آئیں گی۔
+  </div>
+
+  <div id="myDriverRides"></div>
 </section> 
 </main>
 <section class="card" id="safety">
@@ -437,7 +452,6 @@ footer {
   required
   placeholder="03XXXXXXXXX"
 >
-
     <button type="submit" class="primary">
       رجسٹریشن کی درخواست دیں
     </button>
@@ -778,7 +792,12 @@ footer {
       service_type: $("service").value,
       car_type: $("car").value,
       pickup: $("pickup").value.trim(),
-      destination: $("destination").value.trim(),
+      pickup_lat:
+      Number(lastRoute.start.lat),
+      pickup_lng:
+      Number(lastRoute.start.lon),
+      destination: $
+      ("destination").value.trim(),
       ride_date: $("rideDate").value,
       ride_time: $("rideTime").value,
       passengers: Number($("passengers").value),
@@ -1012,7 +1031,7 @@ function escapeAdminText(value) {
 
     const { data: userData, error: userError } =
       await supabaseClient.auth.getUser();
-
+    
     if (userError || !userData.user) {
       panel.hidden = true;
       return;
