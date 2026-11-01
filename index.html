@@ -1403,6 +1403,17 @@ async function savePlatformPaymentAccount(event) {
 
     for (const offer of offers) {
       if (offer.status === "offered") {
+     const { data: offerDetails, error: offerDetailsError } =
+  await supabaseClient.rpc("get_my_offered_ride_details", {
+    p_offer_id: offer.id
+  });
+
+if (offerDetailsError) throw offerDetailsError;
+
+const rideDetails = offerDetails?.[0];
+  if (!rideDetails) {
+  continue;
+}
         const card = document.createElement("div");
         card.style.cssText =
           "border:1px solid #ccc;padding:12px;margin:12px 0;border-radius:8px";
@@ -1414,6 +1425,15 @@ async function savePlatformPaymentAccount(event) {
         const info = document.createElement("p");
         info.textContent = "بکنگ نمبر: " + offer.booking_id;
         card.appendChild(info);
+       const distanceInfo = document.createElement("p");
+distanceInfo.textContent =
+  "📍 فاصلہ: " + (rideDetails.distance_km || "معلوم نہیں") + " KM";
+card.appendChild(distanceInfo);
+
+const fareInfo = document.createElement("p");
+fareInfo.textContent =
+  "💰 کرایہ: Rs. " + (rideDetails.fare || "معلوم نہیں");
+card.appendChild(fareInfo); 
 
         const btn = document.createElement("button");
         btn.type = "button";
