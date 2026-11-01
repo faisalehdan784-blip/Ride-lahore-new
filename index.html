@@ -1439,13 +1439,13 @@ async function savePlatformPaymentAccount(event) {
             }
 
             await loadDriverDashboard();
-          } catch (error) {
-            console.error("Accept ride error:", error);
-            message.textContent =
-              "رائیڈ قبول نہیں ہوئی۔ دوبارہ کوشش کریں۔";
-            btn.disabled = false;
-            btn.textContent = "رائیڈ قبول کریں";
-          }
+       } catch (error) {
+  console.error("Accept ride error:", error);
+  message.textContent =
+    "Accept Error: " + (error.message || error);
+  btn.disabled = false;
+  btn.textContent = "رائیڈ قبول کریں";
+}
         });
 
         card.appendChild(btn);
