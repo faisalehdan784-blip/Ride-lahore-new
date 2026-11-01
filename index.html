@@ -555,7 +555,68 @@ footer {
         "رجسٹریشن میں خرابی: " + error.message;
     }
   }
+async function updateDriverLocation() {
+  try {
+    const { data: { user } } =
+      await supabaseClient.auth.getUser();
 
+    if (!user) return;
+
+    const { data: driver, error: driverError } =
+      await supabaseClient
+        .from("driver_applications")
+        .select("status")
+        .eq("user_id", user.id)
+        .eq("status", "approved")
+        .maybeSingle();
+
+    if (driverError) throw driverError;
+    if (!driver) return;
+
+    if (!navigator.geolocation) {
+      $("accountStatus").textContent =
+        "آپ کے موبائل میں Location دستیاب نہیں۔";
+      return;
+    }
+
+    $("accountStatus").textContent =
+      "ڈرائیور کی Location کی اجازت دیں۔۔۔";
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { data, error } =
+            await supabaseClient.rpc(
+              "update_my_driver_location",
+              {
+                p_lat: position.coords.latitude,
+                p_lng: position.coords.longitude
+              }
+            );
+
+          if (error) throw error;
+
+          $("accountStatus").textContent = data
+            ? "لاگ اِن کامیاب۔ ڈرائیور کی Location اپ ڈیٹ ہوگئی۔"
+            : "Location اپ ڈیٹ نہیں ہوسکی۔";
+        } catch (error) {
+          console.error("Location update error:", error);
+        }
+      },
+      (error) => {
+        $("accountStatus").textContent =
+          "قریبی رائیڈز کے لیے Location کی اجازت ضروری ہے۔";
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 60000
+      }
+    );
+  } catch (error) {
+    console.error("Driver location error:", error);
+  }
+}
   async function login() {
     if (!supabaseClient) return;
 
@@ -580,6 +641,7 @@ footer {
       if (error) throw error;
 
       $("accountStatus").textContent = "لاگ اِن کامیاب ہوگیا۔";
+      await updateDriverLocation();
     } catch (error) {
       $("accountStatus").textContent =
         "لاگ اِن میں خرابی: " + error.message;
