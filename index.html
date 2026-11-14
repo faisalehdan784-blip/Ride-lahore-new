@@ -912,21 +912,17 @@ async function updateDriverLocation() {
     } catch (error) {
       console.error("Booking save error:", error);
     }
+if (saved) {
+  showStatus("✅ آپ کی بکنگ ویب سائٹ میں محفوظ ہوگئی ہے۔ قریبی ڈرائیورز کو رائیڈ آفر بھیج دی گئی ہے۔");
+} else {
+  showStatus(
+    "❌ بکنگ محفوظ نہیں ہوئی۔ براہِ کرم دوبارہ کوشش کریں۔",
+    true
+  );
+}
 
-    if (saved) {
-      showStatus("بکنگ ڈیٹا بیس میں محفوظ ہوگئی۔ WhatsApp کھولیں۔");
-    } else {
-      showStatus(
-        "بکنگ ڈیٹا بیس میں محفوظ نہیں ہوئی۔ WhatsApp پر پیغام بھیجیں؛ ڈیٹا بیس کی پالیسی بھی چیک کرنا ہوگی۔",
-        true
-      );
-    }
-
-    // WhatsApp message opens even if database saving fails.
-    window.location.href = whatsappUrl;
-
-    submitButton.disabled = false;
-    submitButton.textContent = "🟢 WhatsApp پر بکنگ بھیجیں";
+submitButton.disabled = false;
+submitButton.textContent = "🟢 رائیڈ بک کریں";
   }
 
   async function loadMyBookings() {
