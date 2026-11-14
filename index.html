@@ -1685,7 +1685,7 @@ card.appendChild(rejectBtn);
         const { data: booking, error: bookingError } =
           await supabaseClient
             .from("bookings")
-            .select("booking_id, customer_name, customer_phone, pickup, destination, ride_date, ride_time, fare, status")
+          .select("booking_id, customer_name, pickup, destination, ride_date, ride_time, fare, status")
             .eq("id", offer.booking_id)
             .eq("driver_id", user.id)
             .maybeSingle();
@@ -1704,7 +1704,6 @@ card.appendChild(rejectBtn);
 
         [
           ["کسٹمر", booking.customer_name],
-          ["فون", booking.customer_phone],
           ["پک اَپ", booking.pickup],
           ["منزل", booking.destination],
           ["تاریخ", booking.ride_date],
