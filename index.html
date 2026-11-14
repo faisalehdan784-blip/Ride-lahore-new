@@ -1584,7 +1584,36 @@ if (table === "driver_applications") {
     `;
   }).join("");
 }
+async function loadDriverPaymentAccounts() {
+  const list = $("driverPaymentAccounts");
 
+  if (!list || !supabaseClient) return;
+
+  const { data, error } = await supabaseClient
+    .from("platform_payment_accounts")
+    .select("payment_method, account_title, account_number")
+    .order("payment_method");
+
+  if (error) {
+    list.textContent = "Payment accounts لوڈ نہیں ہوئے: " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    list.textContent = "Admin نے ابھی JazzCash یا Easypaisa اکاؤنٹ محفوظ نہیں کیا۔";
+    return;
+  }
+
+  list.innerHTML = data.map(function (account) {
+    return `
+      <div style="border:1px solid #ccc;padding:10px;margin:10px 0;border-radius:8px">
+        <strong>${escapeAdminText(account.payment_method)}</strong>
+        <p>Account Title: ${escapeAdminText(account.account_title)}</p>
+        <p>Account Number: ${escapeAdminText(account.account_number)}</p>
+      </div>
+    `;
+  }).join("");
+}
 async function savePlatformPaymentAccount(event) {
   event.preventDefault();
 
