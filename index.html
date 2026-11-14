@@ -954,7 +954,7 @@ async function updateDriverLocation() {
 
       const { data, error } = await supabaseClient
         .from("bookings")
-        .select("booking_id, service_type, pickup, destination, ride_date, ride_time, fare, status")
+        .select("id, booking_id, user_id, driver_id, service_type, pickup, destination, ride_date, ride_time, fare, status")
         .or("user_id.eq." + user.id + ",driver_id.eq." + user.id)
         .order("created_at", { ascending: false });
 
@@ -989,7 +989,19 @@ async function updateDriverLocation() {
           p.textContent = label + ": " + (value ?? "—");
           card.appendChild(p);
         });
+       if (["accepted", "confirmed"].includes(booking.status)) {
+  const chatBtn = document.createElement("button");
+  chatBtn.type = "button";
+  chatBtn.textContent = "💬 رائیڈ چیٹ کھولیں";
+  chatBtn.style.cssText =
+    "background:#087f5b;color:white;padding:10px 16px;border:0;border-radius:6px;cursor:pointer;margin:8px 0;";
 
+  chatBtn.addEventListener("click", () => {
+    openRideChat(booking.id, booking.booking_id);
+  });
+
+  card.appendChild(chatBtn);
+}
         list.appendChild(card);
       });
     } catch (error) {
@@ -1000,7 +1012,158 @@ async function updateDriverLocation() {
       button.disabled = false;
     }
   }
+async function openRideChat(bookingId, bookingNumber) {
+  const { data: { user }, error: authError } =
+    await supabaseClient.auth.getUser();
 
+  if (authError || !user) {
+    alert("براہِ کرم دوبارہ لاگ اِن کریں۔");
+    return;
+  }
+
+  const { data: booking, error: bookingError } =
+    await supabaseClient
+      .from("bookings")
+      .select("status, user_id, driver_id")
+      .eq("id", bookingId)
+      .maybeSingle();
+
+  if (bookingError || !booking) {
+    alert("بکنگ کی معلومات نہیں مل سکیں۔");
+    return;
+  }
+
+  if (
+    booking.user_id !== user.id &&
+    booking.driver_id !== user.id
+  ) {
+    alert("آپ کو اس چیٹ کی اجازت نہیں ہے۔");
+    return;
+  }
+
+  if (!["accepted", "confirmed"].includes(booking.status)) {
+    alert("یہ رائیڈ چیٹ کے لیے دستیاب نہیں ہے۔");
+    return;
+  }
+
+  const oldChat = document.getElementById("rideChatWindow");
+  if (oldChat) oldChat.remove();
+
+  const chat = document.createElement("div");
+  chat.id = "rideChatWindow";
+  chat.style.cssText =
+    "position:fixed;inset:5%;z-index:99999;background:white;border:2px solid #087f5b;border-radius:12px;padding:15px;display:flex;flex-direction:column;";
+
+  chat.innerHTML = `
+    <h3>💬 رائیڈ چیٹ</h3>
+    <p>بکنگ نمبر: ${String(bookingNumber).replace(/[&<>"']/g, "")}</p>
+    <div id="rideChatMessages"
+      style="flex:1;overflow-y:auto;border:1px solid #ddd;padding:10px;margin:10px 0;">
+    </div>
+    <textarea id="rideChatInput"
+      placeholder="اپنا پیغام لکھیں..."
+      maxlength="1000"
+      style="width:100%;padding:10px;min-height:60px;"></textarea>
+    <button id="rideChatSend"
+      style="background:#087f5b;color:white;padding:12px;margin-top:8px;">
+      پیغام بھیجیں
+    </button>
+    <button id="rideChatClose"
+      style="background:#555;color:white;padding:10px;margin-top:8px;">
+      چیٹ بند کریں
+    </button>
+  `;
+
+  document.body.appendChild(chat);
+
+  const messagesBox = chat.querySelector("#rideChatMessages");
+  const input = chat.querySelector("#rideChatInput");
+  const sendBtn = chat.querySelector("#rideChatSend");
+  const closeBtn = chat.querySelector("#rideChatClose");
+
+  let chatTimer = null;
+
+  function closeChat() {
+    if (chatTimer) clearInterval(chatTimer);
+    chat.remove();
+  }
+
+  closeBtn.addEventListener("click", closeChat);
+
+  async function refreshChat() {
+    const { data: currentBooking, error: statusError } =
+      await supabaseClient
+        .from("bookings")
+        .select("status")
+        .eq("id", bookingId)
+        .maybeSingle();
+
+    if (
+      statusError ||
+      !currentBooking ||
+      !["accepted", "confirmed"].includes(currentBooking.status)
+    ) {
+      alert("رائیڈ مکمل یا بند ہوگئی ہے۔ چیٹ بند کر دی گئی ہے۔");
+      closeChat();
+      return;
+    }
+
+    const { data, error } = await supabaseClient
+      .from("ride_messages")
+      .select("sender_id, message, created_at")
+      .eq("booking_id", bookingId)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      messagesBox.textContent = "پیغامات لوڈ نہیں ہو سکے۔";
+      return;
+    }
+
+    messagesBox.replaceChildren();
+
+    (data || []).forEach(msg => {
+      const p = document.createElement("p");
+      p.textContent =
+        (msg.sender_id === user.id ? "آپ: " : "دوسرا فریق: ") +
+        msg.message;
+      p.style.cssText =
+        "padding:8px;margin:5px;background:#f1f1f1;border-radius:6px;";
+      messagesBox.appendChild(p);
+    });
+
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+  }
+
+  sendBtn.addEventListener("click", async () => {
+    const messageText = input.value.trim();
+
+    if (!messageText) return;
+
+    sendBtn.disabled = true;
+
+    const { error } = await supabaseClient
+      .from("ride_messages")
+      .insert({
+        booking_id: bookingId,
+        sender_id: user.id,
+        message: messageText
+      });
+
+    sendBtn.disabled = false;
+
+    if (error) {
+      alert("پیغام نہیں بھیجا جا سکا: " + error.message);
+      return;
+    }
+
+    input.value = "";
+    await refreshChat();
+  });
+
+  await refreshChat();
+
+  chatTimer = setInterval(refreshChat, 5000);
+}
   async function submitDriverRegistration(event) {
     event.preventDefault();
 
