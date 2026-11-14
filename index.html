@@ -1469,6 +1469,41 @@ card.appendChild(fareInfo);
         });
 
         card.appendChild(btn);
+        const rejectBtn = document.createElement("button");
+rejectBtn.type = "button";
+rejectBtn.textContent = "✖️ رائیڈ Reject کریں";
+rejectBtn.style.cssText =
+  "background:#c62828;color:white;padding:10px;margin:8px;border:0;border-radius:6px;";
+
+rejectBtn.addEventListener("click", async () => {
+  rejectBtn.disabled = true;
+  rejectBtn.textContent = "Reject ہو رہی ہے۔۔۔";
+
+  try {
+    const { data, error } = await supabaseClient.rpc(
+      "reject_ride",
+      { p_offer_id: offer.id }
+    );
+
+    if (error) throw error;
+
+    if (data === true) {
+      message.textContent = "آپ نے یہ رائیڈ Reject کر دی ہے۔";
+    } else {
+      message.textContent = "یہ رائیڈ اب دستیاب نہیں ہے۔";
+    }
+
+    await loadDriverDashboard();
+
+  } catch (error) {
+    console.error("Reject error:", error);
+    message.textContent = "Reject Error: " + error.message;
+    rejectBtn.disabled = false;
+    rejectBtn.textContent = "✖️ رائیڈ Reject کریں";
+  }
+});
+
+card.appendChild(rejectBtn);
         offersBox.appendChild(card);
       }
 
