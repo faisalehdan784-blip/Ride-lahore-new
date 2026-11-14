@@ -1686,6 +1686,18 @@ async function savePlatformPaymentAccount(event) {
     }
 
     message.textContent = "آپ کا ڈرائیور اکاؤنٹ فعال ہے۔";
+   const { data: topupBalance, error: topupBalanceError } =
+  await supabaseClient.rpc("get_my_topup_balance");
+
+if (topupBalanceError) throw topupBalanceError;
+
+const topupBox = $("driverTopupBalance");
+
+if (topupBox) {
+  topupBox.textContent =
+    "آپ کا Top-up Balance: Rs. " +
+    Number(topupBalance || 0).toFixed(2);
+} 
 
     const profileTitle = document.createElement("h3");
     profileTitle.textContent = "ڈرائیور پروفائل";
