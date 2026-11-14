@@ -1529,6 +1529,7 @@ card.appendChild(rejectBtn);
 
         if (bookingError) throw bookingError;
         if (!booking) continue;
+        if (booking.status === "completed") continue;
 
         const card = document.createElement("div");
         card.style.cssText =
@@ -1563,7 +1564,45 @@ card.appendChild(rejectBtn);
           link.textContent = "کسٹمر کو WhatsApp پیغام بھیجیں";
           card.appendChild(link);
         }
+  const completeBtn = document.createElement("button");
+completeBtn.type = "button";
+completeBtn.textContent = "✅ رائیڈ مکمل ہوگئی";
+completeBtn.style.cssText =
+  "background:#087f5b;color:white;padding:12px;margin:10px 0;border:0;border-radius:6px;cursor:pointer;";
 
+completeBtn.addEventListener("click", async () => {
+  if (!confirm("کیا آپ واقعی یہ رائیڈ مکمل کرنا چاہتے ہیں؟")) {
+    return;
+  }
+
+  completeBtn.disabled = true;
+  completeBtn.textContent = "رائیڈ مکمل ہو رہی ہے۔۔۔";
+
+  try {
+    const { data, error } = await supabaseClient.rpc(
+      "complete_my_ride",
+      { p_booking_id: offer.booking_id }
+    );
+
+    if (error) throw error;
+
+    if (data === true) {
+      message.textContent = "رائیڈ کامیابی سے مکمل ہوگئی۔";
+      await loadDriverDashboard();
+    } else {
+      message.textContent = "رائیڈ مکمل نہیں ہوسکی۔ دوبارہ کوشش کریں۔";
+      completeBtn.disabled = false;
+      completeBtn.textContent = "✅ رائیڈ مکمل ہوگئی";
+    }
+  } catch (error) {
+    console.error("Complete ride error:", error);
+    message.textContent = "خرابی: " + error.message;
+    completeBtn.disabled = false;
+    completeBtn.textContent = "✅ رائیڈ مکمل ہوگئی";
+  }
+});
+
+card.appendChild(completeBtn);
         ridesBox.appendChild(card);
       }
     }
