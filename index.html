@@ -985,7 +985,11 @@ submitButton.textContent = "🟢 رائیڈ بک کریں";
           p.textContent = label + ": " + (value ?? "—");
           card.appendChild(p);
         });
-       if (["accepted", "confirmed"].includes(booking.status)) {
+        if (
+  ["accepted", "confirmed"].includes(
+    String(booking.status || "").trim().toLowerCase()
+  )
+) {
   const chatBtn = document.createElement("button");
   chatBtn.type = "button";
   chatBtn.textContent = "💬 رائیڈ چیٹ کھولیں";
