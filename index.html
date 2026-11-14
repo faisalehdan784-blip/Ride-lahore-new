@@ -1716,17 +1716,6 @@ card.appendChild(rejectBtn);
           card.appendChild(p);
         });
 
-        const phone = String(booking.customer_phone || "")
-          .replace(/\D/g, "");
-
-        if (phone) {
-          const link = document.createElement("a");
-          link.href = "https://wa.me/" + phone;
-          link.target = "_blank";
-          link.rel = "noopener";
-          link.textContent = "کسٹمر کو WhatsApp پیغام بھیجیں";
-          card.appendChild(link);
-        }
   const completeBtn = document.createElement("button");
 completeBtn.type = "button";
 completeBtn.textContent = "✅ رائیڈ مکمل ہوگئی";
