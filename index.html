@@ -1721,6 +1721,7 @@ async function savePlatformPaymentAccount(event) {
 if (topupBalanceError) throw topupBalanceError;
 
 const topupBox = $("driverTopupBalance");
+await loadDriverPaymentAccounts();    
 
 if (topupBox) {
   topupBox.textContent =
