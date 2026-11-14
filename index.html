@@ -1964,7 +1964,47 @@ if (supabaseClient) {
     $("loadMyBookings").addEventListener("click", loadMyBookings);
     $("driverRegistrationForm").addEventListener(
   "submit", submitDriverRegistration
-    );     
+    );
+    const driverTopupForm = $("driverTopupForm");
+
+if (driverTopupForm) {
+  driverTopupForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const amount = Number($("driverTopupAmount").value);
+    const method = $("driverTopupMethod").value;
+    const reference = $("driverTopupReference").value.trim();
+    const result = $("driverTopupMessage");
+
+    result.textContent = "درخواست جمع ہو رہی ہے۔۔۔";
+
+    if (amount < 300 || amount > 5000) {
+      result.textContent = "رقم 300 سے 5000 روپے کے درمیان ہونی چاہیے۔";
+      return;
+    }
+
+    try {
+      const { data, error } = await supabaseClient.rpc(
+        "submit_my_topup",
+        {
+          p_amount: amount,
+          p_method: method,
+          p_reference: reference
+        }
+      );
+
+      if (error) throw error;
+
+      result.textContent =
+        "Top-up درخواست جمع ہوگئی۔ Request ID: " + data;
+
+      driverTopupForm.reset();
+
+    } catch (error) {
+      result.textContent = "Error: " + error.message;
+    }
+  });
+}
     setupDriverModels();
     setDateMinimum();
 
