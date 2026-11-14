@@ -1333,6 +1333,71 @@ async function updateDriverStatus(driverId, newStatus) {
         return;
       }
     await loadPlatformPaymentAccounts();
+   // Load Pending Driver Top-up Requests
+      const topupBox = $("adminTopupRequests");
+
+      if (topupBox) {
+        const { data: requests, error: topupError } =
+          await supabaseClient
+            .from("topup_requests")
+            .select("id, driver_id, amount, method, transaction_reference, status, created_at")
+            .eq("status", "pending")
+            .order("created_at", { ascending: false });
+
+        if (topupError) {
+          topupBox.textContent =
+            "Top-up error: " + topupError.message;
+        } else if (!requests || requests.length === 0) {
+          topupBox.textContent = "ابھی کوئی Pending Top-up درخواست نہیں۔";
+        } else {
+          topupBox.innerHTML = requests.map(function (item) {
+            return `
+              <div style="border:1px solid #ccc;padding:12px;margin:10px 0;border-radius:8px">
+                <p>Request ID: ${item.id}</p>
+                <p>Driver ID: ${escapeAdminText(item.driver_id)}</p>
+                <p>رقم: Rs. ${Number(item.amount).toFixed(2)}</p>
+                <p>Payment: ${escapeAdminText(item.method)}</p>
+                <p>Transaction ID: ${escapeAdminText(item.transaction_reference)}</p>
+                <p>تاریخ: ${escapeAdminText(item.created_at)}</p>
+                <button type="button"
+                  data-topup-id="${item.id}">
+                  Approve Top-up
+                </button>
+              </div>
+            `;
+          }).join("");
+
+          topupBox.querySelectorAll("button[data-topup-id]")
+            .forEach(function (button) {
+              button.addEventListener("click", async function () {
+                if (!confirm("کیا آپ نے رقم وصول کرکے Transaction ID چیک کر لیا ہے؟")) {
+                  return;
+                }
+
+                button.disabled = true;
+
+                const { data, error } = await supabaseClient.rpc(
+                  "admin_approve_topup",
+                  { p_request_id: Number(button.dataset.topupId) }
+                );
+
+                if (error) {
+                  alert("Approval Error: " + error.message);
+                  button.disabled = false;
+                  return;
+                }
+
+                if (data === true) {
+                  alert("Top-up Approved Successfully!");
+                  await loadAdminDashboard();
+                } else {
+                  alert("Top-up approve نہیں ہوا۔ Admin access یا request status چیک کریں۔");
+                  button.disabled = false;
+                }
+              });
+            });
+        }
+      }   
      // Platform Commission Report
       const commissionBox = $("adminCommissionReport");
 
