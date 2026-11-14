@@ -376,6 +376,48 @@ footer {
   </p>
 
   <div id="driverProfile"></div>
+ <h3>💰 Driver Top-up — ڈرائیور بیلنس</h3>
+
+<div id="driverTopupBalance">
+  Top-up Balance لوڈ ہو رہا ہے۔
+</div>
+
+<h4>JazzCash / Easypaisa میں رقم بھیجیں</h4>
+<div id="driverPaymentAccounts">
+  ادائیگی کے اکاؤنٹس لوڈ ہو رہے ہیں۔
+</div>
+
+<form id="driverTopupForm">
+
+  <label>Top-up Amount (Rs.)</label>
+  <input
+    id="driverTopupAmount"
+    type="number"
+    min="300"
+    max="5000"
+    step="1"
+    required
+    placeholder="300 سے 5000 روپے"
+  >
+
+  <label>Payment Method</label>
+  <select id="driverTopupMethod" required>
+    <option value="JazzCash">JazzCash</option>
+    <option value="Easypaisa">Easypaisa</option>
+  </select>
+
+  <label>Transaction ID</label>
+  <input
+    id="driverTopupReference"
+    type="text"
+    required
+    placeholder="اپنی ادائیگی کا Transaction ID"
+  >
+
+  <button type="submit">Submit Top-up Request</button>
+
+  <p id="driverTopupMessage" role="status"></p>
+</form>  
 
   <div id="availableRides">
     دستیاب رائیڈز یہاں نظر آئیں گی۔
