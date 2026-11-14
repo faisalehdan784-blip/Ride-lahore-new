@@ -955,7 +955,7 @@ async function updateDriverLocation() {
       const { data, error } = await supabaseClient
         .from("bookings")
         .select("booking_id, service_type, pickup, destination, ride_date, ride_time, fare, status")
-        .eq("user_id", user.id)
+        .or("user_id.eq." + user.id + ",driver_id.eq." + user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
