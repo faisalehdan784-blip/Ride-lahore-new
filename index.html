@@ -1329,6 +1329,48 @@ async function updateDriverStatus(driverId, newStatus) {
         return;
       }
     await loadPlatformPaymentAccounts();
+     // Platform Commission Report
+      const commissionBox = $("adminCommissionReport");
+
+      if (commissionBox) {
+        const { data: commissions, error: commissionError } =
+          await supabaseClient
+            .from("platform_commissions")
+            .select("booking_id, fare, commission, created_at")
+            .order("created_at", { ascending: false });
+
+        if (commissionError) {
+          commissionBox.textContent =
+            "Commission report error: " + commissionError.message;
+        } else {
+          const rows = commissions || [];
+
+          const totalFare = rows.reduce(
+            (sum, item) => sum + Number(item.fare || 0), 0
+          );
+
+          const totalCommission = rows.reduce(
+            (sum, item) => sum + Number(item.commission || 0), 0
+          );
+
+          commissionBox.innerHTML = `
+            <div style="border:1px solid #ccc;padding:12px;border-radius:8px">
+              <p>مکمل رائیڈز: <strong>${rows.length}</strong></p>
+              <p>کل رائیڈ کرایہ: <strong>Rs. ${totalFare.toFixed(2)}</strong></p>
+              <p>آپ کا کل کمیشن: <strong>Rs. ${totalCommission.toFixed(2)}</strong></p>
+            </div>
+            <h4>ہر رائیڈ کا کمیشن</h4>
+            ${rows.map(item => `
+              <div style="border:1px solid #ddd;padding:10px;margin:8px 0;border-radius:8px">
+                <p>Booking: ${escapeAdminText(item.booking_id)}</p>
+                <p>کرایہ: Rs. ${Number(item.fare).toFixed(2)}</p>
+                <p>کمیشن: Rs. ${Number(item.commission).toFixed(2)}</p>
+                <p>تاریخ: ${escapeAdminText(item.created_at)}</p>
+              </div>
+            `).join("")}
+          `;
+        }
+      } 
       const requests = [
         ["profiles", "adminCustomers"],
         ["driver_applications", "adminDrivers"],
