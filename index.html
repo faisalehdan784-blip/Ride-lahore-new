@@ -1514,9 +1514,9 @@ async function loadAvailableRides(){
         alert("رائیڈ قبول نہیں ہوئی: " + error.message);
       }else if(data === true){
         alert("رائیڈ آپ کے نام ہو گئی ہے۔");
-      }else{
-        alert("یہ رائیڈ کسی دوسرے ڈرائیور نے قبول کر لی ہے یا اب دستیاب نہیں۔");
-      }
+    }else{
+  alert("رائیڈ قبول نہیں ہوئی۔ آپ کا Top-up Balance صفر یا کم ہے، یا رائیڈ اب دستیاب نہیں۔ براہ کرم Top-up کریں۔");
+}
 
       await loadDriverDashboard();
     });
