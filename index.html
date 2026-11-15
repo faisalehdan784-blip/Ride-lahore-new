@@ -1057,38 +1057,47 @@ async function getRoute(){
       "کل کرایہ: Rs. " + fare
       + " | پلیٹ فارم کمیشن (5%): Rs. " + commission
       + " | ڈرائیور رقم: Rs. " + driverAmount;
-
-    // نقشہ اختیاری ہے؛ کرایہ معلوم کرنے کے لیے نقشہ ضروری نہیں۔
-    // اگر Leaflet tiles lng],11);
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-            attribution:"© OpenStreetMap"
-          }).addTo(mapObject);کام نہ کریں تو بھی روٹ اور کرایہ محفوظ رہیں گے۔
-    try{
-      if(window.L){
+   // نقشہ اختیاری ہے؛ کرایہ معلوم کرنے کے لیے نقشہ ضروری نہیں۔
+    try {
+      if (window.L) {
         $("map").classList.remove("hidden");
 
-        if(!mapObject){
-          mapObject = L.map("map").setView([start.lat,start.
+        if (!mapObject) {
+          mapObject = L.map("map").setView(
+            [start.lat, start.lng],
+            11
+          );
+
+          L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+              attribution: "© OpenStreetMap"
+            }
+          ).addTo(mapObject);
         }
 
-        if(routeLayer) mapObject.removeLayer(routeLayer);
+        if (routeLayer) {
+          mapObject.removeLayer(routeLayer);
+        }
 
         routeLayer = L.geoJSON(route.geometry).addTo(mapObject);
         mapObject.fitBounds(routeLayer.getBounds());
-        setTimeout(function(){mapObject.invalidateSize();},300);
+
+        setTimeout(function () {
+          mapObject.invalidateSize();
+        }, 300);
       }
-    }catch(mapError){
-      console.log("Map display unavailable:",mapError.message);
+    } catch (mapError) {
+      console.log("Map display unavailable:", mapError.message);
       $("map").classList.add("hidden");
     }
 
-  }catch(error){
-    showStatus("mapStatus",error.message,"error");
-  }finally{
+  } catch (error) {
+    showStatus("mapStatus", error.message, "error");
+  } finally {
     button.disabled = false;
   }
-}
-
+} 
 /* PASSENGER BOOKING */
 async function submitBooking(event){
   event.preventDefault();
