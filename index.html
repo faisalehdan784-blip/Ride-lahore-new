@@ -1401,27 +1401,60 @@ async function updateDriverStatus(driverId, newStatus) {
                 <p>Payment: ${escapeAdminText(item.method)}</p>
                 <p>Transaction ID: ${escapeAdminText(item.transaction_reference)}</p>
                 <p>تاریخ: ${escapeAdminText(item.created_at)}</p>
-                <button type="button"
-                  data-topup-id="${item.id}">
-                  Approve Top-up
-                </button>
+               <button type="button"
+  data-topup-id="${item.id}"
+  data-topup-action="approve">
+  Approve Top-up
+</button>
+
+<button type="button"
+  data-topup-id="${item.id}"
+  data-topup-action="reject">
+  Reject Top-up
+</button>
               </div>
             `;
           }).join("");
+        topupBox.querySelectorAll("button[data-topup-id]")
+  .forEach(function (button) {
+    button.addEventListener("click", async function () {
+      const approved = button.dataset.topupAction === "approve";
 
-          topupBox.querySelectorAll("button[data-topup-id]")
-            .forEach(function (button) {
-              button.addEventListener("click", async function () {
-                if (!confirm("کیا آپ نے رقم وصول کرکے Transaction ID چیک کر لیا ہے؟")) {
-                  return;
-                }
+      const question = approved
+        ? "کیا آپ نے واقعی رقم وصول کرکے Transaction ID چیک کر لیا ہے؟"
+        : "کیا آپ یہ Top-up درخواست Reject کرنا چاہتے ہیں؟";
 
-                button.disabled = true;
+      if (!confirm(question)) return;
 
-                const { data, error } = await supabaseClient.rpc(
-                  "admin_approve_topup",
-                  { p_request_id: Number(button.dataset.topupId) }
-                );
+      button.disabled = true;
+
+      const functionName = approved
+        ? "admin_approve_topup"
+        : "admin_reject_topup";
+
+      const { data, error } = await supabaseClient.rpc(
+        functionName,
+        { p_request_id: Number(button.dataset.topupId) }
+      );
+
+      if (error) {
+        alert("Error: " + error.message);
+        button.disabled = false;
+        return;
+      }
+
+      if (data === true) {
+        alert(approved
+          ? "Top-up Approved Successfully!"
+          : "Top-up Rejected Successfully!");
+
+        await loadAdminDashboard();
+      } else {
+        alert("درخواست مکمل نہیں ہوئی۔");
+        button.disabled = false;
+      }
+    });
+  });  
 
                 if (error) {
                   alert("Approval Error: " + error.message);
