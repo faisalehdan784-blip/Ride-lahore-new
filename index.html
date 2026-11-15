@@ -920,9 +920,10 @@ async function updateDriverLocation(){
   }
 
   driverLocationWatchId = navigator.geolocation.watchPosition(
-    async function(position){
-      const {latitude,longitude} = position.coords;
+   async function(position){
+  const {latitude,longitude} = position.coords;
 
+  console.log("Driver GPS Location:", latitude, longitude);
       const {error} = await supabaseClient.rpc(
         "update_my_driver_location",
         {
@@ -936,8 +937,8 @@ async function updateDriverLocation(){
       }
     },
     function(error){
-      console.log("Location permission:",error.message);
-    },
+  console.log("GPS ERROR:", error.code, error.message);
+},
     {
       enableHighAccuracy:true,
       maximumAge:30000,
@@ -1057,16 +1058,16 @@ async function getRoute(){
       + " | ڈرائیور رقم: Rs. " + driverAmount;
 
     // نقشہ اختیاری ہے؛ کرایہ معلوم کرنے کے لیے نقشہ ضروری نہیں۔
-    // اگر Leaflet tiles کام نہ کریں تو بھی روٹ اور کرایہ محفوظ رہیں گے۔
+    // اگر Leaflet tiles lng],11);
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+            attribution:"© OpenStreetMap"
+          }).addTo(mapObject);کام نہ کریں تو بھی روٹ اور کرایہ محفوظ رہیں گے۔
     try{
       if(window.L){
         $("map").classList.remove("hidden");
 
         if(!mapObject){
-          mapObject = L.map("map").setView([start.lat,start.lng],11);
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-            attribution:"© OpenStreetMap"
-          }).addTo(mapObject);
+          mapObject = L.map("map").setView([start.lat,start.
         }
 
         if(routeLayer) mapObject.removeLayer(routeLayer);
