@@ -898,6 +898,7 @@ currentUser = null;
 let driverLocationWatchId = null;
 let driverLocationWatchStarting = false;  
 async function updateDriverLocation(){
+  console.log("UPDATE DRIVER LOCATION FUNCTION STARTED"); 
   if(
     !currentUser ||
     !navigator.geolocation ||
