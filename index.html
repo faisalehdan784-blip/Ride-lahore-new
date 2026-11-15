@@ -517,10 +517,19 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <button class="primary" onclick="loadDriverDashboard()">ڈیش بورڈ لوڈ کریں</button>
     <div id="driverDashboardStatus" class="status">ڈرائیور لاگ اِن کرنے کے بعد ڈیش بورڈ لوڈ کریں۔</div>
     <div id="driverProfile"></div>
-    <div class="grid-2">
-      <div class="stat">موجودہ ٹاپ اَپ بیلنس<strong id="driverTopupBalance">Rs. 0.00</strong></div>
-      <div class="stat">رائیڈ کمائی الگ ڈرائیور والیٹ میں محفوظ ہوگی<strong>الگ ریکارڈ</strong></div>
-    </div>
+  <div class="grid-2">
+
+  <div class="stat">
+    موجودہ ٹاپ اَپ بیلنس
+    <strong id="driverTopupBalance">Rs. 0.00</strong>
+  </div>
+
+  <div class="stat">
+    میری رائیڈز کی کل کمائی
+    <strong id="driverEarningsBalance">Rs. 0.00</strong>
+  </div>
+
+</div>
   </div>
 
   <div class="card">
@@ -1442,7 +1451,14 @@ async function loadDriverDashboard(){
       : Number(balance || 0);
     $("driverTopupBalance").textContent = "Rs. " + amount.toFixed(2);
   }
+const {data:earnings,error:earningsError} =
+  await supabaseClient.rpc("get_my_driver_earnings");
 
+if(!earningsError){
+  const amount = Number(earnings || 0);
+  $("driverEarningsBalance").textContent =
+    "Rs. " + amount.toFixed(2);
+}
   await loadDriverPaymentAccounts();
   await loadAvailableRides();
   await loadMyDriverRides();
