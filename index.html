@@ -1454,23 +1454,7 @@ async function updateDriverStatus(driverId, newStatus) {
         button.disabled = false;
       }
     });
-  });  
-
-                if (error) {
-                  alert("Approval Error: " + error.message);
-                  button.disabled = false;
-                  return;
-                }
-
-                if (data === true) {
-                  alert("Top-up Approved Successfully!");
-                  await loadAdminDashboard();
-                } else {
-                  alert("Top-up approve نہیں ہوا۔ Admin access یا request status چیک کریں۔");
-                  button.disabled = false;
-                }
-              });
-            });
+  }); 
         }
       }   
      // Platform Commission Report
