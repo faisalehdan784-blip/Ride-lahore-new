@@ -523,15 +523,65 @@ button:disabled{opacity:.55;cursor:not-allowed}
     موجودہ ٹاپ اَپ بیلنس
     <strong id="driverTopupBalance">Rs. 0.00</strong>
   </div>
-
-  <div class="stat">
-    میری رائیڈز کی کل کمائی
-    <strong id="driverEarningsBalance">Rs. 0.00</strong>
-  </div>
+   <div class="stat">
+  میری رائیڈز کی کل کمائی
+  <strong id="driverEarningsBalance">Rs. 0.00</strong>
+</div>
 
 </div>
-  </div>
 
+<div class="card" id="driverWithdrawalSection">
+  <h3>💰 اپنی کمائی Withdraw کریں</h3>
+
+  <p>کم از کم رقم: Rs. 1,000</p>
+
+  <label>Withdrawal Amount</label>
+  <input
+    type="number"
+    id="withdrawalAmount"
+    min="1000"
+    step="0.01"
+    placeholder="مثلاً 1000"
+  >
+
+  <label>Payment Method</label>
+  <select id="withdrawalMethod">
+    <option value="JazzCash">JazzCash</option>
+    <option value="Easypaisa">Easypaisa</option>
+  </select>
+
+  <label>Account Title</label>
+  <input
+    type="text"
+    id="withdrawalAccountTitle"
+    placeholder="اکاؤنٹ ہولڈر کا نام"
+  >
+
+  <label>Account Number</label>
+  <input
+    type="text"
+    id="withdrawalAccountNumber"
+    placeholder="موبائل اکاؤنٹ نمبر"
+  >
+
+  <button
+    type="button"
+    class="primary"
+    onclick="submitWithdrawalRequest()"
+  >
+    Withdraw Request جمع کریں
+  </button>
+
+  <div id="withdrawalStatus" class="status"></div>
+
+  <h3>میری Withdrawal Requests</h3>
+  <div id="myWithdrawalRequests">
+    ابھی کوئی درخواست نہیں۔
+  </div>
+</div>
+
+</div>
+</div> 
   <div class="card">
     <h3>ٹاپ اَپ جمع کروائیں</h3>
     <p>کم از کم 300 روپے اور زیادہ سے زیادہ 5000 روپے۔ رقم JazzCash یا Easypaisa میں بھیج کر ٹرانزیکشن کی تفصیل جمع کریں۔ ایڈمن تصدیق کے بعد بیلنس شامل کرے گا۔</p>
