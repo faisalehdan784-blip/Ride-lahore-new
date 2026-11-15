@@ -2071,7 +2071,119 @@ async function loadAdminWallets(){
     $("adminCommissionReport").appendChild(div);
   });
 }
+/* ADMIN WITHDRAWAL REQUESTS */
 
+async function loadAdminWithdrawals(){
+
+  const box = $("adminWithdrawalRequests");
+
+  if(!box) return;
+
+  box.textContent = "Withdrawal Requests لوڈ ہو رہی ہیں...";
+
+  const {data,error} = await supabaseClient
+    .from("withdrawal_requests")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    box.textContent = "Error: " + error.message;
+    return;
+  }
+
+  box.innerHTML = "";
+
+  if(!data || data.length === 0){
+    box.textContent = "ابھی کوئی Withdrawal Request نہیں۔";
+    return;
+  }
+
+  data.forEach(function(request){
+
+    const div = document.createElement("div");
+    div.className = "item-card";
+
+    const details = document.createElement("p");
+    details.textContent =
+      "Request ID: " + request.id +
+      " | Driver ID: " + request.driver_id +
+      " | رقم: Rs. " + Number(request.amount).toFixed(2) +
+      " | طریقہ: " + request.method +
+      " | Account Title: " + request.account_title +
+      " | Account Number: " + request.account_number +
+      " | Status: " + request.status.toUpperCase();
+
+    div.appendChild(details);
+
+    if(request.status === "pending"){
+
+      const approveBtn = document.createElement("button");
+      approveBtn.className = "primary";
+      approveBtn.textContent = "رقم بھیج دی، Approve کریں";
+
+      approveBtn.onclick = async function(){
+        const confirmed = confirm(
+          "کیا آپ نے ڈرائیور کو Rs. " +
+          request.amount + " بھیج دیے ہیں؟"
+        );
+
+        if(!confirmed) return;
+
+        const {data,error} = await supabaseClient.rpc(
+          "admin_approve_withdrawal",
+          {p_request_id: request.id}
+        );
+
+        if(error){
+          alert("Error: " + error.message);
+          return;
+        }
+
+        if(data !== true){
+          alert("Request Approve نہیں ہوئی۔ شاید پہلے ہی Review ہو چکی ہے۔");
+          return;
+        }
+
+        alert("Withdrawal کامیابی سے Approve ہوگئی۔");
+        await loadAdminWithdrawals();
+      };
+
+      const rejectBtn = document.createElement("button");
+      rejectBtn.textContent = "Reject کریں";
+      rejectBtn.onclick = async function(){
+
+        const confirmed = confirm(
+          "کیا آپ اس درخواست کو Reject کرنا چاہتے ہیں؟ رقم ڈرائیور کے Wallet میں واپس ہوگی۔"
+        );
+
+        if(!confirmed) return;
+
+        const {data,error} = await supabaseClient.rpc(
+          "admin_reject_withdrawal",
+          {p_request_id: request.id}
+        );
+
+        if(error){
+          alert("Error: " + error.message);
+          return;
+        }
+
+        if(data !== true){
+          alert("Request Reject نہیں ہوئی۔ شاید پہلے ہی Review ہو چکی ہے۔");
+          return;
+        }
+
+        alert("Request Reject ہوگئی اور رقم واپس کردی گئی۔");
+        await loadAdminWithdrawals();
+      };
+
+      div.appendChild(approveBtn);
+      div.appendChild(rejectBtn);
+    }
+
+    box.appendChild(div);
+  });
+}
 /* ADMIN TOPUP APPROVAL */
 async function loadAdminTopups(){
   const {data,error} = await supabaseClient
