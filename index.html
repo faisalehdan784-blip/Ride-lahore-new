@@ -870,12 +870,19 @@ async function logout(){
   closeRideChat();
 
   const {error} = await supabaseClient.auth.signOut();
-  if(error){
-    alert(error.message);
-    return;
-  }
+if(error){
+  alert(error.message);
+  return;
+}
 
-  currentUser = null;
+if(driverLocationWatchId !== null){
+  navigator.geolocation.clearWatch(driverLocationWatchId);
+  driverLocationWatchId = null;
+}
+
+driverLocationWatchStarting = false;
+
+currentUser = null;
   currentProfile = null;
   showStatus("passengerAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
   showStatus("driverAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
@@ -888,41 +895,58 @@ async function logout(){
 }
 
 /* DRIVER LOCATION */
+let driverLocationWatchId = null;
+let driverLocationWatchStarting = false;  
 async function updateDriverLocation(){
-  if(!currentUser || !navigator.geolocation) return;
+  if(
+    !currentUser ||
+    !navigator.geolocation ||
+    driverLocationWatchId !== null ||
+    driverLocationWatchStarting
+  ) return;
 
-  const {data:application} = await supabaseClient
+  driverLocationWatchStarting = true;
+
+  const {data:application,error} = await supabaseClient
     .from("driver_applications")
     .select("status")
     .eq("user_id",currentUser.id)
     .eq("status","approved")
     .maybeSingle();
 
-  if(!application) return;
+  if(error || !application){
+    driverLocationWatchStarting = false;
+    return;
+  }
 
-  navigator.geolocation.getCurrentPosition(async function(position){
-    const {latitude,longitude} = position.coords;
+  driverLocationWatchId = navigator.geolocation.watchPosition(
+    async function(position){
+      const {latitude,longitude} = position.coords;
 
-    const {error} = await supabaseClient.rpc(
-      "update_my_driver_location",
-      {
-        p_lat:latitude,
-        p_lng:longitude
+      const {error} = await supabaseClient.rpc(
+        "update_my_driver_location",
+        {
+          p_lat: latitude,
+          p_lng: longitude
+        }
+      );
+
+      if(error){
+        console.log("Location update:",error.message);
       }
-    );
-
-    if(error){
-      console.log("Location update:",error.message);
+    },
+    function(error){
+      console.log("Location permission:",error.message);
+    },
+    {
+      enableHighAccuracy:true,
+      maximumAge:30000,
+      timeout:15000
     }
-  },function(error){
-    console.log("Location permission:",error.message);
-  },{
-    enableHighAccuracy:true,
-    maximumAge:30000,
-    timeout:15000
-  });
-}
+  );
 
+  driverLocationWatchStarting = false;
+}  
 /* DRIVER VEHICLE MODELS */
 const driverModels = {
   Suzuki:["Alto","Cultus","Wagon R","Swift","Bolan","Every"],
