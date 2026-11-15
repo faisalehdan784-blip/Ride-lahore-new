@@ -4,2088 +4,2026 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ride Lahore New | Carpool & Rent a Car</title>
-<meta name="description" content="Lahore carpool, pick and drop, and rent a car booking service.">
+<meta name="description" content="Lahore carpool, private ride, pick and drop and rent a car service.">
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
-:root {
-  --green: #087f5b;
-  --dark: #12352b;
-  --light: #f2f8f5;
-  --orange: #ffb703;
+:root{
+  --navy:#10243a;
+  --blue:#1769aa;
+  --green:#15965b;
+  --light:#f3f6fa;
+  --white:#fff;
+  --red:#c93636;
+  --border:#dce3eb;
+  --text:#263445;
 }
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7f6;
-  color: #20312b;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,"Noto Nastaliq Urdu",sans-serif;
+  background:var(--light);
+  color:var(--text);
+  direction:rtl;
 }
-header {
-  background: var(--dark);
-  color: white;
-  padding: 20px 15px;
-  text-align: center;
+button,input,select,textarea{font:inherit}
+button{
+  border:0;
+  border-radius:9px;
+  padding:11px 17px;
+  cursor:pointer;
+  font-weight:bold;
 }
-header h1 { margin: 0 0 8px; font-size: 28px; }
-header p { margin: 5px 0; color: #e4f3eb; }
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-  flex-wrap: wrap;
-  padding: 13px;
-  background: white;
+button:disabled{opacity:.55;cursor:not-allowed}
+.primary{background:var(--blue);color:white}
+.success{background:var(--green);color:white}
+.danger{background:var(--red);color:white}
+.secondary{background:#e8eef5;color:var(--navy)}
+.site-header{
+  background:var(--navy);
+  color:white;
+  padding:17px 4%;
 }
-nav a {
-  color: var(--green);
-  text-decoration: none;
-  font-weight: bold;
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
 }
-.hero {
-  padding: 30px 16px;
-  text-align: center;
-  background: #e3f4eb;
+.brand h1{margin:0;font-size:25px}
+.brand p{margin:5px 0 0;color:#d5e4f4}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.header-actions button{background:#fff;color:var(--navy)}
+.main-nav{
+  background:#fff;
+  padding:10px 3%;
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  box-shadow:0 2px 8px #0001;
 }
-.hero h2 { font-size: 27px; margin: 0 0 10px; color: var(--dark); }
-.hero p { line-height: 1.7; }
-.container { max-width: 950px; margin: 20px auto; padding: 0 12px; }
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  margin-bottom: 18px;
-  box-shadow: 0 3px 14px #0000000c;
+.main-nav button{
+  background:#edf2f7;
+  color:var(--navy);
 }
-h2, h3 { color: var(--dark); }
-label { display: block; font-weight: bold; margin: 12px 0 6px; }
-input, select, textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #cbd8d1;
-  border-radius: 8px;
-  font-size: 16px;
-  background: white;
+.main-nav button.active{
+  background:var(--blue);
+  color:#fff;
 }
-textarea { min-height: 75px; resize: vertical; }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+.container{max-width:1150px;margin:22px auto;padding:0 14px}
+.app-screen{display:none}
+.app-screen.active{display:block}
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:19px;
+  margin-bottom:17px;
+  box-shadow:0 3px 12px #14283b0a;
 }
-button, .button {
-  display: inline-block;
-  border: 0;
-  border-radius: 9px;
-  padding: 13px 17px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
+.card h2,.card h3{margin-top:0;color:var(--navy)}
+.hero{
+  background:linear-gradient(120deg,#10243a,#1769aa);
+  color:white;
+  padding:35px 22px;
+  border-radius:16px;
+  text-align:center;
+  margin-bottom:20px;
 }
-.primary { background: var(--green); color: white; }
-.secondary { background: #e6f2eb; color: #15543d; }
-.whatsapp {
-  background: #168b50;
-  color: white;
-  width: 100%;
-  margin-top: 14px;
+.hero h2{font-size:30px;margin:0 0 12px}
+.hero p{font-size:17px;line-height:1.8}
+.hero button{background:#fff;color:var(--navy);margin:5px}
+.ad-area{
+  background:#fff;
+  border:2px dashed #aab8c8;
+  border-radius:12px;
+  padding:17px;
+  margin:16px 0;
+  text-align:center;
+  color:#607286;
+  min-height:95px;
 }
-button:disabled { opacity: .5; cursor: not-allowed; }
-#map { height: 330px; width: 100%; border-radius: 10px; z-index: 1; }
-.result {
-  background: #edf8f1;
-  padding: 15px;
-  border-radius: 10px;
-  line-height: 1.8;
-  margin-top: 14px;
+.ad-area strong{display:block;color:var(--navy);margin-bottom:7px}
+.ad-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
 }
-.small { font-size: 13px; color: #63746b; line-height: 1.6; }
-.cars {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+.ad-box{
+  background:#fff;
+  border:1px dashed #9aabba;
+  border-radius:10px;
+  padding:18px;
+  min-height:105px;
+  text-align:center;
 }
-.car {
-  border: 1px solid #dce7df;
-  border-radius: 10px;
-  padding: 13px;
-  text-align: center;
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
 }
-.car .emoji { font-size: 36px; }
-.car strong { display: block; margin: 7px 0; }
-footer {
-  text-align: center;
-  padding: 25px;
-  background: var(--dark);
-  color: white;
-  line-height: 1.8;
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
 }
-.notice {
-  background: #fff5d9;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  line-height: 1.6;
+.field{margin-bottom:13px}
+.field label{display:block;font-weight:bold;margin-bottom:6px}
+.field input,.field select,.field textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:white;
+  color:var(--text);
 }
-.status { line-height: 1.7; overflow-wrap: anywhere; }
-@media(max-width:600px) {
-  .grid, .cars { grid-template-columns: 1fr; }
-  header h1 { font-size: 24px; }
-  .hero h2 { font-size: 23px; }
-  .card { padding: 15px; }
-  #map { height: 280px; }
+.field textarea{min-height:85px;resize:vertical}
+.form-actions{display:flex;gap:9px;flex-wrap:wrap}
+.status{
+  padding:11px;
+  border-radius:8px;
+  margin:10px 0;
+  background:#edf3f8;
+  white-space:pre-wrap;
+}
+.status.error{background:#ffe8e8;color:#9b2020}
+.status.ok{background:#e3f7eb;color:#126b3e}
+.hidden{display:none!important}
+.stat{
+  background:#edf4fa;
+  border-radius:10px;
+  padding:15px;
+  text-align:center;
+}
+.stat strong{display:block;font-size:23px;color:var(--blue);margin-top:6px}
+.item-card{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  margin:10px 0;
+  background:#fff;
+}
+.item-card p{margin:7px 0;line-height:1.6}
+.item-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#map{height:260px;border-radius:10px;margin:12px 0}
+#chatModal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:#0009;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+}
+.chat-window{
+  background:#fff;
+  width:100%;
+  max-width:520px;
+  height: min(85vh,650px);
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.chat-head{
+  background:var(--navy);
+  color:white;
+  padding:13px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.chat-messages{
+  flex:1;
+  overflow-y:auto;
+  padding:12px;
+  background:#f2f5f8;
+}
+.chat-message{
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  margin:8px 0;
+  max-width:85%;
+  overflow-wrap:anywhere;
+}
+.chat-message.mine{background:#dff5e7;margin-right:auto}
+.chat-compose{display:flex;gap:7px;padding:10px;border-top:1px solid var(--border)}
+.chat-compose input{flex:1;min-width:0;padding:11px;border:1px solid var(--border);border-radius:8px}
+.site-footer{
+  margin-top:30px;
+  padding:24px 15px;
+  text-align:center;
+  background:var(--navy);
+  color:white;
+}
+@media(max-width:650px){
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .hero h2{font-size:23px}
+  .brand h1{font-size:21px}
+  .main-nav button{flex:1 1 42%}
+  .container{padding:0 10px}
 }
 </style>
 </head>
 
 <body>
-<header>
-  <h1>🚘 Ride Lahore New</h1>
-  <p>Carpool • Pick & Drop • Rent a Car</p>
-  <p>آپ کا سفر، ہماری ذمہ داری</p>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <h1>🚘 Ride Lahore New</h1>
+      <p>Carpool • Pick & Drop • Rent a Car</p>
+    </div>
+    <div class="header-actions">
+      <button onclick="showScreen('homeScreen')">ہوم</button>
+      <button onclick="showScreen('passengerScreen')">مسافر</button>
+      <button onclick="showScreen('driverScreen')">ڈرائیور</button>
+      <button onclick="showScreen('adminScreen')">ایڈمن</button>
+    </div>
+  </div>
 </header>
 
-<nav>
-  <a href="#booking">Book a Ride</a>
-  <a href="#services">Services</a>
-  <a href="#rates">Rates</a>
-  <a href="#safety">Safety</a>
-  <a href="#my-bookings">My Bookings</a>
-  <a href="#driver-registration">Driver Registration</a>
+<nav class="main-nav">
+  <button class="active" data-screen="homeScreen" onclick="showScreen('homeScreen')">ہوم پیج</button>
+  <button data-screen="passengerScreen" onclick="showScreen('passengerScreen')">مسافر پیج</button>
+  <button data-screen="driverScreen" onclick="showScreen('driverScreen')">ڈرائیور پیج</button>
+  <button data-screen="adminScreen" onclick="showScreen('adminScreen')">ایڈمن پیج</button>
 </nav>
 
-<section class="hero">
-  <h2>لاہور میں اپنی رائیڈ بک کریں</h2>
-  <p>پک اَپ لوکیشن اور منزل درج کریں، فاصلہ معلوم کریں اور WhatsApp پر بکنگ بھیجیں۔</p>
-  <a class="button primary" href="#booking">ابھی رائیڈ بک کریں</a>
+<div class="container">
+
+<!-- HOME SCREEN -->
+<section id="homeScreen" class="app-screen active">
+
+  <div class="hero">
+    <h2>آپ کا سفر، ہماری ذمہ داری</h2>
+    <p>لاہور میں محفوظ اور آسان کارپول، پرائیویٹ رائیڈ اور پک اینڈ ڈراپ سروس</p>
+    <button onclick="showScreen('passengerScreen')">ابھی رائیڈ بک کریں</button>
+    <button onclick="showScreen('driverScreen')">ڈرائیور رجسٹریشن / لاگ اِن</button>
+  </div>
+
+  <!-- MAIN PUBLICITY SPACE -->
+  <div class="ad-area">
+    <strong>📢 کاروباری تشہیر کے لیے جگہ</strong>
+    <span>یہاں لاہور کے کاروبار، دکانیں اور کمپنیز اپنی پبلسٹی دکھا سکیں گی۔</span>
+  </div>
+
+  <div class="card">
+    <h2>ہماری سروسز</h2>
+    <div class="grid-3">
+      <div class="stat">🚗<h3>کارپول</h3><p>ایک ہی راستے پر سفر شیئر کریں</p></div>
+      <div class="stat">🚘<h3>پرائیویٹ رائیڈ</h3><p>اپنی ذاتی گاڑی اور سفر بک کریں</p></div>
+      <div class="stat">🚙<h3>پک اینڈ ڈراپ</h3><p>روزانہ آنے جانے کی سہولت</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>تشہیر کرنے والے کاروبار</h2>
+    <div class="ad-grid">
+      <div class="ad-box">📢 اشتہار نمبر 1<br>اپنے کاروبار کی تشہیر کریں</div>
+      <div class="ad-box">📢 اشتہار نمبر 2<br>اپنے کاروبار کی تشہیر کریں</div>
+      <div class="ad-box">📢 اشتہار نمبر 3<br>اپنے کاروبار کی تشہیر کریں</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>کرایہ اور کمیشن</h2>
+    <div class="grid-2">
+      <div class="stat">فی کلومیٹر کرایہ<strong>60 روپے</strong></div>
+      <div class="stat">پلیٹ فارم کمیشن<strong>5%</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>اکاؤنٹ بنائیں یا لاگ اِن کریں</h2>
+    <p>مسافر یا ڈرائیور اپنا اکاؤنٹ بنانے کے لیے متعلقہ صفحہ کھولیں۔</p>
+    <div class="form-actions">
+      <button class="primary" onclick="showScreen('passengerScreen')">مسافر اکاؤنٹ</button>
+      <button class="success" onclick="showScreen('driverScreen')">ڈرائیور اکاؤنٹ</button>
+    </div>
+  </div>
+
+</section>
+<!-- PART 1 ENDS HERE --><!-- PASSENGER SCREEN -->
+<section id="passengerScreen" class="app-screen">
+
+  <div class="card">
+    <h2>مسافر اکاؤنٹ</h2>
+    <div class="field">
+      <label>آپ کا نام</label>
+      <input id="passengerName" type="text" placeholder="اپنا نام لکھیں">
+    </div>
+    <div class="field">
+      <label>موبائل نمبر</label>
+      <input id="passengerPhone" type="tel" placeholder="03XXXXXXXXX">
+    </div>
+    <div class="field">
+      <label>ای میل</label>
+      <input id="passengerEmail" type="email" placeholder="Email">
+    </div>
+    <div class="field">
+      <label>پاس ورڈ</label>
+      <input id="passengerPassword" type="password" placeholder="Password">
+    </div>
+    <div class="form-actions">
+      <button class="success" onclick="signup('passenger')">اکاؤنٹ بنائیں</button>
+      <button class="primary" onclick="login('passenger')">لاگ اِن</button>
+      <button class="secondary" onclick="logout()">لاگ آؤٹ</button>
+    </div>
+    <div id="passengerAuthStatus" class="status">اکاؤنٹ بنانے یا لاگ اِن کرنے کے بعد رائیڈ بک کریں۔</div>
+  </div>
+
+  <div class="card">
+    <h2>رائیڈ بک کریں</h2>
+    <form id="bookingForm">
+      <div class="grid-2">
+        <div class="field">
+          <label>مسافر کا نام</label>
+          <input id="customerName" required>
+        </div>
+        <div class="field">
+          <label>موبائل نمبر</label>
+          <input id="phone" type="tel" required>
+        </div>
+        <div class="field">
+          <label>سروس</label>
+          <select id="service" required>
+            <option value="Carpool">Carpool</option>
+            <option value="Private Ride">Private Ride</option>
+            <option value="Pick and Drop">Pick and Drop</option>
+            <option value="Rent a Car">Rent a Car</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>گاڑی</label>
+          <select id="car" required>
+            <option value="Economy">Economy</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>کہاں سے؟</label>
+          <input id="pickup" required placeholder="مثلاً اقبال ٹاؤن">
+        </div>
+        <div class="field">
+          <label>کہاں جانا ہے؟</label>
+          <input id="destination" required placeholder="مثلاً لیک سٹی">
+        </div>
+        <div class="field">
+          <label>سفر کی تاریخ</label>
+          <input id="rideDate" type="date" required>
+        </div>
+        <div class="field">
+          <label>سفر کا وقت</label>
+          <input id="rideTime" type="time" required>
+        </div>
+        <div class="field">
+          <label>مسافروں کی تعداد</label>
+          <select id="passengers">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>اضافی تفصیل</label>
+        <textarea id="notes" placeholder="اگر کوئی اضافی بات ہو تو لکھیں"></textarea>
+      </div>
+      <button type="button" class="secondary" id="mapButton" onclick="getRoute()">فاصلہ اور کرایہ معلوم کریں</button>
+      <div id="mapStatus" class="status">پک اَپ اور منزل لکھ کر فاصلہ معلوم کریں۔</div>
+      <div id="map" class="hidden"></div>
+      <div id="fareResult" class="status"></div>
+      <button type="submit" class="success">رائیڈ بک کریں</button>
+      <div id="bookingStatus" class="status"></div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>میری رائیڈز اور پرائیویٹ چیٹ</h2>
+    <button class="primary" onclick="loadMyBookings()">میری رائیڈز دیکھیں</button>
+    <div id="myBookingsStatus" class="status"></div>
+    <div id="myBookingsList"></div>
+  </div>
+
 </section>
 
-<main class="container">
+<!-- DRIVER SCREEN -->
+<section id="driverScreen" class="app-screen">
 
-<section class="card" id="account">
-  <h2>🔐 Ride Lahore New اکاؤنٹ</h2>
+  <div class="card">
+    <h2>ڈرائیور اکاؤنٹ</h2>
+    <div class="field">
+      <label>نام</label>
+      <input id="driverLoginName" placeholder="ڈرائیور کا نام">
+    </div>
+    <div class="field">
+      <label>موبائل نمبر</label>
+      <input id="driverLoginPhone" type="tel" placeholder="03XXXXXXXXX">
+    </div>
+    <div class="field">
+      <label>ای میل</label>
+      <input id="driverEmail" type="email" placeholder="Email">
+    </div>
+    <div class="field">
+      <label>پاس ورڈ</label>
+      <input id="driverPassword" type="password" placeholder="Password">
+    </div>
+    <div class="form-actions">
+      <button class="success" onclick="signup('driver')">اکاؤنٹ بنائیں</button>
+      <button class="primary" onclick="login('driver')">لاگ اِن</button>
+      <button class="secondary" onclick="logout()">لاگ آؤٹ</button>
+    </div>
+    <div id="driverAuthStatus" class="status">ڈرائیور لاگ اِن کریں یا نیا اکاؤنٹ بنائیں۔</div>
+  </div>
 
-  <label for="accountRole">اکاؤنٹ کی قسم</label>
-  <select id="accountRole">
-    <option value="passenger">مسافر</option>
-    <option value="driver">ڈرائیور</option>
-  </select>
+  <div class="card">
+    <h2>ڈرائیور رجسٹریشن</h2>
+    <form id="driverRegistrationForm">
+      <div class="grid-2">
+        <div class="field">
+          <label>ڈرائیور کا نام</label>
+          <input id="regDriverName" required>
+        </div>
+        <div class="field">
+          <label>موبائل نمبر</label>
+          <input id="regDriverPhone" type="tel" required>
+        </div>
+        <div class="field">
+          <label>ای میل</label>
+          <input id="regDriverEmail" type="email" required>
+        </div>
+        <div class="field">
+          <label>گاڑی کی کمپنی</label>
+          <select id="carCompany" required>
+            <option value="">کمپنی منتخب کریں</option>
+            <option>Suzuki</option>
+            <option>Toyota</option>
+            <option>Honda</option>
+            <option>Kia</option>
+            <option>Hyundai</option>
+            <option>Changan</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>گاڑی کا ماڈل</label>
+          <select id="carModel" required>
+            <option value="">پہلے کمپنی منتخب کریں</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>گاڑی کا نمبر</label>
+          <input id="carNumber" required>
+        </div>
+        <div class="field">
+          <label>ڈرائیونگ لائسنس نمبر</label>
+          <input id="licenseNumber" required>
+        </div>
+        <div class="field">
+          <label>ادائیگی کا طریقہ</label>
+          <select id="driverPaymentMethod" required>
+            <option value="JazzCash">JazzCash</option>
+            <option value="Easypaisa">Easypaisa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>اکاؤنٹ ٹائٹل</label>
+          <input id="driverPaymentTitle" required>
+        </div>
+        <div class="field">
+          <label>اکاؤنٹ نمبر</label>
+          <input id="driverPaymentNumber" required>
+        </div>
+      </div>
+      <button class="success" type="submit">رجسٹریشن جمع کریں</button>
+      <div id="driverRegistrationStatus" class="status"></div>
+    </form>
+  </div>
 
-  <label for="accountName">پورا نام</label>
-  <input id="accountName" autocomplete="name" placeholder="اپنا پورا نام">
+  <div class="card">
+    <h2>ڈرائیور ڈیش بورڈ</h2>
+    <button class="primary" onclick="loadDriverDashboard()">ڈیش بورڈ لوڈ کریں</button>
+    <div id="driverDashboardStatus" class="status">ڈرائیور لاگ اِن کرنے کے بعد ڈیش بورڈ لوڈ کریں۔</div>
+    <div id="driverProfile"></div>
+    <div class="grid-2">
+      <div class="stat">موجودہ ٹاپ اَپ بیلنس<strong id="driverTopupBalance">Rs. 0.00</strong></div>
+      <div class="stat">رائیڈ کمائی الگ ڈرائیور والیٹ میں محفوظ ہوگی<strong>الگ ریکارڈ</strong></div>
+    </div>
+  </div>
 
-  <label for="accountPhone">موبائل نمبر</label>
-  <input id="accountPhone" type="tel" autocomplete="tel" placeholder="03XXXXXXXXX">
+  <div class="card">
+    <h3>ٹاپ اَپ جمع کروائیں</h3>
+    <p>کم از کم 300 روپے اور زیادہ سے زیادہ 5000 روپے۔ رقم JazzCash یا Easypaisa میں بھیج کر ٹرانزیکشن کی تفصیل جمع کریں۔ ایڈمن تصدیق کے بعد بیلنس شامل کرے گا۔</p>
+    <div id="driverPaymentAccounts"></div>
+    <form id="driverTopupForm">
+      <div class="field">
+        <label>رقم (300 تا 5000 روپے)</label>
+        <input id="topupAmount" type="number" min="300" max="5000" required>
+      </div>
+      <div class="field">
+        <label>ادائیگی کا طریقہ</label>
+        <select id="topupMethod">
+          <option value="JazzCash">JazzCash</option>
+          <option value="Easypaisa">Easypaisa</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>ٹرانزیکشن آئی ڈی / حوالہ نمبر</label>
+        <input id="topupReference" required>
+      </div>
+      <button class="success" type="submit">ٹاپ اَپ درخواست جمع کریں</button>
+      <div id="topupStatus" class="status"></div>
+    </form>
+  </div>
 
-  <label for="accountEmail">ای میل</label>
-  <input id="accountEmail" type="email" autocomplete="email" placeholder="name@example.com">
+  <div class="card">
+    <h3>میرے لیے آنے والی رائیڈز</h3>
+    <div id="availableRides"></div>
+  </div>
 
-  <label for="accountPassword">پاس ورڈ</label>
-  <input id="accountPassword" type="password" autocomplete="current-password"
-         minlength="8" placeholder="کم از کم 8 حروف">
+  <div class="card">
+    <h3>میری قبول شدہ رائیڈز</h3>
+    <div id="myDriverRides"></div>
+  </div>
 
-  <button type="button" class="primary" id="signupButton">نیا اکاؤنٹ بنائیں</button>
-  <button type="button" class="secondary" id="loginButton">لاگ اِن کریں</button>
-  <button type="button" class="secondary" id="logoutButton">لاگ آؤٹ</button>
-
-  <p id="accountStatus" class="status" role="status" aria-live="polite"></p>
 </section>
 
-<section class="card" id="services">
-  <h2>ہماری سروسز</h2>
-  <div class="cars">
-    <div class="car">
-      <div class="emoji">🚗</div>
-      <strong>Carpool</strong>
-      <p>مشترکہ سفر</p>
+<!-- ADMIN SCREEN -->
+<section id="adminScreen" class="app-screen">
+
+  <div class="card">
+    <h2>ایڈمن لاگ اِن</h2>
+    <p>ایڈمن اپنے موجودہ Supabase اکاؤنٹ سے لاگ اِن کرے۔ ایڈمن ہونے کی تصدیق ڈیٹا بیس کے is_admin فنکشن سے ہوگی۔</p>
+    <div class="field">
+      <label>ای میل</label>
+      <input id="adminEmail" type="email">
     </div>
-    <div class="car">
-      <div class="emoji">🚙</div>
-      <strong>Private Ride</strong>
-      <p>ذاتی گاڑی اور ڈرائیور</p>
+    <div class="field">
+      <label>پاس ورڈ</label>
+      <input id="adminPassword" type="password">
     </div>
-    <div class="car">
-      <div class="emoji">🛣️</div>
-      <strong>Pick & Drop</strong>
-      <p>روزانہ آنے جانے کی سہولت</p>
+    <div class="form-actions">
+      <button class="primary" onclick="login('admin')">ایڈمن لاگ اِن</button>
+      <button class="secondary" onclick="logout()">لاگ آؤٹ</button>
+      <button class="success" id="adminLoadBtn">ایڈمن ڈیش بورڈ لوڈ کریں</button>
     </div>
+    <div id="adminStatus" class="status">ایڈمن اکاؤنٹ سے لاگ اِن کریں۔</div>
+  </div>
+
+  <div id="adminPanel" class="hidden">
+
+    <div class="card">
+      <h2>ایڈمن ڈیش بورڈ</h2>
+      <div class="grid-3">
+        <div class="stat">کسٹمرز<strong id="adminCustomerCount">0</strong></div>
+        <div class="stat">ڈرائیورز<strong id="adminDriverCount">0</strong></div>
+        <div class="stat">رائیڈز<strong id="adminRideCount">0</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>کسٹمرز</h3>
+      <div id="adminCustomers"></div>
+    </div>
+
+    <div class="card">
+      <h3>ڈرائیورز اور رجسٹریشن منظوری</h3>
+      <div id="adminDrivers"></div>
+    </div>
+
+    <div class="card">
+      <h3>تمام رائیڈز</h3>
+      <div id="adminRides"></div>
+    </div>
+
+    <div class="card">
+      <h3>ڈرائیور والیٹ اور کمیشن</h3>
+      <div id="adminWallets"></div>
+      <div id="adminCommissionReport"></div>
+    </div>
+
+    <div class="card">
+      <h3>ڈرائیور ٹاپ اَپ درخواستیں</h3>
+      <div id="adminTopupRequests"></div>
+    </div>
+
+    <div class="card">
+      <h3>پلیٹ فارم کی ادائیگی وصول کرنے والے اکاؤنٹس</h3>
+      <form id="platformPaymentForm">
+        <div class="field">
+          <label>ادائیگی کا طریقہ</label>
+          <select id="platformPaymentMethod">
+            <option value="JazzCash">JazzCash</option>
+            <option value="Easypaisa">Easypaisa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>اکاؤنٹ ٹائٹل</label>
+          <input id="platformPaymentTitle" required>
+        </div>
+        <div class="field">
+          <label>اکاؤنٹ نمبر</label>
+          <input id="platformPaymentNumber" required>
+        </div>
+        <button class="success" type="submit">اکاؤنٹ محفوظ کریں</button>
+        <div id="platformPaymentStatus" class="status"></div>
+      </form>
+      <div id="platformPaymentAccounts"></div>
+    </div>
+
   </div>
 </section>
 
-<section class="card" id="rates">
-  <h2>کرایہ اور کمیشن</h2>
-  <p>ابتدائی اندازہ: <strong>60 روپے فی کلومیٹر</strong></p>
-  <p>سروس کمیشن: <strong>5%</strong></p>
-  <p class="small">
-    یہ ابتدائی اندازہ ہے۔ حتمی کرایہ سفر سے پہلے طے کریں۔
-    انتظار، ٹول اور دیگر اضافی اخراجات الگ ہو سکتے ہیں۔
-  </p>
-</section>
-
-<section class="card" id="booking">
-  <h2>📋 رائیڈ بکنگ فارم</h2>
-
-  <form id="bookingForm">
-    <div class="grid">
-      <div>
-        <label for="customerName">مسافر کا نام *</label>
-        <input id="customerName" required placeholder="اپنا نام لکھیں">
-      </div>
-
-      <div>
-        <label for="phone">موبائل نمبر *</label>
-        <input id="phone" type="tel" required placeholder="03XXXXXXXXX">
-      </div>
-
-      <div>
-        <label for="service">سروس منتخب کریں *</label>
-        <select id="service" required>
-          <option value="Carpool">Carpool / مشترکہ سفر</option>
-          <option value="Private Ride">Private Ride / ذاتی رائیڈ</option>
-          <option value="Pick and Drop">Pick & Drop</option>
-          <option value="Rent a Car">Rent a Car</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="car">گاڑی کی قسم *</label>
-        <select id="car" required>
-          <option value="Economy">Economy - عام گاڑی</option>
-          <option value="Sedan">Sedan - فیملی گاڑی</option>
-          <option value="SUV">SUV - بڑی گاڑی</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="pickup">پک اَپ لوکیشن *</label>
-        <input id="pickup" required placeholder="مثلاً Iqbal Town Lahore">
-      </div>
-
-      <div>
-        <label for="destination">منزل *</label>
-        <input id="destination" required placeholder="مثلاً Lake City Lahore">
-      </div>
-
-      <div>
-        <label for="rideDate">سفر کی تاریخ *</label>
-        <input id="rideDate" type="date" required>
-      </div>
-
-      <div>
-        <label for="rideTime">سفر کا وقت *</label>
-        <input id="rideTime" type="time" required>
-      </div>
-
-      <div>
-        <label for="passengers">مسافروں کی تعداد *</label>
-        <select id="passengers" required>
-          <option value="1">1 مسافر</option>
-          <option value="2">2 مسافر</option>
-          <option value="3">3 مسافر</option>
-          <option value="4">4 مسافر</option>
-          <option value="5">5 مسافر</option>
-          <option value="6">6 مسافر</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="notes">اضافی ہدایات</label>
-        <input id="notes" placeholder="سامان، واپسی وغیرہ">
-      </div>
+<!-- PRIVATE RIDE CHAT -->
+<div id="chatModal">
+  <div class="chat-window">
+    <div class="chat-head">
+      <strong id="chatTitle">رائیڈ پرائیویٹ چیٹ</strong>
+      <button class="danger" onclick="closeRideChat()">بند کریں</button>
     </div>
-
-    <p class="small">
-      لوکیشن انگریزی میں لکھیں، مثلاً Iqbal Town Lahore۔
-    </p>
-
-    <button type="button" class="primary" id="mapButton"
-            style="width:100%;margin-top:14px">
-      📍 نقشے پر راستہ اور کرایہ معلوم کریں
-    </button>
-
-    <p id="status" class="status" role="status" aria-live="polite"></p>
-    <div id="map"></div>
-
-    <div class="result" id="fareResult">
-      <strong>آپ کے سفر کی تفصیل</strong>
-      <p>پک اَپ اور منزل درج کرکے نقشے والا بٹن دبائیں۔</p>
+    <div id="chatMessages" class="chat-messages"></div>
+    <div class="chat-compose">
+      <input id="chatInput" type="text" placeholder="اپنا پیغام لکھیں">
+      <button class="success" onclick="sendRideMessage()">بھیجیں</button>
     </div>
-
-    <button type="submit" class="whatsapp">
-      🟢 WhatsApp پر بکنگ بھیجیں
-    </button>
-  </form>
-</section>
- <section id="adminPanel" hidden>
-  <h2>Ride Lahore New — Admin Panel</h2>
-  <p id="adminStatus">Admin access check required.</p>
-
-  <div>
-    <button type="button" id="adminLoadBtn">
-      Load Dashboard
-    </button>
+    <div id="chatStatus" class="status"></div>
   </div>
-
-  <h3>Customers</h3>
-  <div id="adminCustomers">Login and admin verification required.</div>
-
-  <h3>Driver Applications</h3>
-  <div id="adminDrivers">Login and admin verification required.</div>
-
-  <h3>All Rides</h3>
-  <div id="adminRides">Login and admin verification required.</div>
-
-  <h3>Driver Wallets & Commission</h3>
-  <div id="adminWallets">Login and admin verification required.</div>
-  <h3>Driver Top-up Requests — ڈرائیور کی ادائیگیاں</h3>
-<div id="adminTopupRequests">
-  Top-up requests یہاں نظر آئیں گی۔
-</div> 
-  <h3>Platform Commission Report — میری کمائی</h3>
-<div id="adminCommissionReport">
-  کمیشن رپورٹ لوڈ ہونے کا انتظار کریں۔
-</div> 
-  <h3>My Commission Payment Accounts</h3>
-
-<form id="platformPaymentForm">
-  <label for="platformPaymentMethod">Payment Method</label>
-  <select id="platformPaymentMethod" required>
-    <option value="JazzCash">JazzCash</option>
-    <option value="Easypaisa">Easypaisa</option>
-  </select>
-
-  <label for="platformPaymentTitle">Account Holder Name</label>
-  <input id="platformPaymentTitle" type="text" required>
-
-  <label for="platformPaymentNumber">Account Number</label>
-  <input id="platformPaymentNumber" type="tel" required>
-
-  <button type="submit">Save Payment Account</button>
-  <p id="platformPaymentMessage" role="status"></p>
-</form>
-
-<div id="platformPaymentAccounts"></div> 
-</section>
- <section class="card" id="driverDashboard">
-  <h2>🚘 Driver Dashboard — ڈرائیور ڈیش بورڈ</h2>
-
-  <p id="driverDashboardMessage">
-    ڈرائیور ڈیش بورڈ دیکھنے کے لیے لاگ اِن کریں۔
-  </p>
-
-  <div id="driverProfile"></div>
- <h3>💰 Driver Top-up — ڈرائیور بیلنس</h3>
-
-<div id="driverTopupBalance">
-  Top-up Balance لوڈ ہو رہا ہے۔
 </div>
 
-<h4>JazzCash / Easypaisa میں رقم بھیجیں</h4>
-<div id="driverPaymentAccounts">
-  ادائیگی کے اکاؤنٹس لوڈ ہو رہے ہیں۔
 </div>
 
-<form id="driverTopupForm">
-
-  <label>Top-up Amount (Rs.)</label>
-  <input
-    id="driverTopupAmount"
-    type="number"
-    min="300"
-    max="5000"
-    step="1"
-    required
-    placeholder="300 سے 5000 روپے"
-  >
-
-  <label>Payment Method</label>
-  <select id="driverTopupMethod" required>
-    <option value="JazzCash">JazzCash</option>
-    <option value="Easypaisa">Easypaisa</option>
-  </select>
-
-  <label>Transaction ID</label>
-  <input
-    id="driverTopupReference"
-    type="text"
-    required
-    placeholder="اپنی ادائیگی کا Transaction ID"
-  >
-
-  <button type="submit">Submit Top-up Request</button>
-
-  <p id="driverTopupMessage" role="status"></p>
-</form>  
-
-  <div id="availableRides">
-    دستیاب رائیڈز یہاں نظر آئیں گی۔
-  </div>
-
-  <div id="myDriverRides"></div>
-</section> 
-</main>
-<section class="card" id="safety">
-  <h2>🔐 حفاظت اور تصدیق</h2>
-  <p>ڈرائیور کی شناخت، ڈرائیونگ لائسنس، گاڑی کی تفصیلات اور مسافر کے فون کی تصدیق ضروری ہے۔</p>
-  <div class="notice">
-    <strong>اہم:</strong> اس ویب سائٹ میں ابھی شناختی کارڈ کی تصاویر اپ لوڈ کرنے کا محفوظ نظام شامل نہیں۔ عوامی فارم میں CNIC کی تصاویر نہ ڈالیں۔
-  </div>
-</section>
-
-<section class="card" id="my-bookings">
-  <h2>My Bookings — میری بکنگز</h2>
-  <button type="button" class="primary" id="loadMyBookings">
-    میری بکنگز دیکھیں
-  </button>
-  <div id="myBookingsList" class="status">
-    اپنی بکنگز دیکھنے کے لیے بٹن دبائیں۔
-  </div>
-</section>
-
-<section class="card" id="driver-registration">
-  <h2>Driver Registration — ڈرائیور رجسٹریشن</h2>
-  <p>Ride Lahore New کے ساتھ ڈرائیور کے طور پر رجسٹر ہوں۔</p>
-
-  <form id="driverRegistrationForm">
-    <label for="driverName">پورا نام *</label>
-    <input type="text" id="driverName" required>
-
-    <label for="driverPhone">موبائل نمبر *</label>
-    <input type="tel" id="driverPhone" required placeholder="03XXXXXXXXX">
-
-    <label for="driverEmail">ای میل *</label>
-    <input type="email" id="driverEmail" required>
-
-    <label for="driverCompany">گاڑی کی کمپنی *</label>
-    <select id="driverCompany" required>
-      <option value="">پہلے کمپنی منتخب کریں</option>
-      <option value="Suzuki">Suzuki</option>
-      <option value="Toyota">Toyota</option>
-      <option value="Honda">Honda</option>
-      <option value="Kia">Kia</option>
-      <option value="Hyundai">Hyundai</option>
-      <option value="Changan">Changan</option>
-      <option value="Other">Other</option>
-    </select>
-
-    <label for="driverCar">گاڑی کا ماڈل *</label>
-    <select id="driverCar" required disabled>
-      <option value="">پہلے کمپنی منتخب کریں</option>
-    </select>
-
-    <label for="driverCarNumber">گاڑی کا رجسٹریشن نمبر *</label>
-    <input type="text" id="driverCarNumber" required>
-
-    <label for="driverLicense">ڈرائیونگ لائسنس نمبر *</label>
-    <input type="text" id="driverLicense" required>
-    <label for="driverPaymentMethod">ادائیگی کا اکاؤنٹ *</label>
-<select id="driverPaymentMethod" required>
-  <option value="">طریقہ منتخب کریں</option>
-  <option value="JazzCash">JazzCash</option>
-  <option value="Easypaisa">Easypaisa</option>
-</select>
-
-<label for="driverPaymentTitle">اکاؤنٹ ہولڈر کا نام *</label>
-<input
-  type="text"
-  id="driverPaymentTitle"
-  required
-  placeholder="اکاؤنٹ پر درج اصل نام"
->
-
-<label for="driverPaymentNumber">ادائیگی اکاؤنٹ کا موبائل نمبر *</label>
-<input
-  type="tel"
-  id="driverPaymentNumber"
-  required
-  placeholder="03XXXXXXXXX"
->
-    <button type="submit" class="primary">
-      رجسٹریشن کی درخواست دیں
-    </button>
-    <p id="driverFormMessage" class="status" role="status"></p>
-  </form>
-</section>
-
-<footer>
-  <strong>Ride Lahore New</strong><br>
-  Lahore, Pakistan<br>
-  بکنگ WhatsApp پر بھیجیں: 0309 1588042
+<footer class="site-footer">
+  <h3>🚘 Ride Lahore New</h3>
+  <p>محفوظ سفر، آسان بکنگ اور نجی پیغام رسانی</p>
+  <p>© Ride Lahore New</p>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- PART 2 ENDS HERE --><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-(() => {
-  "use strict";
+"use strict";
 
-  const $ = id => document.getElementById(id);
+/* SUPABASE CONNECTION */
+const SUPABASE_URL = "https://ijktavdlwkxkvpgqixbr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GXbAfXr3Q8yY5FtgAYDi4A_iFN4vLD4";
+const RATE_PER_KM = 60;
+const COMMISSION_RATE = 0.05;
 
-  const SUPABASE_URL =
-    "https://ijktavdlwkxkvpgqixbr.supabase.co";
+let supabaseClient = null;
+let currentUser = null;
+let currentProfile = null;
+let lastRoute = null;
+let mapObject = null;
+let routeLayer = null;
+let chatBookingId = null;
+let chatRefresh = null;
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_GXbAfXr3Q8yY5FtgAYDi4A_iFN4vLD4";
+function $(id){
+  return document.getElementById(id);
+}
 
-  const BUSINESS_PHONE = "923091588042";
-  const RATE_PER_KM = 60;
-  const COMMISSION_RATE = 0.05;
+function showStatus(id,message,type){
+  const el = $(id);
+  if(!el) return;
+  el.textContent = message || "";
+  el.className = "status" + (type ? " " + type : "");
+}
 
-  let supabaseClient = null;
-  let map = null;
-  let routeLayer = null;
-  let pickupMarker = null;
-  let destinationMarker = null;
-  let lastRoute = null;
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,function(ch){
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[ch];
+  });
+}
 
-  function showStatus(message, isError = false) {
-    $("status").textContent = message;
-    $("status").style.color = isError ? "#b42318" : "#087f5b";
+function initSupabase(){
+  if(!window.supabase){
+    alert("Supabase library load نہیں ہوئی۔ انٹرنیٹ چیک کریں۔");
+    return;
+  }
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+}
+
+/* PAGE NAVIGATION */
+function showScreen(screenId){
+  document.querySelectorAll(".app-screen").forEach(function(screen){
+    screen.classList.remove("active");
+  });
+
+  const selected = $(screenId);
+  if(selected) selected.classList.add("active");
+
+  document.querySelectorAll(".main-nav button").forEach(function(btn){
+    btn.classList.toggle("active",btn.dataset.screen === screenId);
+  });
+
+  window.scrollTo({top:0,behavior:"smooth"});
+
+  if(screenId === "driverScreen" && currentUser){
+    loadDriverDashboard();
+  }
+  if(screenId === "adminScreen" && currentUser){
+    checkAdminAccess();
+  }
+}
+
+/* AUTHENTICATION */
+async function signup(role){
+  if(!supabaseClient) return;
+
+  const isDriver = role === "driver";
+  const email = isDriver ? $("driverEmail").value.trim() : $("passengerEmail").value.trim();
+  const password = isDriver ? $("driverPassword").value : $("passengerPassword").value;
+  const name = isDriver ? $("driverLoginName").value.trim() : $("passengerName").value.trim();
+  const phone = isDriver ? $("driverLoginPhone").value.trim() : $("passengerPhone").value.trim();
+
+  const statusId = isDriver ? "driverAuthStatus" : "passengerAuthStatus";
+
+  if(!email || !password || !name || !phone){
+    showStatus(statusId,"نام، فون، ای میل اور پاس ورڈ درج کریں۔","error");
+    return;
+  }
+  if(password.length < 6){
+    showStatus(statusId,"پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے۔","error");
+    return;
   }
 
-  function initSupabase() {
-    if (!window.supabase) {
-      $("accountStatus").textContent =
-        "Supabase لوڈ نہیں ہوا۔ انٹرنیٹ چیک کرکے صفحہ دوبارہ کھولیں۔";
-      return false;
-    }
+  showStatus(statusId,"اکاؤنٹ بنایا جا رہا ہے...");
 
-    try {
-      supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-      return true;
-    } catch (error) {
-      $("accountStatus").textContent =
-        "Supabase شروع نہیں ہوسکا: " + error.message;
-      return false;
+  const {data,error} = await supabaseClient.auth.signUp({
+    email:email,
+    password:password,
+    options:{
+      data:{
+        full_name:name,
+        phone:phone,
+        role:role
+      }
     }
+  });
+
+  if(error){
+    showStatus(statusId,error.message,"error");
+    return;
   }
 
-  async function signup() {
-    if (!supabaseClient) return;
-
-    const name = $("accountName").value.trim();
-    const phone = $("accountPhone").value.trim();
-    const role = $("accountRole").value;
-    const email = $("accountEmail").value.trim();
-    const password = $("accountPassword").value;
-
-    if (!name || !email || password.length < 8) {
-      $("accountStatus").textContent =
-        "نام، ای میل اور کم از کم 8 حروف کا پاس ورڈ درج کریں۔";
-      return;
-    }
-
-    $("accountStatus").textContent = "اکاؤنٹ بنایا جا رہا ہے۔۔۔";
-
-    try {
-      const { error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: name,
-            phone,
-            role
-          }
-        }
-      });
-
-      if (error) throw error;
-
-      $("accountStatus").textContent =
-        "رجسٹریشن کی درخواست مکمل ہوگئی۔ اگر ای میل تصدیق مانگی جائے تو اپنا ای میل چیک کریں۔";
-    } catch (error) {
-      $("accountStatus").textContent =
-        "رجسٹریشن میں خرابی: " + error.message;
-    }
+  if(data.session){
+    currentUser = data.user;
+    await loadCurrentProfile();
   }
-async function updateDriverLocation() {
-  try {
-    const { data: { user } } =
-      await supabaseClient.auth.getUser();
 
-    if (!user) return;
+  showStatus(
+    statusId,
+    data.session
+      ? "اکاؤنٹ بن گیا اور لاگ اِن ہو گئے۔"
+      : "اکاؤنٹ بن گیا۔ اگر ای میل تصدیق مانگی جائے تو اپنی ای میل چیک کریں۔",
+    "ok"
+  );
+}
 
-    const { data: driver, error: driverError } =
-      await supabaseClient
-        .from("driver_applications")
-        .select("status")
-        .eq("user_id", user.id)
-        .eq("status", "approved")
-        .maybeSingle();
+async function login(role){
+  if(!supabaseClient) return;
 
-    if (driverError) throw driverError;
-    if (!driver) return;
+  let email,password,statusId;
 
-    if (!navigator.geolocation) {
-      $("accountStatus").textContent =
-        "آپ کے موبائل میں Location دستیاب نہیں۔";
-      return;
-    }
+  if(role === "admin"){
+    email = $("adminEmail").value.trim();
+    password = $("adminPassword").value;
+    statusId = "adminStatus";
+  }else if(role === "driver"){
+    email = $("driverEmail").value.trim();
+    password = $("driverPassword").value;
+    statusId = "driverAuthStatus";
+  }else{
+    email = $("passengerEmail").value.trim();
+    password = $("passengerPassword").value;
+    statusId = "passengerAuthStatus";
+  }
 
-    $("accountStatus").textContent =
-      "ڈرائیور کی Location کی اجازت دیں۔۔۔";
+  if(!email || !password){
+    showStatus(statusId,"ای میل اور پاس ورڈ درج کریں۔","error");
+    return;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { data, error } =
-            await supabaseClient.rpc(
-              "update_my_driver_location",
-              {
-                p_lat: position.coords.latitude,
-                p_lng: position.coords.longitude
-              }
-            );
+  showStatus(statusId,"لاگ اِن ہو رہا ہے...");
 
-          if (error) throw error;
+  const {data,error} = await supabaseClient.auth.signInWithPassword({
+    email:email,
+    password:password
+  });
 
-          $("accountStatus").textContent = data
-            ? "لاگ اِن کامیاب۔ ڈرائیور کی Location اپ ڈیٹ ہوگئی۔"
-            : "Location اپ ڈیٹ نہیں ہوسکی۔";
-        } catch (error) {
-          console.error("Location update error:", error);
-        }
-      },
-      (error) => {
-        $("accountStatus").textContent =
-          "قریبی رائیڈز کے لیے Location کی اجازت ضروری ہے۔";
-      },
+  if(error){
+    showStatus(statusId,error.message,"error");
+    return;
+  }
+
+  currentUser = data.user;
+  await loadCurrentProfile();
+
+  showStatus(statusId,"لاگ اِن کامیاب ہو گیا۔","ok");
+
+  if(role === "driver"){
+    updateDriverLocation();
+    loadDriverDashboard();
+  }
+  if(role === "admin"){
+    await checkAdminAccess();
+  }
+}
+
+async function loadCurrentProfile(){
+  if(!currentUser) return;
+
+  const {data} = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id",currentUser.id)
+    .maybeSingle();
+
+  currentProfile = data || null;
+}
+
+async function logout(){
+  if(!supabaseClient) return;
+
+  closeRideChat();
+
+  const {error} = await supabaseClient.auth.signOut();
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  currentUser = null;
+  currentProfile = null;
+  showStatus("passengerAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
+  showStatus("driverAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
+  showStatus("adminStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
+  $("adminPanel").classList.add("hidden");
+  $("driverProfile").innerHTML = "";
+  $("availableRides").innerHTML = "";
+  $("myDriverRides").innerHTML = "";
+  alert("لاگ آؤٹ ہو گیا۔");
+}
+
+/* DRIVER LOCATION */
+async function updateDriverLocation(){
+  if(!currentUser || !navigator.geolocation) return;
+
+  const {data:application} = await supabaseClient
+    .from("driver_applications")
+    .select("status")
+    .eq("user_id",currentUser.id)
+    .eq("status","approved")
+    .maybeSingle();
+
+  if(!application) return;
+
+  navigator.geolocation.getCurrentPosition(async function(position){
+    const {latitude,longitude} = position.coords;
+
+    const {error} = await supabaseClient.rpc(
+      "update_my_driver_location",
       {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 60000
+        p_lat:latitude,
+        p_lng:longitude
       }
     );
-  } catch (error) {
-    console.error("Driver location error:", error);
+
+    if(error){
+      console.log("Location update:",error.message);
+    }
+  },function(error){
+    console.log("Location permission:",error.message);
+  },{
+    enableHighAccuracy:true,
+    maximumAge:30000,
+    timeout:15000
+  });
+}
+
+/* DRIVER VEHICLE MODELS */
+const driverModels = {
+  Suzuki:["Alto","Cultus","Wagon R","Swift","Bolan","Every"],
+  Toyota:["Corolla","Yaris","Prius","Aqua","Vitz","Passo","Fortuner"],
+  Honda:["City","Civic","BR-V","Vezel"],
+  Kia:["Picanto","Sportage","Stonic"],
+  Hyundai:["Elantra","Tucson","Santro"],
+  Changan:["Alsvin","Oshan X7","Karvaan"],
+  Other:["Other"]
+};
+
+function setupDriverModels(){
+  const company = $("carCompany");
+  const model = $("carModel");
+  if(!company || !model) return;
+
+  company.addEventListener("change",function(){
+    model.innerHTML = '<option value="">ماڈل منتخب کریں</option>';
+
+    (driverModels[company.value] || ["Other"]).forEach(function(name){
+      const option = document.createElement("option");
+      option.value = name;
+      option.textContent = name;
+      model.appendChild(option);
+    });
+  });
+}
+
+/* ROUTE AND FARE */
+async function geocode(place){
+  const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="
+    + encodeURIComponent(place + ", Lahore, Pakistan");
+
+  const response = await fetch(url,{
+    headers:{"Accept-Language":"en"}
+  });
+
+  if(!response.ok) throw new Error("جگہ تلاش نہیں ہو سکی۔");
+  const results = await response.json();
+
+  if(!results.length) throw new Error("یہ جگہ نہیں ملی: " + place);
+
+  return {
+    lat:Number(results[0].lat),
+    lng:Number(results[0].lon)
+  };
+}
+
+async function getRoute(){
+  const pickup = $("pickup").value.trim();
+  const destination = $("destination").value.trim();
+
+  if(!pickup || !destination){
+    showStatus("mapStatus","پک اَپ اور منزل دونوں درج کریں۔","error");
+    return;
+  }
+
+  const button = $("mapButton");
+  button.disabled = true;
+  showStatus("mapStatus","فاصلہ معلوم کیا جا رہا ہے...");
+
+  try{
+    const start = await geocode(pickup);
+    const end = await geocode(destination);
+
+    const routeURL =
+      "https://router.project-osrm.org/route/v1/driving/"
+      + start.lng + "," + start.lat + ";"
+      + end.lng + "," + end.lat
+      + "?overview=full&geometries=geojson";
+
+    const response = await fetch(routeURL);
+    if(!response.ok) throw new Error("روٹ معلوم نہیں ہو سکا۔");
+
+    const routeData = await response.json();
+    if(!routeData.routes || !routeData.routes.length){
+      throw new Error("اس راستے کا روٹ نہیں ملا۔");
+    }
+
+    const route = routeData.routes[0];
+    const distanceKm = route.distance / 1000;
+    const durationMin = route.duration / 60;
+    const fare = Math.round(distanceKm * RATE_PER_KM);
+    const commission = Math.round(fare * COMMISSION_RATE);
+    const driverAmount = fare - commission;
+
+    lastRoute = {
+      distanceKm:distanceKm,
+      durationMin:durationMin,
+      fare:fare,
+      commission:commission,
+      driverAmount:driverAmount,
+      pickup:start,
+      destination:end,
+      geometry:route.geometry
+    };
+
+    showStatus(
+      "mapStatus",
+      "فاصلہ: " + distanceKm.toFixed(2) + " کلومیٹر | اندازاً وقت: "
+      + Math.round(durationMin) + " منٹ",
+      "ok"
+    );
+
+    $("fareResult").textContent =
+      "کل کرایہ: Rs. " + fare
+      + " | پلیٹ فارم کمیشن (5%): Rs. " + commission
+      + " | ڈرائیور رقم: Rs. " + driverAmount;
+
+    // نقشہ اختیاری ہے؛ کرایہ معلوم کرنے کے لیے نقشہ ضروری نہیں۔
+    // اگر Leaflet tiles کام نہ کریں تو بھی روٹ اور کرایہ محفوظ رہیں گے۔
+    try{
+      if(window.L){
+        $("map").classList.remove("hidden");
+
+        if(!mapObject){
+          mapObject = L.map("map").setView([start.lat,start.lng],11);
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+            attribution:"© OpenStreetMap"
+          }).addTo(mapObject);
+        }
+
+        if(routeLayer) mapObject.removeLayer(routeLayer);
+
+        routeLayer = L.geoJSON(route.geometry).addTo(mapObject);
+        mapObject.fitBounds(routeLayer.getBounds());
+        setTimeout(function(){mapObject.invalidateSize();},300);
+      }
+    }catch(mapError){
+      console.log("Map display unavailable:",mapError.message);
+      $("map").classList.add("hidden");
+    }
+
+  }catch(error){
+    showStatus("mapStatus",error.message,"error");
+  }finally{
+    button.disabled = false;
   }
 }
-  async function login() {
-    if (!supabaseClient) return;
 
-    const email = $("accountEmail").value.trim();
-    const password = $("accountPassword").value;
+/* PASSENGER BOOKING */
+async function submitBooking(event){
+  event.preventDefault();
 
-    if (!email || !password) {
-      $("accountStatus").textContent =
-        "لاگ اِن کے لیے ای میل اور پاس ورڈ درج کریں۔";
-      return;
-    }
-
-    $("accountStatus").textContent = "لاگ اِن ہو رہا ہے۔۔۔";
-
-    try {
-      const { error } =
-        await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
-
-      if (error) throw error;
-
-      $("accountStatus").textContent = "لاگ اِن کامیاب ہوگیا۔";
-      await updateDriverLocation();
-    } catch (error) {
-      $("accountStatus").textContent =
-        "لاگ اِن میں خرابی: " + error.message;
-    }
+  if(!currentUser){
+    showStatus("bookingStatus","رائیڈ بک کرنے سے پہلے مسافر اکاؤنٹ سے لاگ اِن کریں۔","error");
+    return;
   }
 
-  async function logout() {
-    if (!supabaseClient) return;
-
-    const { error } = await supabaseClient.auth.signOut();
-
-    $("accountStatus").textContent = error
-      ? "لاگ آؤٹ میں خرابی: " + error.message
-      : "آپ لاگ آؤٹ ہوگئے ہیں۔";
+  if(!lastRoute){
+    showStatus("bookingStatus","پہلے فاصلہ اور کرایہ معلوم کریں۔","error");
+    return;
   }
 
-  const driverModels = {
-    Suzuki: ["Alto", "Cultus", "Wagon R", "Swift", "Mehran", "Bolan", "Every", "APV"],
-    Toyota: ["Corolla", "Yaris", "Vitz", "Aqua", "Prius", "Passo", "Fortuner", "Hilux", "Land Cruiser"],
-    Honda: ["City", "Civic", "BR-V", "HR-V", "Vezel"],
-    Kia: ["Picanto", "Sportage", "Sorento", "Stonic"],
-    Hyundai: ["Tucson", "Elantra", "Sonata", "Porter"],
-    Changan: ["Alsvin", "Oshan X7", "Karvaan"],
-    Other: ["Other model"]
+  const booking = {
+    booking_id:"RL-" + Date.now(),
+    user_id:currentUser.id,
+    customer_name:$("customerName").value.trim(),
+    customer_phone:$("phone").value.trim(),
+    service_type:$("service").value,
+    car_type:$("car").value,
+    pickup:$("pickup").value.trim(),
+    pickup_lat:lastRoute.pickup.lat,
+    pickup_lng:lastRoute.pickup.lng,
+    destination:$("destination").value.trim(),
+    ride_date:$("rideDate").value,
+    ride_time:$("rideTime").value,
+    passengers:Number($("passengers").value),
+    notes:$("notes").value.trim(),
+    distance_km:Number(lastRoute.distanceKm.toFixed(3)),
+    fare:lastRoute.fare,
+    commission:lastRoute.commission,
+    driver_amount:lastRoute.driverAmount,
+    status:"pending"
   };
 
-  function setupDriverModels() {
-    const companySelect = $("driverCompany");
-    const modelSelect = $("driverCar");
-
-    companySelect.addEventListener("change", () => {
-      const company = companySelect.value;
-      modelSelect.replaceChildren();
-
-      const firstOption = document.createElement("option");
-      firstOption.value = "";
-      firstOption.textContent = company
-        ? "ماڈل منتخب کریں"
-        : "پہلے کمپنی منتخب کریں";
-
-      modelSelect.appendChild(firstOption);
-
-      (driverModels[company] || []).forEach(model => {
-        const option = document.createElement("option");
-        option.value = model;
-        option.textContent = model;
-        modelSelect.appendChild(option);
-      });
-
-      modelSelect.disabled = !company;
-    });
+  if(!booking.customer_name || !booking.customer_phone ||
+     !booking.pickup || !booking.destination ||
+     !booking.ride_date || !booking.ride_time){
+    showStatus("bookingStatus","تمام ضروری معلومات درج کریں۔","error");
+    return;
   }
 
-  async function geocode(place) {
-    const query = place.toLowerCase().includes("lahore")
-      ? place
-      : place + ", Lahore, Pakistan";
+  showStatus("bookingStatus","رائیڈ محفوظ ہو رہی ہے...");
 
-    const url =
-      "https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" +
-      encodeURIComponent(query);
+  const {data,error} = await supabaseClient
+    .from("bookings")
+    .insert(booking)
+    .select()
+    .single();
 
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error("لوکیشن تلاش نہیں ہو سکی۔ دوبارہ کوشش کریں۔");
-    }
-
-    const results = await response.json();
-
-    if (!results.length) {
-      throw new Error(
-        "لوکیشن نہیں ملی۔ علاقے کا نام انگریزی میں لکھیں۔"
-      );
-    }
-
-    return {
-      lat: Number(results[0].lat),
-      lon: Number(results[0].lon),
-      name: results[0].display_name
-    };
-  }
-  async function getRoute() {
-    const pickupText = $("pickup").value.trim();
-    const destinationText = $("destination").value.trim();
-
-    if (!pickupText || !destinationText) {
-      showStatus("پک اَپ اور منزل درج کریں۔", true);
-      return;
-    }
-
-    const button = $("mapButton");
-    button.disabled = true;
-    button.textContent = "راستہ تلاش ہو رہا ہے۔۔۔";
-
-    try {
-      const start = await geocode(pickupText);
-      const end = await geocode(destinationText);
-
-      const url =
-        "https://router.project-osrm.org/route/v1/driving/" +
-        start.lon + "," + start.lat + ";" +
-        end.lon + "," + end.lat +
-        "?overview=full&geometries=geojson";
-
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("راستے کی سروس دستیاب نہیں۔");
-
-      const data = await response.json();
-      if (!data.routes || !data.routes.length) {
-        throw new Error("ڈرائیونگ راستہ نہیں ملا۔");
-      }
-
-      const route = data.routes[0];
-      const distanceKm = route.distance / 1000;
-      const durationMin = Math.round(route.duration / 60);
-      const fare = Math.round(distanceKm * RATE_PER_KM);
-      const commission = Math.round(fare * COMMISSION_RATE);
-      const driverAmount = fare - commission;
-
-      lastRoute = {
-        distanceKm, durationMin, fare, commission,
-        driverAmount, start, end
-      };
-
-      if (!map) {
-        map = L.map("map").setView([start.lat, start.lon], 12);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "&copy; OpenStreetMap contributors",
-          maxZoom: 19
-        }).addTo(map);
-      }
-
-      if (routeLayer) map.removeLayer(routeLayer);
-      if (pickupMarker) map.removeLayer(pickupMarker);
-      if (destinationMarker) map.removeLayer(destinationMarker);
-
-      routeLayer = L.geoJSON(route.geometry).addTo(map);
-      pickupMarker = L.marker([start.lat, start.lon])
-        .addTo(map).bindPopup("پک اَپ");
-      destinationMarker = L.marker([end.lat, end.lon])
-        .addTo(map).bindPopup("منزل");
-
-      map.fitBounds(routeLayer.getBounds(), { padding: [25, 25] });
-      setTimeout(() => map.invalidateSize(), 200);
-
-      $("fareResult").replaceChildren();
-
-      const details = [
-        ["فاصلہ", distanceKm.toFixed(1) + " کلومیٹر"],
-        ["متوقع وقت", durationMin + " منٹ"],
-        ["اندازاً کرایہ", "Rs. " + fare.toLocaleString("en-PK")],
-        ["5% کمیشن", "Rs. " + commission.toLocaleString("en-PK")],
-        ["کمیشن کے بعد ڈرائیور کی رقم", "Rs. " + driverAmount.toLocaleString("en-PK")]
-      ];
-
-      const heading = document.createElement("strong");
-      heading.textContent = "✅ سفر کا اندازہ";
-      $("fareResult").appendChild(heading);
-
-      details.forEach(([label, value]) => {
-        const p = document.createElement("p");
-        p.textContent = label + ": " + value;
-        $("fareResult").appendChild(p);
-      });
-
-      const note = document.createElement("p");
-      note.className = "small";
-      note.textContent = "یہ اندازاً کرایہ ہے، حتمی قیمت سفر سے پہلے طے کریں۔";
-      $("fareResult").appendChild(note);
-
-      showStatus("راستہ اور کرایہ معلوم ہوگیا۔");
-    } catch (error) {
-      showStatus(error.message || "راستہ معلوم نہیں ہوسکا۔", true);
-    } finally {
-      button.disabled = false;
-      button.textContent = "📍 نقشے پر راستہ اور کرایہ معلوم کریں";
-    }
+  if(error){
+    showStatus("bookingStatus","رائیڈ محفوظ نہیں ہوئی: " + error.message,"error");
+    return;
   }
 
-  async function submitBooking(event) {
-    event.preventDefault();
-
-    if (!lastRoute) {
-      showStatus("پہلے راستہ اور کرایہ معلوم کریں۔", true);
-      return;
-    }
-
-    const form = $("bookingForm");
-    if (!form.reportValidity()) return;
-
-    const submitButton = form.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-
-    const bookingId = "RL-" + Date.now();
-
-    let user = null;
-    if (supabaseClient) {
-      try {
-        const result = await supabaseClient.auth.getUser();
-        user = result.data.user;
-      } catch (_) {}
-    }
-
-    const booking = {
-      booking_id: bookingId,
-      user_id: user ? user.id : null,
-      customer_name: $("customerName").value.trim(),
-      customer_phone: $("phone").value.trim(),
-      service_type: $("service").value,
-      car_type: $("car").value,
-      pickup: $("pickup").value.trim(),
-      pickup_lat:
-      Number(lastRoute.start.lat),
-      pickup_lng:
-      Number(lastRoute.start.lon),
-      destination: $
-      ("destination").value.trim(),
-      ride_date: $("rideDate").value,
-      ride_time: $("rideTime").value,
-      passengers: Number($("passengers").value),
-      notes: $("notes").value.trim(),
-      distance_km: Number(lastRoute.distanceKm.toFixed(2)),
-      fare: lastRoute.fare,
-      commission: lastRoute.commission,
-      driver_amount: lastRoute.driverAmount,
-      status: "pending"
-    };
-
-    const message = [
-      "نئی رائیڈ بکنگ - Ride Lahore New",
-      "بکنگ نمبر: " + booking.booking_id,
-      "نام: " + booking.customer_name,
-      "فون: " + booking.customer_phone,
-      "سروس: " + booking.service_type,
-      "گاڑی: " + booking.car_type,
-      "پک اَپ: " + booking.pickup,
-      "منزل: " + booking.destination,
-      "تاریخ: " + booking.ride_date,
-      "وقت: " + booking.ride_time,
-      "مسافر: " + booking.passengers,
-      "فاصلہ: " + booking.distance_km + " کلومیٹر",
-      "اندازاً کرایہ: Rs. " + booking.fare,
-      "5% کمیشن: Rs. " + booking.commission,
-      "ڈرائیور کی رقم: Rs. " + booking.driver_amount,
-      "اضافی ہدایات: " + (booking.notes || "کوئی نہیں")
-    ].join("\n");
-
-    const whatsappUrl =
-      "https://wa.me/" + BUSINESS_PHONE +
-      "?text=" + encodeURIComponent(message);
-
-    submitButton.textContent = "بکنگ تیار ہو رہی ہے۔۔۔";
-
-    let saved = false;
-
-    try {
-      if (!supabaseClient) {
-        throw new Error("ڈیٹا بیس سے رابطہ دستیاب نہیں۔");
-      }
-
-      const { error } = await supabaseClient
-        .from("bookings")
-        .insert([booking]);
-
-      if (error) throw error;
-      saved = true;
-    } catch (error) {
-      console.error("Booking save error:", error);
-    }
-if (saved) {
-  showStatus("✅ آپ کی بکنگ ویب سائٹ میں محفوظ ہوگئی ہے۔ قریبی ڈرائیورز کو رائیڈ آفر بھیج دی گئی ہے۔");
-} else {
   showStatus(
-    "❌ بکنگ محفوظ نہیں ہوئی۔ براہِ کرم دوبارہ کوشش کریں۔",
-    true
-  );
-}
-
-submitButton.disabled = false;
-submitButton.textContent = "🟢 رائیڈ بک کریں";
-  }
-
-  async function loadMyBookings() {
-    const list = $("myBookingsList");
-    const button = $("loadMyBookings");
-
-    if (!supabaseClient) {
-      list.textContent = "ڈیٹا بیس سے رابطہ دستیاب نہیں۔";
-      return;
-    }
-
-    button.disabled = true;
-    list.textContent = "بکنگز لوڈ ہو رہی ہیں۔۔۔";
-
-    try {
-      const { data: { user }, error: authError } =
-        await supabaseClient.auth.getUser();
-
-      if (authError) throw authError;
-
-      if (!user) {
-        list.textContent = "براہِ کرم پہلے لاگ اِن کریں۔";
-        return;
-      }
-
-      const { data, error } = await supabaseClient
-        .from("bookings")
-        .select("id, booking_id, user_id, driver_id, service_type, pickup, destination, ride_date, ride_time, fare, status")
-        .or("user_id.eq." + user.id + ",driver_id.eq." + user.id)
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      list.replaceChildren();
-
-      if (!data || data.length === 0) {
-        list.textContent = "آپ کی کوئی بکنگ نہیں ملی۔";
-        return;
-      }
-
-      data.forEach(booking => {
-        const card = document.createElement("div");
-        card.style.cssText =
-          "border:1px solid #ccc;padding:12px;margin:12px 0;border-radius:8px";
-
-        const title = document.createElement("h3");
-        title.textContent = "بکنگ نمبر: " + (booking.booking_id || "—");
-        card.appendChild(title);
-
-        [
-          ["سروس", booking.service_type],
-          ["پک اَپ", booking.pickup],
-          ["منزل", booking.destination],
-          ["تاریخ", booking.ride_date],
-          ["وقت", booking.ride_time],
-          ["کرایہ", booking.fare == null ? "—" : "Rs. " + booking.fare],
-          ["اسٹیٹس", booking.status]
-        ].forEach(([label, value]) => {
-          const p = document.createElement("p");
-          p.textContent = label + ": " + (value ?? "—");
-          card.appendChild(p);
-        });
-        if (
-  ["accepted", "confirmed"].includes(
-    String(booking.status || "").trim().toLowerCase()
-  )
-) {
-  const chatBtn = document.createElement("button");
-  chatBtn.type = "button";
-  chatBtn.textContent = "💬 رائیڈ چیٹ کھولیں";
-  chatBtn.style.cssText =
-    "background:#087f5b;color:white;padding:10px 16px;border:0;border-radius:6px;cursor:pointer;margin:8px 0;";
-
-  chatBtn.addEventListener("click", () => {
-    openRideChat(booking.id, booking.booking_id);
-  });
-
-  card.appendChild(chatBtn);
-}
-        list.appendChild(card);
-      });
-    } catch (error) {
-      console.error("My Bookings error:", error);
-      list.textContent =
-        "بکنگز لوڈ نہیں ہو سکیں۔ لاگ اِن اور ڈیٹا بیس کی پالیسی چیک کریں۔";
-    } finally {
-      button.disabled = false;
-    }
-  }
-async function openRideChat(bookingId, bookingNumber) {
-  const { data: { user }, error: authError } =
-    await supabaseClient.auth.getUser();
-
-  if (authError || !user) {
-    alert("براہِ کرم دوبارہ لاگ اِن کریں۔");
-    return;
-  }
-
-  const { data: booking, error: bookingError } =
-    await supabaseClient
-      .from("bookings")
-      .select("status, user_id, driver_id")
-      .eq("id", bookingId)
-      .maybeSingle();
-
-  if (bookingError || !booking) {
-    alert("بکنگ کی معلومات نہیں مل سکیں۔");
-    return;
-  }
-
-  if (
-    booking.user_id !== user.id &&
-    booking.driver_id !== user.id
-  ) {
-    alert("آپ کو اس چیٹ کی اجازت نہیں ہے۔");
-    return;
-  }
-
-  if (!["accepted", "confirmed"].includes(booking.status)) {
-    alert("یہ رائیڈ چیٹ کے لیے دستیاب نہیں ہے۔");
-    return;
-  }
-
-  const oldChat = document.getElementById("rideChatWindow");
-  if (oldChat) oldChat.remove();
-
-  const chat = document.createElement("div");
-  chat.id = "rideChatWindow";
-  chat.style.cssText =
-    "position:fixed;inset:5%;z-index:99999;background:white;border:2px solid #087f5b;border-radius:12px;padding:15px;display:flex;flex-direction:column;";
-
-  chat.innerHTML = `
-    <h3>💬 رائیڈ چیٹ</h3>
-    <p>بکنگ نمبر: ${String(bookingNumber).replace(/[&<>"']/g, "")}</p>
-    <div id="rideChatMessages"
-      style="flex:1;overflow-y:auto;border:1px solid #ddd;padding:10px;margin:10px 0;">
-    </div>
-    <textarea id="rideChatInput"
-      placeholder="اپنا پیغام لکھیں..."
-      maxlength="1000"
-      style="width:100%;padding:10px;min-height:60px;"></textarea>
-    <button id="rideChatSend"
-      style="background:#087f5b;color:white;padding:12px;margin-top:8px;">
-      پیغام بھیجیں
-    </button>
-    <button id="rideChatClose"
-      style="background:#555;color:white;padding:10px;margin-top:8px;">
-      چیٹ بند کریں
-    </button>
-  `;
-
-  document.body.appendChild(chat);
-
-  const messagesBox = chat.querySelector("#rideChatMessages");
-  const input = chat.querySelector("#rideChatInput");
-  const sendBtn = chat.querySelector("#rideChatSend");
-  const closeBtn = chat.querySelector("#rideChatClose");
-
-  let chatTimer = null;
-
-  function closeChat() {
-    if (chatTimer) clearInterval(chatTimer);
-    chat.remove();
-  }
-
-  closeBtn.addEventListener("click", closeChat);
-
-  async function refreshChat() {
-    const { data: currentBooking, error: statusError } =
-      await supabaseClient
-        .from("bookings")
-        .select("status")
-        .eq("id", bookingId)
-        .maybeSingle();
-
-    if (
-      statusError ||
-      !currentBooking ||
-      !["accepted", "confirmed"].includes(currentBooking.status)
-    ) {
-      alert("رائیڈ مکمل یا بند ہوگئی ہے۔ چیٹ بند کر دی گئی ہے۔");
-      closeChat();
-      return;
-    }
-
-    const { data, error } = await supabaseClient
-      .from("ride_messages")
-      .select("sender_id, message, created_at")
-      .eq("booking_id", bookingId)
-      .order("created_at", { ascending: true });
-
-    if (error) {
-      messagesBox.textContent = "پیغامات لوڈ نہیں ہو سکے۔";
-      return;
-    }
-
-    messagesBox.replaceChildren();
-
-    (data || []).forEach(msg => {
-      const p = document.createElement("p");
-      p.textContent =
-        (msg.sender_id === user.id ? "آپ: " : "دوسرا فریق: ") +
-        msg.message;
-      p.style.cssText =
-        "padding:8px;margin:5px;background:#f1f1f1;border-radius:6px;";
-      messagesBox.appendChild(p);
-    });
-
-    messagesBox.scrollTop = messagesBox.scrollHeight;
-  }
-
-  sendBtn.addEventListener("click", async () => {
-    const messageText = input.value.trim();
-
-    if (!messageText) return;
-
-    sendBtn.disabled = true;
-
-    const { error } = await supabaseClient
-      .from("ride_messages")
-      .insert({
-        booking_id: bookingId,
-        sender_id: user.id,
-        message: messageText
-      });
-
-    sendBtn.disabled = false;
-
-    if (error) {
-      alert("پیغام نہیں بھیجا جا سکا: " + error.message);
-      return;
-    }
-
-    input.value = "";
-    await refreshChat();
-  });
-
-  await refreshChat();
-
-  chatTimer = setInterval(refreshChat, 5000);
-}
-  async function submitDriverRegistration(event) {
-    event.preventDefault();
-
-    const form = $("driverRegistrationForm");
-    const message = $("driverFormMessage");
-    const button = form.querySelector('button[type="submit"]');
-
-    if (!supabaseClient) {
-      message.textContent = "ڈیٹا بیس سے رابطہ دستیاب نہیں۔";
-      return;
-    }
-
-    button.disabled = true;
-    message.textContent = "درخواست جمع ہو رہی ہے۔۔۔";
-
-    try {
-      const { data: { user }, error: authError } =
-        await supabaseClient.auth.getUser();
-
-      if (authError) throw authError;
-
-      if (!user) {
-        message.textContent = "براہِ کرم پہلے اکاؤنٹ میں لاگ اِن کریں۔";
-        return;
-      }
-const application = {
-        user_id: user.id,
-        driver_name: $("driverName").value.trim(),
-        driver_phone: $("driverPhone").value.trim(),
-        driver_email: $("driverEmail").value.trim(),
-        car_company: $("driverCompany").value,
-        car_model: $("driverCar").value,
-        car_number: $("driverCarNumber").value.trim(),
-        license_number: $("driverLicense").value.trim(),
-        payment_method: $("driverPaymentMethod").value,
-        payment_account_title: $("driverPaymentTitle").value.trim(),
-        payment_account_number: $("driverPaymentNumber").value.trim()
-      };
-      const { error } = await supabaseClient
-        .from("driver_applications")
-        .insert([application]);
-
-      if (error) throw error;
-
-      message.textContent =
-        "درخواست جمع ہوگئی۔ منظوری کا انتظار کریں۔";
-      form.reset();
-      $("driverCar").disabled = true;
-      $("driverCar").replaceChildren();
-
-      const option = document.createElement("option");
-      option.value = "";
-      option.textContent = "پہلے کمپنی منتخب کریں";
-      $("driverCar").appendChild(option);
-    } catch (error) {
-      console.error("Driver registration error:", error);
-      message.textContent =
-        "درخواست جمع نہیں ہوئی۔ لاگ اِن، ٹیبل اور RLS پالیسی چیک کریں۔";
-    } finally {
-      button.disabled = false;
-    }
-  }
-
-  function setDateMinimum() {
-    const today = new Date();
-    const localDate = new Date(
-      today.getTime() - today.getTimezoneOffset() * 60000
-    ).toISOString().split("T")[0];
-
-    $("rideDate").min = localDate;
-    $("rideDate").value = localDate;
-  }
-function escapeAdminText(value) {
-    return String(value ?? "").replace(/[&<>"']/g, function (char) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      }[char];
-    });
-  }
-
-  async function checkAdminAccess() {
-    const panel = $("adminPanel");
-    const status = $("adminStatus");
-
-    if (!panel || !status || !supabaseClient) return;
-
-    const { data: userData, error: userError } =
-      await supabaseClient.auth.getUser();
-    
-    if (userError || !userData.user) {
-      panel.hidden = true;
-      return;
-    }
-
-    const { data, error } = await supabaseClient.rpc("is_admin");
-
-    if (error || data !== true) {
-      panel.hidden = true;
-      console.log("Admin access check:", error || data);
-      return;
-    }
-
-    panel.hidden = false;
-    status.textContent = "Admin access verified.";
-  }
-async function updateDriverStatus(driverId, newStatus) {
-  if (!["approved", "rejected"].includes(newStatus)) return;
-
-  const confirmed = confirm(
-    newStatus === "approved"
-      ? "Kya aap is driver ko approve karna chahte hain?"
-      : "Kya aap is driver ko reject karna chahte hain?"
+    "bookingStatus",
+    "آپ کی رائیڈ بک ہو گئی ہے۔ بکنگ نمبر: "
+    + (data.booking_id || booking.booking_id)
+    + "۔ ڈرائیور ملنے پر آپ ویب سائٹ کے اندر چیٹ کر سکیں گے۔",
+    "ok"
   );
 
-  if (!confirmed) return;
+  $("bookingForm").reset();
+  $("fareResult").textContent = "";
+  lastRoute = null;
+}
 
-  const { data: userData } = await supabaseClient.auth.getUser();
-
-  if (!userData.user) {
-    alert("Pehle login karein.");
+/* MY BOOKINGS */
+async function loadMyBookings(){
+  if(!currentUser){
+    showStatus("myBookingsStatus","پہلے لاگ اِن کریں۔","error");
     return;
   }
 
-  const { data: adminCheck, error: adminError } =
-    await supabaseClient.rpc("is_admin");
+  showStatus("myBookingsStatus","رائیڈز لوڈ ہو رہی ہیں...");
+  $("myBookingsList").innerHTML = "";
 
-  if (adminError || adminCheck !== true) {
-    alert("Admin permission verify nahi hui.");
+  const {data,error} = await supabaseClient
+    .from("bookings")
+    .select("*")
+    .or("user_id.eq." + currentUser.id + ",driver_id.eq." + currentUser.id)
+    .order("created_at",{ascending:false});
+
+  if(error){
+    showStatus("myBookingsStatus",error.message,"error");
     return;
   }
 
-  const { error } = await supabaseClient
+  if(!data || !data.length){
+    showStatus("myBookingsStatus","ابھی کوئی رائیڈ موجود نہیں۔");
+    return;
+  }
+
+  showStatus("myBookingsStatus","آپ کی رائیڈز:");
+
+  data.forEach(function(booking){
+    const card = document.createElement("div");
+    card.className = "item-card";
+
+    let html =
+      "<strong>بکنگ: " + escapeHTML(booking.booking_id || booking.id) + "</strong>"
+      + "<p>پک اَپ: " + escapeHTML(booking.pickup) + "</p>"
+      + "<p>منزل: " + escapeHTML(booking.destination) + "</p>"
+      + "<p>تاریخ: " + escapeHTML(booking.ride_date) + "</p>"
+      + "<p>کرایہ: Rs. " + escapeHTML(booking.fare) + "</p>"
+      + "<p>حالت: " + escapeHTML(booking.status) + "</p>";
+
+    if(["accepted","confirmed"].includes(String(booking.status).toLowerCase())){
+      html += '<button class="success" data-chat-booking="' +
+        escapeHTML(booking.id) + '">پرائیویٹ چیٹ کھولیں</button>';
+    }
+
+    card.innerHTML = html;
+    $("myBookingsList").appendChild(card);
+  });
+
+  $("myBookingsList").querySelectorAll("[data-chat-booking]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      const booking = data.find(function(item){
+        return String(item.id) === btn.dataset.chatBooking;
+      });
+      if(booking) openRideChat(booking.id,booking.booking_id);
+    });
+  });
+}
+
+/* PRIVATE PASSENGER / DRIVER CHAT */
+async function openRideChat(bookingId,bookingNumber){
+  if(!currentUser) return;
+
+  const {data:booking,error} = await supabaseClient
+    .from("bookings")
+    .select("id,user_id,driver_id,status,booking_id")
+    .eq("id",bookingId)
+    .maybeSingle();
+
+  if(error || !booking){
+    alert("رائیڈ کی معلومات نہیں ملیں۔");
+    return;
+  }
+
+  const isParticipant =
+    booking.user_id === currentUser.id ||
+    booking.driver_id === currentUser.id;
+
+  if(!isParticipant){
+    alert("آپ اس رائیڈ کی چیٹ نہیں کھول سکتے۔");
+    return;
+  }
+
+  if(!["accepted","confirmed"].includes(String(booking.status).toLowerCase())){
+    alert("چیٹ صرف ڈرائیور کے رائیڈ قبول کرنے کے بعد کھلے گی۔");
+    return;
+  }
+
+  chatBookingId = bookingId;
+  $("chatTitle").textContent = "رائیڈ چیٹ: " + (bookingNumber || bookingId);
+  $("chatModal").style.display = "flex";
+
+  await loadRideMessages();
+
+  if(chatRefresh) clearInterval(chatRefresh);
+  chatRefresh = setInterval(async function(){
+    await checkChatRideStatus();
+  },5000);
+}
+
+async function checkChatRideStatus(){
+  if(!chatBookingId) return;
+
+  const {data,error} = await supabaseClient
+    .from("bookings")
+    .select("status")
+    .eq("id",chatBookingId)
+    .maybeSingle();
+
+  if(error || !data ||
+     !["accepted","confirmed"].includes(String(data.status).toLowerCase())){
+    showStatus("chatStatus","یہ رائیڈ مکمل یا بند ہو چکی ہے۔ چیٹ بند کر دی گئی۔");
+    setTimeout(closeRideChat,1200);
+    return;
+  }
+
+  await loadRideMessages();
+}
+
+async function loadRideMessages(){
+  if(!chatBookingId) return;
+
+  const {data,error} = await supabaseClient
+    .from("ride_messages")
+    .select("*")
+    .eq("booking_id",chatBookingId)
+    .order("created_at",{ascending:true});
+
+  if(error){
+    showStatus("chatStatus","چیٹ لوڈ نہیں ہوئی: " + error.message,"error");
+    return;
+  }
+
+  const box = $("chatMessages");
+  box.innerHTML = "";
+
+  (data || []).forEach(function(message){
+    const div = document.createElement("div");
+    div.className = "chat-message" +
+      (message.sender_id === currentUser.id ? " mine" : "");
+    div.textContent = message.message;
+    box.appendChild(div);
+  });
+
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendRideMessage(){
+  if(!currentUser || !chatBookingId) return;
+
+  const message = $("chatInput").value.trim();
+  if(!message) return;
+
+  const {error} = await supabaseClient
+    .from("ride_messages")
+    .insert({
+      booking_id:chatBookingId,
+      sender_id:currentUser.id,
+      message:message
+    });
+
+  if(error){
+    showStatus("chatStatus","پیغام نہیں بھیجا گیا: " + error.message,"error");
+    return;
+  }
+
+  $("chatInput").value = "";
+  await loadRideMessages();
+}
+
+function closeRideChat(){
+  if(chatRefresh){
+    clearInterval(chatRefresh);
+    chatRefresh = null;
+  }
+  chatBookingId = null;
+  if($("chatModal")) $("chatModal").style.display = "none";
+}
+
+/* DRIVER REGISTRATION */
+async function submitDriverRegistration(event){
+  event.preventDefault();
+
+  if(!currentUser){
+    showStatus("driverRegistrationStatus","پہلے ڈرائیور اکاؤنٹ سے لاگ اِن کریں۔","error");
+    return;
+  }
+
+  const application = {
+    user_id:currentUser.id,
+    driver_name:$("regDriverName").value.trim(),
+    driver_phone:$("regDriverPhone").value.trim(),
+    driver_email:$("regDriverEmail").value.trim(),
+    car_company:$("carCompany").value,
+    car_model:$("carModel").value,
+    car_number:$("carNumber").value.trim(),
+    license_number:$("licenseNumber").value.trim(),
+    payment_method:$("driverPaymentMethod").value,
+    payment_account_title:$("driverPaymentTitle").value.trim(),
+    payment_account_number:$("driverPaymentNumber").value.trim(),
+    status:"pending"
+  };
+
+  showStatus("driverRegistrationStatus","درخواست جمع ہو رہی ہے...");
+
+  const {error} = await supabaseClient
     .from("driver_applications")
-    .update({ status: newStatus })
-    .eq("id", driverId);
+    .insert(application);
 
-  if (error) {
-    alert("Status update nahi hua: " + error.message);
+  if(error){
+    showStatus("driverRegistrationStatus",error.message,"error");
     return;
   }
 
-  alert("Driver status update ho gaya.");
-  await loadAdminDashboard();
+  showStatus(
+    "driverRegistrationStatus",
+    "ڈرائیور رجسٹریشن جمع ہو گئی۔ ایڈمن کی منظوری کا انتظار کریں۔",
+    "ok"
+  );
+
+  $("driverRegistrationForm").reset();
+  $("carModel").innerHTML = '<option value="">پہلے کمپنی منتخب کریں</option>';
 }
-  async function loadAdminDashboard() {
-    const status = $("adminStatus");
-    status.textContent = "Dashboard loading...";
 
-    try {
-      await checkAdminAccess();
+/* DRIVER DASHBOARD */
+async function loadDriverDashboard(){
+  if(!currentUser){
+    showStatus("driverDashboardStatus","ڈرائیور لاگ اِن کریں۔","error");
+    return;
+  }
 
-      if ($("adminPanel").hidden) {
-        status.textContent =
-          "Admin access nahi mila. Pehle apne account mein login karein.";
-        return;
-      }
-    await loadPlatformPaymentAccounts();
-   // Load Pending Driver Top-up Requests
-      const topupBox = $("adminTopupRequests");
+  showStatus("driverDashboardStatus","ڈرائیور ڈیش بورڈ لوڈ ہو رہا ہے...");
 
-      if (topupBox) {
-        const { data: requests, error: topupError } =
-          await supabaseClient
-            .from("topup_requests")
-            .select("id, driver_id, amount, method, transaction_reference, status, created_at")
-            .eq("status", "pending")
-            .order("created_at", { ascending: false });
+  const {data:application,error} = await supabaseClient
+    .from("driver_applications")
+    .select("*")
+    .eq("user_id",currentUser.id)
+    .order("created_at",{ascending:false})
+    .limit(1)
+    .maybeSingle();
 
-        if (topupError) {
-          topupBox.textContent =
-            "Top-up error: " + topupError.message;
-        } else if (!requests || requests.length === 0) {
-          topupBox.textContent = "ابھی کوئی Pending Top-up درخواست نہیں۔";
-        } else {
-          topupBox.innerHTML = requests.map(function (item) {
-            return `
-              <div style="border:1px solid #ccc;padding:12px;margin:10px 0;border-radius:8px">
-                <p>Request ID: ${item.id}</p>
-                <p>Driver ID: ${escapeAdminText(item.driver_id)}</p>
-                <p>رقم: Rs. ${Number(item.amount).toFixed(2)}</p>
-                <p>Payment: ${escapeAdminText(item.method)}</p>
-                <p>Transaction ID: ${escapeAdminText(item.transaction_reference)}</p>
-                <p>تاریخ: ${escapeAdminText(item.created_at)}</p>
-               <button type="button"
-  data-topup-id="${item.id}"
-  data-topup-action="approve">
-  Approve Top-up
-</button>
+  if(error){
+    showStatus("driverDashboardStatus",error.message,"error");
+    return;
+  }
 
-<button type="button"
-  data-topup-id="${item.id}"
-  data-topup-action="reject">
-  Reject Top-up
-</button>
-              </div>
-            `;
-          }).join("");
-        topupBox.querySelectorAll("button[data-topup-id]")
-  .forEach(function (button) {
-    button.addEventListener("click", async function () {
-      const approved = button.dataset.topupAction === "approve";
+  if(!application){
+    showStatus("driverDashboardStatus","آپ کی ڈرائیور رجسٹریشن موجود نہیں۔ پہلے رجسٹریشن جمع کریں۔","error");
+    return;
+  }
 
-      const question = approved
-        ? "کیا آپ نے واقعی رقم وصول کرکے Transaction ID چیک کر لیا ہے؟"
-        : "کیا آپ یہ Top-up درخواست Reject کرنا چاہتے ہیں؟";
+  $("driverProfile").innerHTML =
+    "<div class='item-card'><strong>" + escapeHTML(application.driver_name) +
+    "</strong><p>گاڑی: " + escapeHTML(application.car_company) +
+    " " + escapeHTML(application.car_model) +
+    "</p><p>نمبر: " + escapeHTML(application.car_number) +
+    "</p><p>منظوری: " + escapeHTML(application.status) + "</p></div>";
 
-      if (!confirm(question)) return;
+  if(application.status !== "approved"){
+    showStatus("driverDashboardStatus","آپ کی درخواست ابھی منظور نہیں ہوئی۔ منظوری کے بعد رائیڈز مل سکیں گی۔");
+    return;
+  }
+
+  updateDriverLocation();
+
+  const {data:balance,error:balanceError} = await supabaseClient.rpc(
+    "get_my_topup_balance"
+  );
+
+  if(!balanceError){
+    const amount = typeof balance === "number"
+      ? balance
+      : Number(balance || 0);
+    $("driverTopupBalance").textContent = "Rs. " + amount.toFixed(2);
+  }
+
+  await loadDriverPaymentAccounts();
+  await loadAvailableRides();
+  await loadMyDriverRides();
+
+  showStatus("driverDashboardStatus","ڈرائیور ڈیش بورڈ تیار ہے۔","ok");
+}
+
+async function loadAvailableRides(){
+  const box = $("availableRides");
+  box.innerHTML = "رائیڈز لوڈ ہو رہی ہیں...";
+
+  const {data:offers,error} = await supabaseClient
+    .from("ride_offers")
+    .select("id,booking_id,status,created_at")
+    .eq("driver_id",currentUser.id)
+    .eq("status","offered")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    box.textContent = "رائیڈ آفرز لوڈ نہیں ہوئیں: " + error.message;
+    return;
+  }
+
+  if(!offers || !offers.length){
+    box.textContent = "اس وقت آپ کے لیے کوئی رائیڈ آفر موجود نہیں۔";
+    return;
+  }
+
+  box.innerHTML = "";
+
+  for(const offer of offers){
+    const {data:details,error:detailError} = await supabaseClient.rpc(
+      "get_my_offered_ride_details",
+      {p_offer_id:offer.id}
+    );
+
+    if(detailError || !details) continue;
+
+    const ride = Array.isArray(details) ? details[0] : details;
+    if(!ride) continue;
+
+    const card = document.createElement("div");
+    card.className = "item-card";
+
+    card.innerHTML =
+      "<strong>نئی رائیڈ آفر</strong>" +
+      "<p>پک اَپ: " + escapeHTML(ride.pickup) + "</p>" +
+      "<p>منزل: " + escapeHTML(ride.destination) + "</p>" +
+      "<p>فاصلہ: " + escapeHTML(ride.distance_km) + " کلومیٹر</p>" +
+      "<p>کرایہ: Rs. " + escapeHTML(ride.fare) + "</p>" +
+      "<button class='success' data-accept='" + escapeHTML(offer.id) + "'>رائیڈ قبول کریں</button> " +
+      "<button class='danger' data-reject='" + escapeHTML(offer.id) + "'>رد کریں</button>";
+
+    box.appendChild(card);
+  }
+
+  box.querySelectorAll("[data-accept]").forEach(function(button){
+    button.addEventListener("click",async function(){
+      if(!confirm("کیا آپ یہ رائیڈ قبول کرنا چاہتے ہیں؟")) return;
 
       button.disabled = true;
 
-      const functionName = approved
-        ? "admin_approve_topup"
-        : "admin_reject_topup";
-
-      const { data, error } = await supabaseClient.rpc(
-        functionName,
-        { p_request_id: Number(button.dataset.topupId) }
+      const {data,error} = await supabaseClient.rpc(
+        "accept_ride",
+        {p_offer_id:button.dataset.accept}
       );
 
-      if (error) {
-        alert("Error: " + error.message);
-        button.disabled = false;
-        return;
+      if(error){
+        alert("رائیڈ قبول نہیں ہوئی: " + error.message);
+      }else if(data === true){
+        alert("رائیڈ آپ کے نام ہو گئی ہے۔");
+      }else{
+        alert("یہ رائیڈ کسی دوسرے ڈرائیور نے قبول کر لی ہے یا اب دستیاب نہیں۔");
       }
 
-      if (data === true) {
-        alert(approved
-          ? "Top-up Approved Successfully!"
-          : "Top-up Rejected Successfully!");
-
-        await loadAdminDashboard();
-      } else {
-        alert("درخواست مکمل نہیں ہوئی۔");
-        button.disabled = false;
-      }
-    });
-  }); 
-        }
-      }   
-     // Platform Commission Report
-      const commissionBox = $("adminCommissionReport");
-
-      if (commissionBox) {
-        const { data: commissions, error: commissionError } =
-          await supabaseClient
-            .from("platform_commissions")
-            .select("booking_id, fare, commission, created_at")
-            .order("created_at", { ascending: false });
-
-        if (commissionError) {
-          commissionBox.textContent =
-            "Commission report error: " + commissionError.message;
-        } else {
-          const rows = commissions || [];
-
-          const totalFare = rows.reduce(
-            (sum, item) => sum + Number(item.fare || 0), 0
-          );
-
-          const totalCommission = rows.reduce(
-            (sum, item) => sum + Number(item.commission || 0), 0
-          );
-
-          commissionBox.innerHTML = `
-            <div style="border:1px solid #ccc;padding:12px;border-radius:8px">
-              <p>مکمل رائیڈز: <strong>${rows.length}</strong></p>
-              <p>کل رائیڈ کرایہ: <strong>Rs. ${totalFare.toFixed(2)}</strong></p>
-              <p>آپ کا کل کمیشن: <strong>Rs. ${totalCommission.toFixed(2)}</strong></p>
-            </div>
-            <h4>ہر رائیڈ کا کمیشن</h4>
-            ${rows.map(item => `
-              <div style="border:1px solid #ddd;padding:10px;margin:8px 0;border-radius:8px">
-                <p>Booking: ${escapeAdminText(item.booking_id)}</p>
-                <p>کرایہ: Rs. ${Number(item.fare).toFixed(2)}</p>
-                <p>کمیشن: Rs. ${Number(item.commission).toFixed(2)}</p>
-                <p>تاریخ: ${escapeAdminText(item.created_at)}</p>
-              </div>
-            `).join("")}
-          `;
-        }
-      } 
-      const requests = [
-        ["profiles", "adminCustomers"],
-        ["driver_applications", "adminDrivers"],
-        ["bookings", "adminRides"],
-        ["driver_wallets", "adminWallets"]
-      ];
-
-      for (const [table, elementId] of requests) {
-        const target = $(elementId);
-        target.textContent = "Loading...";
-
-        const { data, error } = await supabaseClient
-          .from(table)
-          .select("*")
-          .limit(100);
-
-        if (error) {
-          target.textContent = "Error: " + error.message;
-          continue;
-        }
-
-        if (!data || data.length === 0) {
-          target.textContent = "Abhi koi record nahi mila.";
-          continue;
-        }
-if (table === "driver_applications") {
-  target.innerHTML = data.map(function (driver) {
-    const details = escapeAdminText(
-      JSON.stringify(driver, null, 2)
-    );
-
-    const status = String(driver.status || "pending");
-    const safeStatus = escapeAdminText(status);
-    const safeId = escapeAdminText(driver.id);
-
-    return `
-      <div style="border:1px solid #ccc;padding:12px;margin:10px 0;border-radius:8px">
-        <pre style="white-space:pre-wrap;overflow-wrap:anywhere">${details}</pre>
-        <p>Status: <strong>${safeStatus}</strong></p>
-        <button type="button" data-driver-id="${safeId}" data-driver-status="approved">
-          Approve
-        </button>
-        <button type="button" data-driver-id="${safeId}" data-driver-status="rejected">
-          Reject
-        </button>
-      </div>
-    `;
-  }).join("");
-
-  target.querySelectorAll("button[data-driver-id]").forEach(function (button) {
-    button.addEventListener("click", function () {
-      updateDriverStatus(
-        button.dataset.driverId,
-        button.dataset.driverStatus
-      );
+      await loadDriverDashboard();
     });
   });
-} else {
-  target.innerHTML =
-    "<pre style='white-space:pre-wrap;overflow-wrap:anywhere'>" +
-    escapeAdminText(JSON.stringify(data, null, 2)) +
-    "</pre>";
+
+  box.querySelectorAll("[data-reject]").forEach(function(button){
+    button.addEventListener("click",async function(){
+      button.disabled = true;
+
+      const {error} = await supabaseClient.rpc(
+        "reject_ride",
+        {p_offer_id:button.dataset.reject}
+      );
+
+      if(error) alert(error.message);
+      await loadAvailableRides();
+    });
+  });
 }
+
+async function loadMyDriverRides(){
+  const box = $("myDriverRides");
+  box.innerHTML = "آپ کی رائیڈز لوڈ ہو رہی ہیں...";
+
+  const {data,error} = await supabaseClient
+    .from("bookings")
+    .select("*")
+    .eq("driver_id",currentUser.id)
+    .in("status",["accepted","confirmed","completed"])
+    .order("created_at",{ascending:false});
+
+  if(error){
+    box.textContent = error.message;
+    return;
+  }
+
+  if(!data || !data.length){
+    box.textContent = "ابھی آپ نے کوئی رائیڈ قبول نہیں کی۔";
+    return;
+  }
+
+  box.innerHTML = "";
+
+  data.forEach(function(ride){
+    const card = document.createElement("div");
+    card.className = "item-card";
+
+    card.innerHTML =
+      "<strong>بکنگ: " + escapeHTML(ride.booking_id || ride.id) + "</strong>" +
+      "<p>پک اَپ: " + escapeHTML(ride.pickup) + "</p>" +
+      "<p>منزل: " + escapeHTML(ride.destination) + "</p>" +
+      "<p>کرایہ: Rs. " + escapeHTML(ride.fare) + "</p>" +
+      "<p>حالت: " + escapeHTML(ride.status) + "</p>" +
+      (["accepted","confirmed"].includes(ride.status)
+        ? "<button class='success' data-driver-chat='" + escapeHTML(ride.id) + "'>مسافر سے چیٹ</button> <button class='primary' data-complete='" + escapeHTML(ride.id) + "'>رائیڈ مکمل کریں</button>"
+        : "");
+
+    box.appendChild(card);
+  });
+
+  box.querySelectorAll("[data-driver-chat]").forEach(function(button){
+    button.addEventListener("click",function(){
+      const ride = data.find(item => String(item.id) === button.dataset.driverChat);
+      if(ride) openRideChat(ride.id,ride.booking_id);
+    });
+  });
+
+  box.querySelectorAll("[data-complete]").forEach(function(button){
+    button.addEventListener("click",async function(){
+      if(!confirm("کیا یہ رائیڈ مکمل ہو چکی ہے؟")) return;
+
+      button.disabled = true;
+
+      const {error} = await supabaseClient.rpc(
+        "complete_my_ride",
+        {p_booking_id:rideIdNumber(button.dataset.complete)}
+      );
+
+      if(error){
+        alert("رائیڈ مکمل نہیں ہوئی: " + error.message);
+      }else{
+        alert("رائیڈ مکمل ہو گئی۔");
       }
 
-      status.textContent = "Dashboard loading complete.";
-    } catch (error) {
-      console.error("Admin dashboard error:", error);
-      status.textContent = "Dashboard load nahi hua. Console check karein.";
-    }
-  }
-  async function loadPlatformPaymentAccounts() {
-  const list = document.getElementById("platformPaymentAccounts");
-  const message = document.getElementById("platformPaymentMessage");
-
-  if (!list || !supabaseClient) return;
-
-  const { data, error } = await supabaseClient
-    .from("platform_payment_accounts")
-    .select("*")
-    .order("payment_method");
-
-  if (error) {
-    message.textContent = "اکاؤنٹس لوڈ نہیں ہوئے: " + error.message;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    list.textContent = "ابھی کوئی اکاؤنٹ محفوظ نہیں ہے۔";
-    return;
-  }
-
-  list.innerHTML = data.map(function (account) {
-    return `
-      <div style="border:1px solid #ccc;padding:10px;margin:10px 0;border-radius:8px">
-        <strong>${escapeAdminText(account.payment_method)}</strong>
-        <p>Account Title: ${escapeAdminText(account.account_title)}</p>
-        <p>Account Number: ${escapeAdminText(account.account_number)}</p>
-      </div>
-    `;
-  }).join("");
+      await loadDriverDashboard();
+    });
+  });
 }
-async function loadDriverPaymentAccounts() {
-  const list = $("driverPaymentAccounts");
 
-  if (!list || !supabaseClient) return;
-
-  const { data, error } = await supabaseClient
-    .from("platform_payment_accounts")
-    .select("payment_method, account_title, account_number")
-    .order("payment_method");
-
-  if (error) {
-    list.textContent = "Payment accounts لوڈ نہیں ہوئے: " + error.message;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    list.textContent = "Admin نے ابھی JazzCash یا Easypaisa اکاؤنٹ محفوظ نہیں کیا۔";
-    return;
-  }
-
-  list.innerHTML = data.map(function (account) {
-    return `
-      <div style="border:1px solid #ccc;padding:10px;margin:10px 0;border-radius:8px">
-        <strong>${escapeAdminText(account.payment_method)}</strong>
-        <p>Account Title: ${escapeAdminText(account.account_title)}</p>
-        <p>Account Number: ${escapeAdminText(account.account_number)}</p>
-      </div>
-    `;
-  }).join("");
+function rideIdNumber(value){
+  const number = Number(value);
+  return Number.isFinite(number) ? number : value;
 }
-async function savePlatformPaymentAccount(event) {
+
+/* DRIVER TOPUP REQUEST */
+async function submitTopup(event){
   event.preventDefault();
 
-  const message = document.getElementById("platformPaymentMessage");
-  message.textContent = "محفوظ کیا جا رہا ہے...";
-
-  try {
-    const { data: userData, error: userError } =
-      await supabaseClient.auth.getUser();
-
-    if (userError || !userData.user) {
-      throw new Error("پہلے اپنے اکاؤنٹ میں لاگ اِن کریں۔");
-    }
-
-    const { data: adminCheck, error: adminError } =
-      await supabaseClient.rpc("is_admin");
-
-    if (adminError || adminCheck !== true) {
-      throw new Error("صرف Admin یہ اکاؤنٹ محفوظ کر سکتا ہے۔");
-    }
-
-    const paymentMethod =
-      document.getElementById("platformPaymentMethod").value;
-
-    const accountTitle =
-      document.getElementById("platformPaymentTitle").value.trim();
-
-    const accountNumber =
-      document.getElementById("platformPaymentNumber").value.trim();
-
-    if (!accountTitle || !accountNumber) {
-      throw new Error("اکاؤنٹ کا نام اور نمبر درج کریں۔");
-    }
-
-    const { error } = await supabaseClient
-      .from("platform_payment_accounts")
-      .upsert(
-        [{
-          payment_method: paymentMethod,
-          account_title: accountTitle,
-          account_number: accountNumber,
-          updated_at: new Date().toISOString()
-        }],
-        { onConflict: "payment_method" }
-      );
-
-    if (error) throw error;
-
-    message.textContent = "اکاؤنٹ کامیابی سے محفوظ ہوگیا۔";
-    document.getElementById("platformPaymentForm").reset();
-
-    await loadPlatformPaymentAccounts();
-  } catch (error) {
-    message.textContent = error.message;
-  }
-}
- async function loadDriverDashboard() {
-  const message = $("driverDashboardMessage");
-  const profileBox = $("driverProfile");
-  const offersBox = $("availableRides");
-  const ridesBox = $("myDriverRides");
-
-  if (!supabaseClient) return;
-
-  try {
-    const { data: { user }, error: authError } =
-      await supabaseClient.auth.getUser();
-
-    if (authError) throw authError;
-
-    profileBox.replaceChildren();
-    offersBox.replaceChildren();
-    ridesBox.replaceChildren();
-
-    if (!user) {
-      message.textContent = "ڈرائیور ڈیش بورڈ دیکھنے کے لیے لاگ اِن کریں۔";
-      return;
-    }
-
-    const { data: driver, error: driverError } =
-      await supabaseClient
-        .from("driver_applications")
-        .select("driver_name, driver_phone, car_company, car_model, car_number, status")
-    .eq("user_id", user.id)
-.order("created_at", { ascending: false })
-.limit(1)
-.maybeSingle();
-
-    if (driverError) throw driverError;
-
-    if (!driver) {
-      message.textContent = "آپ کی ڈرائیور رجسٹریشن نہیں ملی۔";
-      return;
-    }
-
-    if (driver.status !== "approved") {
-      message.textContent = "آپ کی درخواست ابھی منظور نہیں ہوئی۔";
-      return;
-    }
-
-    message.textContent = "آپ کا ڈرائیور اکاؤنٹ فعال ہے۔";
-   const { data: topupBalance, error: topupBalanceError } =
-  await supabaseClient.rpc("get_my_topup_balance");
-
-if (topupBalanceError) throw topupBalanceError;
-
-const topupBox = $("driverTopupBalance");
-await loadDriverPaymentAccounts();    
-
-if (topupBox) {
-  topupBox.textContent =
-    "آپ کا Top-up Balance: Rs. " +
-    Number(topupBalance || 0).toFixed(2);
-} 
-
-    const profileTitle = document.createElement("h3");
-    profileTitle.textContent = "ڈرائیور پروفائل";
-    profileBox.appendChild(profileTitle);
-
-    [
-      ["نام", driver.driver_name],
-      ["فون", driver.driver_phone],
-      ["گاڑی", driver.car_company + " " + driver.car_model],
-      ["نمبر", driver.car_number]
-    ].forEach(([label, value]) => {
-      const p = document.createElement("p");
-      p.textContent = label + ": " + (value || "—");
-      profileBox.appendChild(p);
-    });
-
-    const { data: offers, error: offersError } =
-      await supabaseClient
-        .from("ride_offers")
-        .select("id, booking_id, status, created_at")
-        .eq("driver_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(30);
-
-    if (offersError) throw offersError;
-
-    if (!offers || offers.length === 0) {
-      offersBox.textContent = "ابھی کوئی نئی رائیڈ دستیاب نہیں۔";
-      ridesBox.textContent = "آپ کی قبول کردہ رائیڈز یہاں نظر آئیں گی۔";
-      return;
-    }
-
-    offersBox.replaceChildren();
-    ridesBox.replaceChildren();
-
-    for (const offer of offers) {
-      if (offer.status === "offered") {
-     const { data: offerDetails, error: offerDetailsError } =
-  await supabaseClient.rpc("get_my_offered_ride_details", {
-    p_offer_id: offer.id
-  });
-
-if (offerDetailsError) throw offerDetailsError;
-
-const rideDetails = offerDetails?.[0];
-  if (!rideDetails) {
-  continue;
-}
-  if (!rideDetails) {
-  continue;
-}
-        const card = document.createElement("div");
-        card.style.cssText =
-          "border:1px solid #ccc;padding:12px;margin:12px 0;border-radius:8px";
-
-        const title = document.createElement("h3");
-        title.textContent = "🚘 نئی قریبی رائیڈ";
-        card.appendChild(title);
-
-        const info = document.createElement("p");
-        info.textContent = "بکنگ نمبر: " + offer.booking_id;
-        card.appendChild(info);
-       const distanceInfo = document.createElement("p");
-distanceInfo.textContent =
-  "📍 فاصلہ: " + (rideDetails.distance_km || "معلوم نہیں") + " KM";
-card.appendChild(distanceInfo);
-
-const fareInfo = document.createElement("p");
-fareInfo.textContent =
-  "💰 کرایہ: Rs. " + (rideDetails.fare || "معلوم نہیں");
-card.appendChild(fareInfo); 
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = "رائیڈ قبول کریں";
-
-        btn.addEventListener("click", async () => {
-          btn.disabled = true;
-          btn.textContent = "قبول ہو رہی ہے۔۔۔";
-
-          try {
-            const { data, error } =
-              await supabaseClient.rpc("accept_ride", {
-                p_offer_id: offer.id
-              });
-
-            if (error) throw error;
-
-            if (data === true) {
-              message.textContent = "مبارک ہو! رائیڈ آپ کو مل گئی۔";
-            } else {
-              message.textContent =
-                "یہ رائیڈ دوسرے ڈرائیور نے قبول کر لی ہے۔";
-            }
-
-            await loadDriverDashboard();
-       } catch (error) {
-  console.error("Accept ride error:", error);
-  message.textContent =
-    "Accept Error: " + (error.message || error);
-  btn.disabled = false;
-  btn.textContent = "رائیڈ قبول کریں";
-}
-        });
-
-        card.appendChild(btn);
-        const rejectBtn = document.createElement("button");
-rejectBtn.type = "button";
-rejectBtn.textContent = "✖️ رائیڈ Reject کریں";
-rejectBtn.style.cssText =
-  "background:#c62828;color:white;padding:10px;margin:8px;border:0;border-radius:6px;";
-
-rejectBtn.addEventListener("click", async () => {
-  rejectBtn.disabled = true;
-  rejectBtn.textContent = "Reject ہو رہی ہے۔۔۔";
-
-  try {
-    const { data, error } = await supabaseClient.rpc(
-      "reject_ride",
-      { p_offer_id: offer.id }
-    );
-
-    if (error) throw error;
-
-    if (data === true) {
-      message.textContent = "آپ نے یہ رائیڈ Reject کر دی ہے۔";
-    } else {
-      message.textContent = "یہ رائیڈ اب دستیاب نہیں ہے۔";
-    }
-
-    await loadDriverDashboard();
-
-  } catch (error) {
-    console.error("Reject error:", error);
-    message.textContent = "Reject Error: " + error.message;
-    rejectBtn.disabled = false;
-    rejectBtn.textContent = "✖️ رائیڈ Reject کریں";
-  }
-});
-
-card.appendChild(rejectBtn);
-        offersBox.appendChild(card);
-      }
-
-      if (offer.status === "expired") {
-        const p = document.createElement("p");
-        p.textContent =
-          "بکنگ " + offer.booking_id +
-          ": یہ رائیڈ دوسرے ڈرائیور نے قبول کر لی ہے۔";
-        offersBox.appendChild(p);
-      }
-
-      if (offer.status === "accepted") {
-        const { data: booking, error: bookingError } =
-          await supabaseClient
-            .from("bookings")
-          .select("booking_id, customer_name, pickup, destination, ride_date, ride_time, fare, status")
-            .eq("id", offer.booking_id)
-            .eq("driver_id", user.id)
-            .maybeSingle();
-
-        if (bookingError) throw bookingError;
-        if (!booking) continue;
-        if (booking.status === "completed") continue;
-
-        const card = document.createElement("div");
-        card.style.cssText =
-          "border:1px solid #087f5b;padding:12px;margin:12px 0;border-radius:8px";
-
-        const title = document.createElement("h3");
-        title.textContent = "✅ آپ کی قبول کردہ رائیڈ";
-        card.appendChild(title);
-
-        [
-          ["کسٹمر", booking.customer_name],
-          ["پک اَپ", booking.pickup],
-          ["منزل", booking.destination],
-          ["تاریخ", booking.ride_date],
-          ["وقت", booking.ride_time],
-          ["کرایہ", "Rs. " + booking.fare]
-        ].forEach(([label, value]) => {
-          const p = document.createElement("p");
-          p.textContent = label + ": " + (value || "—");
-          card.appendChild(p);
-        });
-
-  const completeBtn = document.createElement("button");
-completeBtn.type = "button";
-completeBtn.textContent = "✅ رائیڈ مکمل ہوگئی";
-completeBtn.style.cssText =
-  "background:#087f5b;color:white;padding:12px;margin:10px 0;border:0;border-radius:6px;cursor:pointer;";
-
-completeBtn.addEventListener("click", async () => {
-  if (!confirm("کیا آپ واقعی یہ رائیڈ مکمل کرنا چاہتے ہیں؟")) {
+  if(!currentUser){
+    showStatus("topupStatus","پہلے ڈرائیور لاگ اِن کریں۔","error");
     return;
   }
 
-  completeBtn.disabled = true;
-  completeBtn.textContent = "رائیڈ مکمل ہو رہی ہے۔۔۔";
+  const amount = Number($("topupAmount").value);
+  const method = $("topupMethod").value;
+  const reference = $("topupReference").value.trim();
 
-  try {
-    const { data, error } = await supabaseClient.rpc(
-      "complete_my_ride",
-      { p_booking_id: offer.booking_id }
-    );
-
-    if (error) throw error;
-
-    if (data === true) {
-      message.textContent = "رائیڈ کامیابی سے مکمل ہوگئی۔";
-      await loadDriverDashboard();
-    } else {
-      message.textContent = "رائیڈ مکمل نہیں ہوسکی۔ دوبارہ کوشش کریں۔";
-      completeBtn.disabled = false;
-      completeBtn.textContent = "✅ رائیڈ مکمل ہوگئی";
-    }
-  } catch (error) {
-    console.error("Complete ride error:", error);
-    message.textContent = "خرابی: " + error.message;
-    completeBtn.disabled = false;
-    completeBtn.textContent = "✅ رائیڈ مکمل ہوگئی";
+  if(!Number.isFinite(amount) || amount < 300 || amount > 5000){
+    showStatus("topupStatus","ٹاپ اَپ 300 سے 5000 روپے کے درمیان ہونا چاہیے۔","error");
+    return;
   }
-});
 
-card.appendChild(completeBtn);
-        ridesBox.appendChild(card);
-      }
-    }
+  if(!reference){
+    showStatus("topupStatus","ٹرانزیکشن آئی ڈی درج کریں۔","error");
+    return;
+  }
 
-    if (!offersBox.hasChildNodes()) {
-      offersBox.textContent = "ابھی کوئی نئی رائیڈ نہیں۔";
-    }
+  showStatus("topupStatus","درخواست جمع ہو رہی ہے...");
 
-    if (!ridesBox.hasChildNodes()) {
-      ridesBox.textContent = "آپ نے ابھی کوئی رائیڈ قبول نہیں کی۔";
+  const {error} = await supabaseClient.rpc(
+    "submit_my_topup",
+    {
+      p_amount:amount,
+      p_payment_method:method,
+      p_transaction_reference:reference
     }
-} catch (error) {
-  console.error("Driver Dashboard error:", error);
-  message.textContent = "خرابی: " + (error.message || error);
+  );
+
+  if(error){
+    showStatus("topupStatus",error.message,"error");
+    return;
+  }
+
+  showStatus("topupStatus","ٹاپ اَپ درخواست جمع ہو گئی۔ ایڈمن کی تصدیق کا انتظار کریں۔","ok");
+  $("driverTopupForm").reset();
 }
-} 
- function startApp() {
+
+/* PAYMENT ACCOUNTS */
+async function loadDriverPaymentAccounts(){
+  const box = $("driverPaymentAccounts");
+  if(!box) return;
+
+  const {data,error} = await supabaseClient
+    .from("platform_payment_accounts")
+    .select("*");
+
+  if(error){
+    box.textContent = "ادائیگی اکاؤنٹس لوڈ نہیں ہوئے۔";
+    return;
+  }
+
+  box.innerHTML = "";
+
+  (data || []).forEach(function(account){
+    const div = document.createElement("div");
+    div.className = "item-card";
+    div.textContent =
+      account.payment_method + " | "
+      + account.account_title + " | "
+      + account.account_number;
+    box.appendChild(div);
+  });
+}
+
+/* ADMIN SECURITY */
+async function checkAdminAccess(){
+  if(!currentUser){
+    $("adminPanel").classList.add("hidden");
+    showStatus("adminStatus","ایڈمن لاگ اِن کریں۔");
+    return false;
+  }
+
+  const {data,error} = await supabaseClient.rpc("is_admin");
+
+  if(error || data !== true){
+    $("adminPanel").classList.add("hidden");
+    showStatus("adminStatus","یہ اکاؤنٹ ایڈمن نہیں ہے۔","error");
+    return false;
+  }
+
+  $("adminPanel").classList.remove("hidden");
+  showStatus("adminStatus","ایڈمن تصدیق کامیاب۔","ok");
+  return true;
+}
+
+/* ADMIN DASHBOARD */
+async function loadAdminDashboard(){
+  const allowed = await checkAdminAccess();
+  if(!allowed) return;
+
+  showStatus("adminStatus","ایڈمن ڈیٹا لوڈ ہو رہا ہے...");
+
+  await Promise.all([
+    loadAdminCustomers(),
+    loadAdminDrivers(),
+    loadAdminRides(),
+    loadAdminWallets(),
+    loadAdminTopups(),
+    loadPlatformPaymentAccounts()
+  ]);
+
+  showStatus("adminStatus","ایڈمن ڈیش بورڈ اپ ڈیٹ ہو گیا۔","ok");
+}
+
+async function loadAdminCustomers(){
+  const {data,error} = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("adminCustomers").textContent = error.message;
+    return;
+  }
+
+  $("adminCustomerCount").textContent = (data || []).length;
+  $("adminCustomers").innerHTML = "";
+
+  (data || []).forEach(function(profile){
+    const div = document.createElement("div");
+    div.className = "item-card";
+    div.textContent =
+      (profile.full_name || "نام موجود نہیں")
+      + " | " + (profile.phone || "")
+      + " | " + (profile.role || "");
+    $("adminCustomers").appendChild(div);
+  });
+}
+
+async function loadAdminDrivers(){
+  const {data,error} = await supabaseClient
+    .from("driver_applications")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("adminDrivers").textContent = error.message;
+    return;
+  }
+
+  $("adminDriverCount").textContent = (data || []).length;
+  $("adminDrivers").innerHTML = "";
+
+  (data || []).forEach(function(driver){
+    const div = document.createElement("div");
+    div.className = "item-card";
+
+    div.innerHTML =
+      "<strong>" + escapeHTML(driver.driver_name) + "</strong>" +
+      "<p>فون: " + escapeHTML(driver.driver_phone) + "</p>" +
+      "<p>گاڑی: " + escapeHTML(driver.car_company) + " " + escapeHTML(driver.car_model) + "</p>" +
+      "<p>گاڑی نمبر: " + escapeHTML(driver.car_number) + "</p>" +
+      "<p>لائسنس: " + escapeHTML(driver.license_number) + "</p>" +
+      "<p>حالت: " + escapeHTML(driver.status) + "</p>" +
+      (driver.status !== "approved"
+        ? "<button class='success' data-approve-driver='" + escapeHTML(driver.id) + "'>منظور کریں</button> "
+        : "") +
+      (driver.status !== "rejected"
+        ? "<button class='danger' data-reject-driver='" + escapeHTML(driver.id) + "'>رد کریں</button>"
+        : "");
+
+    $("adminDrivers").appendChild(div);
+  });
+
+  $("adminDrivers").querySelectorAll("[data-approve-driver]").forEach(function(button){
+    button.addEventListener("click",function(){
+      updateDriverStatus(button.dataset.approveDriver,"approved");
+    });
+  });
+
+  $("adminDrivers").querySelectorAll("[data-reject-driver]").forEach(function(button){
+    button.addEventListener("click",function(){
+      updateDriverStatus(button.dataset.rejectDriver,"rejected");
+    });
+  });
+}
+
+async function updateDriverStatus(driverId,newStatus){
+  if(!await checkAdminAccess()) return;
+
+  const {error} = await supabaseClient
+    .from("driver_applications")
+    .update({status:newStatus})
+    .eq("id",driverId);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  alert("ڈرائیور کی درخواست اپ ڈیٹ ہو گئی۔");
+  await loadAdminDrivers();
+}
+
+async function loadAdminRides(){
+  const {data,error} = await supabaseClient
+    .from("bookings")
+    .select("*")
+    .order("created_at",{ascending:false})
+    .limit(200);
+
+  if(error){
+    $("adminRides").textContent = error.message;
+    return;
+  }
+
+  $("adminRideCount").textContent = (data || []).length;
+  $("adminRides").innerHTML = "";
+
+  (data || []).forEach(function(ride){
+    const div = document.createElement("div");
+    div.className = "item-card";
+    div.innerHTML =
+      "<strong>" + escapeHTML(ride.booking_id || ride.id) + "</strong>" +
+      "<p>کسٹمر: " + escapeHTML(ride.customer_name) + "</p>" +
+      "<p>پک اَپ: " + escapeHTML(ride.pickup) + "</p>" +
+      "<p>منزل: " + escapeHTML(ride.destination) + "</p>" +
+      "<p>کرایہ: Rs. " + escapeHTML(ride.fare) + "</p>" +
+      "<p>حالت: " + escapeHTML(ride.status) + "</p>";
+    $("adminRides").appendChild(div);
+  });
+}
+
+async function loadAdminWallets(){
+  const {data:wallets,error} = await supabaseClient
+    .from("driver_wallets")
+    .select("*");
+
+  if(error){
+    $("adminWallets").textContent = error.message;
+  }else{
+    $("adminWallets").innerHTML = "";
+    (wallets || []).forEach(function(wallet){
+      const div = document.createElement("div");
+      div.className = "item-card";
+      div.textContent =
+        "ڈرائیور ID: " + wallet.driver_id
+        + " | کمائی والا بیلنس: Rs. " + wallet.balance;
+      $("adminWallets").appendChild(div);
+    });
+  }
+
+  const {data:commissions, error:commissionError} = await supabaseClient
+    .from("platform_commissions")
+    .select("*")
+    .order("created_at",{ascending:false})
+    .limit(200);
+
+  if(commissionError){
+    $("adminCommissionReport").textContent = commissionError.message;
+    return;
+  }
+
+  $("adminCommissionReport").innerHTML = "<h4>پلیٹ فارم کمیشن ریکارڈ</h4>";
+
+  (commissions || []).forEach(function(item){
+    const div = document.createElement("div");
+    div.className = "item-card";
+    div.textContent =
+      "رائیڈ: " + item.booking_id
+      + " | کمیشن: Rs. " + item.commission_amount;
+    $("adminCommissionReport").appendChild(div);
+  });
+}
+
+/* ADMIN TOPUP APPROVAL */
+async function loadAdminTopups(){
+  const {data,error} = await supabaseClient
+    .from("topup_requests")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("adminTopupRequests").textContent = error.message;
+    return;
+  }
+
+  $("adminTopupRequests").innerHTML = "";
+
+  (data || []).forEach(function(request){
+    const div = document.createElement("div");
+    div.className = "item-card";
+
+    div.innerHTML =
+      "<strong>ٹاپ اَپ: Rs. " + escapeHTML(request.amount) + "</strong>" +
+      "<p>ڈرائیور: " + escapeHTML(request.driver_id) + "</p>" +
+      "<p>طریقہ: " + escapeHTML(request.payment_method) + "</p>" +
+      "<p>ٹرانزیکشن: " + escapeHTML(request.transaction_reference) + "</p>" +
+      "<p>حالت: " + escapeHTML(request.status) + "</p>" +
+      (request.status === "pending"
+        ? "<button class='success' data-topup-approve='" + escapeHTML(request.id) + "'>رقم وصول ہونے پر منظور کریں</button> " +
+          "<button class='danger' data-topup-reject='" + escapeHTML(request.id) + "'>رد کریں</button>"
+        : "");
+
+    $("adminTopupRequests").appendChild(div);
+  });
+
+  $("adminTopupRequests").querySelectorAll("[data-topup-approve]").forEach(function(button){
+    button.addEventListener("click",async function(){
+      if(!confirm("کیا آپ نے رقم وصول کر کے ٹرانزیکشن آئی ڈی چیک کر لی ہے؟")) return;
+
+      button.disabled = true;
+
+      const {error} = await supabaseClient.rpc(
+        "admin_approve_topup",
+        {p_topup_id:button.dataset.topupApprove}
+      );
+
+      if(error){
+        alert("منظوری ناکام: " + error.message);
+      }else{
+        alert("ٹاپ اَپ منظور ہو گیا۔");
+      }
+
+      await loadAdminTopups();
+    });
+  });
+
+  $("adminTopupRequests").querySelectorAll("[data-topup-reject]").forEach(function(button){
+    button.addEventListener("click",async function(){
+      if(!confirm("کیا آپ یہ ٹاپ اَپ درخواست رد کرنا چاہتے ہیں؟")) return;
+
+      button.disabled = true;
+
+      const {error} = await supabaseClient.rpc(
+        "admin_reject_topup",
+        {p_topup_id:button.dataset.topupReject}
+      );
+
+      if(error){
+        alert("درخواست رد نہیں ہوئی: " + error.message);
+      }else{
+        alert("ٹاپ اَپ درخواست رد ہو گئی۔");
+      }
+
+      await loadAdminTopups();
+    });
+  });
+}
+
+/* ADMIN PAYMENT ACCOUNTS */
+async function loadPlatformPaymentAccounts(){
+  const {data,error} = await supabaseClient
+    .from("platform_payment_accounts")
+    .select("*");
+
+  if(error){
+    $("platformPaymentAccounts").textContent = error.message;
+    return;
+  }
+
+  $("platformPaymentAccounts").innerHTML = "";
+
+  (data || []).forEach(function(account){
+    const div = document.createElement("div");
+    div.className = "item-card";
+    div.textContent =
+      account.payment_method + " | "
+      + account.account_title + " | "
+      + account.account_number;
+    $("platformPaymentAccounts").appendChild(div);
+  });
+}
+
+async function savePlatformPaymentAccount(event){
+  event.preventDefault();
+
+  if(!await checkAdminAccess()) return;
+
+  const account = {
+    payment_method:$("platformPaymentMethod").value,
+    account_title:$("platformPaymentTitle").value.trim(),
+    account_number:$("platformPaymentNumber").value.trim()
+  };
+
+  if(!account.account_title || !account.account_number){
+    showStatus("platformPaymentStatus","اکاؤنٹ ٹائٹل اور نمبر درج کریں۔","error");
+    return;
+  }
+
+  showStatus("platformPaymentStatus","اکاؤنٹ محفوظ ہو رہا ہے...");
+
+  const {error} = await supabaseClient
+    .from("platform_payment_accounts")
+    .upsert(account,{onConflict:"payment_method"});
+
+  if(error){
+    showStatus("platformPaymentStatus",error.message,"error");
+    return;
+  }
+
+  showStatus("platformPaymentStatus","اکاؤنٹ محفوظ ہو گیا۔","ok");
+  $("platformPaymentForm").reset();
+  await loadPlatformPaymentAccounts();
+}
+
+/* START APP */
+function setDateMinimum(){
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth()+1).padStart(2,"0");
+  const day = String(today.getDate()).padStart(2,"0");
+  $("rideDate").min = year + "-" + month + "-" + day;
+}
+
+function startApp(){
   initSupabase();
 
-  // Safe event listener helper
-  function bindEvent(id, event, handler) {
-    const element = $(id);
-    if (element) {
-      element.addEventListener(event, handler);
-    }
-  }
+  $("bookingForm").addEventListener("submit",submitBooking);
+  $("driverRegistrationForm").addEventListener("submit",submitDriverRegistration);
+  $("driverTopupForm").addEventListener("submit",submitTopup);
+  $("platformPaymentForm").addEventListener("submit",savePlatformPaymentAccount);
+  $("adminLoadBtn").addEventListener("click",loadAdminDashboard);
 
-  bindEvent("platformPaymentForm", "submit", savePlatformPaymentAccount);
-  bindEvent("adminLoadBtn", "click", loadAdminDashboard);
+  $("chatInput").addEventListener("keydown",function(event){
+    if(event.key === "Enter") sendRideMessage();
+  });
 
-  loadPlatformPaymentAccounts();
-
-  if (supabaseClient) {
-    supabaseClient.auth.onAuthStateChange(() => {
-      checkAdminAccess();
-      loadDriverDashboard();
-    });
-
-    checkAdminAccess();
-    loadDriverDashboard();
-  }
-
-  bindEvent("signupButton", "click", signup);
-  bindEvent("loginButton", "click", login);
-  bindEvent("logoutButton", "click", logout);
-  bindEvent("mapButton", "click", getRoute);
-  bindEvent("bookingForm", "submit", submitBooking);
-  bindEvent("loadMyBookings", "click", loadMyBookings);
-  bindEvent("driverRegistrationForm", "submit", submitDriverRegistration);
-
-  const driverTopupForm = $("driverTopupForm");
-
-  if (driverTopupForm) {
-    driverTopupForm.addEventListener("submit", async function (event) {
-      event.preventDefault();
-
-      const amount = Number($("driverTopupAmount").value);
-      const method = $("driverTopupMethod").value;
-      const reference = $("driverTopupReference").value.trim();
-      const result = $("driverTopupMessage");
-
-      result.textContent = "درخواست جمع ہو رہی ہے۔۔۔";
-
-      if (amount < 300 || amount > 5000) {
-        result.textContent = "رقم 300 سے 5000 روپے کے درمیان ہونی چاہیے۔";
-        return;
-      }
-
-      try {
-        const { data, error } = await supabaseClient.rpc(
-          "submit_my_topup",
-          {
-            p_amount: amount,
-            p_method: method,
-            p_reference: reference
-          }
-        );
-
-        if (error) throw error;
-
-        result.textContent =
-          "Top-up درخواست جمع ہوگئی۔ Request ID: " + data;
-
-        driverTopupForm.reset();
-
-      } catch (error) {
-        result.textContent = "Error: " + error.message;
-      }
-    });
-  }
-
-  if ($("driverCompany") && $("driverCar")) {
-    setupDriverModels();
-  }
-
+  setupDriverModels();
   setDateMinimum();
 
-  if (window.L && $("map")) {
-    map = L.map("map").setView([31.5204, 74.3587], 11);
+  supabaseClient.auth.getSession().then(async function(result){
+    const session = result.data.session;
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
-      maxZoom: 19
-    }).addTo(map);
+    if(session){
+      currentUser = session.user;
+      await loadCurrentProfile();
+    }
+  });
 
-    setTimeout(() => map.invalidateSize(), 300);
-  } else {
-    showStatus("نقشے کی سروس لوڈ نہیں ہوئی۔ انٹرنیٹ چیک کریں۔", true);
-  }
-} 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startApp);
-  } else {
-    startApp();
-  }
-})();
+  supabaseClient.auth.onAuthStateChange(async function(event,session){
+    currentUser = session ? session.user : null;
+
+    if(currentUser){
+      await loadCurrentProfile();
+    }else{
+      currentProfile = null;
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded",startApp);
 </script>
 
 </body>
