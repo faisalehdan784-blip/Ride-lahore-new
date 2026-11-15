@@ -1451,6 +1451,129 @@ async function submitDriverRegistration(event){
 }
 
 /* DRIVER DASHBOARD */
+async function submitWithdrawalRequest(){
+
+  const amount = Number(
+    $("withdrawalAmount").value
+  );
+
+  const method =
+    $("withdrawalMethod").value;
+
+  const accountTitle =
+    $("withdrawalAccountTitle").value.trim();
+
+  const accountNumber =
+    $("withdrawalAccountNumber").value.trim();
+
+  const statusBox = $("withdrawalStatus");
+
+  if(!currentUser){
+    statusBox.textContent = "پہلے Driver Login کریں۔";
+    return;
+  }
+
+  if(!amount || amount < 1000){
+    statusBox.textContent =
+      "کم از کم Withdrawal رقم 1000 روپے ہے۔";
+    return;
+  }
+
+  if(!accountTitle || !accountNumber){
+    statusBox.textContent =
+      "Account Title اور Account Number درج کریں۔";
+    return;
+  }
+
+  statusBox.textContent =
+    "درخواست جمع ہو رہی ہے...";
+
+  const {data,error} = await supabaseClient.rpc(
+    "submit_my_withdrawal",
+    {
+      p_amount: amount,
+      p_method: method,
+      p_account_title: accountTitle,
+      p_account_number: accountNumber
+    }
+  );
+
+  if(error){
+    statusBox.textContent =
+      "Error: " + error.message;
+    return;
+  }
+
+  statusBox.textContent =
+    "Withdrawal Request کامیابی سے جمع ہوگئی۔ Request ID: " + data;
+
+  $("withdrawalAmount").value = "";
+  $("withdrawalAccountTitle").value = "";
+  $("withdrawalAccountNumber").value = "";
+
+  const {data:earnings} =
+    await supabaseClient.rpc("get_my_driver_earnings");
+
+  if(earnings !== null && earnings !== undefined){
+    $("driverEarningsBalance").textContent =
+      "Rs. " + Number(earnings).toFixed(2);
+  }
+
+  await loadMyWithdrawalRequests();
+}
+
+
+async function loadMyWithdrawalRequests(){
+
+  const box = $("myWithdrawalRequests");
+
+  if(!currentUser){
+    box.textContent = "پہلے Login کریں۔";
+    return;
+  }
+
+  box.textContent = "درخواستیں لوڈ ہو رہی ہیں...";
+
+  const {data,error} = await supabaseClient
+    .from("withdrawal_requests")
+    .select("id,amount,method,status,created_at")
+    .eq("driver_id",currentUser.id)
+    .order("created_at",{ascending:false});
+
+  if(error){
+    box.textContent =
+      "Requests Load Error: " + error.message;
+    return;
+  }
+
+  box.innerHTML = "";
+
+  if(!data || data.length === 0){
+    box.textContent = "ابھی کوئی Withdrawal Request نہیں۔";
+    return;
+  }
+
+  data.forEach(function(item){
+
+    const card = document.createElement("div");
+    card.className = "stat";
+
+    const details = document.createElement("p");
+    details.textContent =
+      "Request #" + item.id +
+      " | Rs. " + Number(item.amount).toFixed(2) +
+      " | " + item.method;
+
+    const requestStatus = document.createElement("strong");
+    requestStatus.textContent =
+      item.status.toUpperCase();
+
+    card.appendChild(details);
+    card.appendChild(requestStatus);
+    box.appendChild(card);
+
+  });
+}  
 async function loadDriverDashboard(){
   if(!currentUser){
     showStatus("driverDashboardStatus","ڈرائیور لاگ اِن کریں۔","error");
