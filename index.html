@@ -857,15 +857,20 @@ function initSupabase(){
     SUPABASE_KEY
   );
 }
-
 /* PAGE NAVIGATION */
 function showScreen(screenId){
+
   document.querySelectorAll(".app-screen").forEach(function(screen){
     screen.classList.remove("active");
+    screen.style.setProperty("display","none","important");
   });
 
   const selected = $(screenId);
-  if(selected) selected.classList.add("active");
+
+  if(selected){
+    selected.classList.add("active");
+    selected.style.setProperty("display","block","important");
+  }
 
   document.querySelectorAll(".main-nav button").forEach(function(btn){
     btn.classList.toggle("active",btn.dataset.screen === screenId);
@@ -876,11 +881,11 @@ function showScreen(screenId){
   if(screenId === "driverScreen" && currentUser){
     loadDriverDashboard();
   }
+
   if(screenId === "adminScreen" && currentUser){
     checkAdminAccess();
   }
 }
-
 /* AUTHENTICATION */
 async function signup(role){
   if(!supabaseClient) return;
