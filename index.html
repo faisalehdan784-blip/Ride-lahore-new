@@ -520,9 +520,23 @@ button:disabled{opacity:.55;cursor:not-allowed}
   </div>
 
   <div class="card">
-    <h2>ڈرائیور ڈیش بورڈ</h2>
-    <button class="primary" onclick="loadDriverDashboard()">ڈیش بورڈ لوڈ کریں</button>
-    <div id="driverDashboardStatus" class="status">ڈرائیور لاگ اِن کرنے کے بعد ڈیش بورڈ لوڈ کریں۔</div>
+  <h2>ڈرائیور ڈیش بورڈ</h2>
+
+<button class="primary" onclick="loadDriverDashboard()">
+  ڈیش بورڈ لوڈ کریں
+</button>
+
+<button class="success" type="button" onclick="manualUpdateDriverLocation()">
+  📍 Update My Location
+</button>
+
+<div id="driverLocationStatus" class="status">
+  GPS لوکیشن ابھی اپڈیٹ نہیں ہوئی۔
+</div>
+
+<div id="driverDashboardStatus" class="status">
+  ڈرائیور لاگ اِن کرنے کے بعد ڈیش بورڈ لوڈ کریں۔
+</div>  
     <div id="driverProfile"></div>
 <div class="grid-2">
 
@@ -1038,20 +1052,30 @@ currentUser = null;
   $("myDriverRides").innerHTML = "";
   alert("لاگ آؤٹ ہو گیا۔");
 }
-
 /* DRIVER LOCATION */
+
 let driverLocationWatchId = null;
-let driverLocationWatchStarting = false;  
+let driverLocationWatchStarting = false;
+
 async function updateDriverLocation(){
-  console.log("UPDATE DRIVER LOCATION FUNCTION STARTED"); 
-  if(
-    !currentUser ||
-    !navigator.geolocation ||
-    driverLocationWatchId !== null ||
-    driverLocationWatchStarting
-  ) return;
+
+  if(!currentUser){
+    showStatus("driverLocationStatus","پہلے ڈرائیور لاگ اِن کریں۔","error");
+    return;
+  }
+
+  if(!navigator.geolocation){
+    showStatus("driverLocationStatus","آپ کے براؤزر میں GPS دستیاب نہیں۔","error");
+    return;
+  }
+
+  if(driverLocationWatchId !== null || driverLocationWatchStarting){
+    return;
+  }
 
   driverLocationWatchStarting = true;
+
+  showStatus("driverLocationStatus","GPS لوکیشن حاصل کی جا رہی ہے...");
 
   const {data:application,error} = await supabaseClient
     .from("driver_applications")
@@ -1062,14 +1086,17 @@ async function updateDriverLocation(){
 
   if(error || !application){
     driverLocationWatchStarting = false;
+    showStatus("driverLocationStatus","صرف منظور شدہ ڈرائیور لوکیشن اپڈیٹ کر سکتے ہیں۔","error");
     return;
   }
 
   driverLocationWatchId = navigator.geolocation.watchPosition(
-   async function(position){
-  const {latitude,longitude} = position.coords;
 
-  console.log("Driver GPS Location:", latitude, longitude);
+    async function(position){
+
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
       const {error} = await supabaseClient.rpc(
         "update_my_driver_location",
         {
@@ -1079,12 +1106,34 @@ async function updateDriverLocation(){
       );
 
       if(error){
-        console.log("Location update:",error.message);
+        showStatus("driverLocationStatus","لوکیشن محفوظ نہیں ہوئی: " + error.message,"error");
+        return;
       }
+
+      showStatus(
+        "driverLocationStatus",
+        "GPS لوکیشن کامیابی سے اپڈیٹ ہوگئی۔ آخری وقت: " +
+        new Date().toLocaleTimeString(),
+        "ok"
+      );
     },
+
     function(error){
-  console.log("GPS ERROR:", error.code, error.message);
-},
+
+      console.log("GPS ERROR:",error.code,error.message);
+
+      if(driverLocationWatchId !== null){
+        navigator.geolocation.clearWatch(driverLocationWatchId);
+        driverLocationWatchId = null;
+      }
+
+      showStatus(
+        "driverLocationStatus",
+        "GPS مسئلہ: " + error.message,
+        "error"
+      );
+    },
+
     {
       enableHighAccuracy:true,
       maximumAge:30000,
@@ -1093,7 +1142,75 @@ async function updateDriverLocation(){
   );
 
   driverLocationWatchStarting = false;
-}  
+}
+
+
+/* MANUAL LOCATION UPDATE */
+
+async function manualUpdateDriverLocation(){
+
+  if(!currentUser){
+    showStatus("driverLocationStatus","پہلے ڈرائیور لاگ اِن کریں۔","error");
+    return;
+  }
+
+  if(!navigator.geolocation){
+    showStatus("driverLocationStatus","آپ کے براؤزر میں GPS دستیاب نہیں۔","error");
+    return;
+  }
+
+  showStatus("driverLocationStatus","تازہ GPS لوکیشن حاصل کی جا رہی ہے...");
+
+  navigator.geolocation.getCurrentPosition(
+
+    async function(position){
+
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      const {data,error} = await supabaseClient.rpc(
+        "update_my_driver_location",
+        {
+          p_lat: latitude,
+          p_lng: longitude
+        }
+      );
+
+      if(error || data !== true){
+        showStatus(
+          "driverLocationStatus",
+          "لوکیشن محفوظ نہیں ہوئی۔ دوبارہ کوشش کریں۔",
+          "error"
+        );
+        return;
+      }
+
+      showStatus(
+        "driverLocationStatus",
+        "آپ کی لوکیشن کامیابی سے محفوظ ہوگئی۔ وقت: " +
+        new Date().toLocaleTimeString(),
+        "ok"
+      );
+    },
+
+    function(error){
+
+      showStatus(
+        "driverLocationStatus",
+        "GPS اجازت دیں یا دوبارہ کوشش کریں: " + error.message,
+        "error"
+      );
+    },
+
+    {
+      enableHighAccuracy:true,
+      maximumAge:0,
+      timeout:20000
+    }
+  );
+}
+
+
 /* DRIVER VEHICLE MODELS */
 const driverModels = {
   Suzuki:["Alto","Cultus","Wagon R","Swift","Bolan","Every"],
