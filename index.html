@@ -535,7 +535,18 @@ button:disabled{opacity:.55;cursor:not-allowed}
   </div>
 
 </div>
+<div class="card">
+  <h3>🎁 میری CEO Bonus / Overtime History</h3>
 
+  <button class="primary" type="button"
+    onclick="loadMyBonusHistory()">
+    Bonus History دیکھیں
+  </button>
+
+  <div id="myBonusHistory">
+    Bonus History یہاں نظر آئے گی۔
+  </div>
+</div>
 <div class="card" id="driverWithdrawalSection">
   <h3>💰 CEO Bonus / Overtime Withdraw کریں</h3>
 
@@ -1622,6 +1633,52 @@ async function loadMyWithdrawalRequests(){
     card.appendChild(requestStatus);
     box.appendChild(card);
 
+  });
+} 
+async function loadMyBonusHistory(){
+
+  const box = $("myBonusHistory");
+
+  if(!currentUser){
+    box.textContent = "پہلے Login کریں۔";
+    return;
+  }
+
+  box.textContent = "Bonus History لوڈ ہو رہی ہے...";
+
+  const {data,error} = await supabaseClient.rpc(
+    "get_my_bonus_history"
+  );
+
+  if(error){
+    box.textContent = "Error: " + error.message;
+    return;
+  }
+
+  if(!data || data.length === 0){
+    box.textContent = "ابھی کوئی Bonus History موجود نہیں۔";
+    return;
+  }
+
+  box.innerHTML = "";
+
+  data.forEach(function(item){
+
+    const div = document.createElement("div");
+    div.className = "item-card";
+
+    const type =
+      item.bonus_type === "bonus" ? "CEO Bonus" : "Overtime";
+
+    const date = new Date(item.created_at).toLocaleString();
+
+    div.textContent =
+      type +
+      " | Rs. " + Number(item.amount).toFixed(2) +
+      " | " + (item.description || "کوئی تفصیل نہیں") +
+      " | " + date;
+
+    box.appendChild(div);
   });
 }  
 async function loadDriverDashboard(){
