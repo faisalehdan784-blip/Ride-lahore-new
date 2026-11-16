@@ -741,6 +741,18 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <div id="adminBonusStatus" class="status"></div>
 </div>
     <div class="card">
+  <h3>📋 تمام ڈرائیوروں کی Bonus / Overtime History</h3>
+
+  <button class="primary" type="button"
+    onclick="loadAdminBonusHistory()">
+    Bonus History لوڈ کریں
+  </button>
+
+  <div id="adminBonusHistory">
+    Bonus History یہاں نظر آئے گی۔
+  </div>
+</div>
+    <div class="card">
       <h3>پلیٹ فارم کی ادائیگی وصول کرنے والے اکاؤنٹس</h3>
       <form id="platformPaymentForm">
         <div class="field">
@@ -2387,7 +2399,48 @@ async function submitDriverBonus(){
 
   $("adminBonusAmount").value = "";
   $("adminBonusDescription").value = "";
-}  
+}
+ async function loadAdminBonusHistory(){
+
+  const box = $("adminBonusHistory");
+
+  box.textContent = "Bonus History لوڈ ہو رہی ہے...";
+
+  const {data,error} = await supabaseClient.rpc(
+    "get_admin_bonus_history"
+  );
+
+  if(error){
+    box.textContent = "Error: " + error.message;
+    return;
+  }
+
+  if(!data || data.length === 0){
+    box.textContent = "ابھی کوئی Bonus History موجود نہیں۔";
+    return;
+  }
+
+  box.innerHTML = "";
+
+  data.forEach(function(item){
+
+    const card = document.createElement("div");
+    card.className = "item-card";
+
+    const type =
+      item.bonus_type === "bonus" ? "CEO Bonus" : "Overtime";
+
+    card.textContent =
+      "Driver: " + (item.driver_name || "Unknown") +
+      " | Phone: " + (item.driver_phone || "N/A") +
+      " | " + type +
+      " | Rs. " + Number(item.amount).toFixed(2) +
+      " | " + (item.description || "No description") +
+      " | " + new Date(item.created_at).toLocaleString();
+
+    box.appendChild(card);
+  });
+} 
 /* ADMIN TOPUP APPROVAL */
 async function loadAdminTopups(){
   const {data,error} = await supabaseClient
