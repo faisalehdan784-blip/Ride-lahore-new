@@ -2217,7 +2217,16 @@ async function loadAdminWithdrawals(){
     box.textContent = "Error: " + error.message;
     return;
   }
+const {data:drivers,error:driversError} =
+    await supabaseClient
+      .from("driver_applications")
+      .select("user_id,driver_name,driver_phone");
 
+  if(driversError){
+    box.textContent =
+      "Driver details Error: " + driversError.message;
+    return;
+  }
   box.innerHTML = "";
 
   if(!data || data.length === 0){
@@ -2231,9 +2240,13 @@ async function loadAdminWithdrawals(){
     div.className = "item-card";
 
     const details = document.createElement("p");
+    const driver = drivers.find(function(item){
+  return item.user_id === request.driver_id;
+});
     details.textContent =
       "Request ID: " + request.id +
-      " | Driver ID: " + request.driver_id +
+      " | Driver: " + (driver ? driver.driver_name : "Unknown") +
+" | Phone: " + (driver ? driver.driver_phone : "N/A") +
       " | رقم: Rs. " + Number(request.amount).toFixed(2) +
       " | طریقہ: " + request.method +
       " | Account Title: " + request.account_title +
