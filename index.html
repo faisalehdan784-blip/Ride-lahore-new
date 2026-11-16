@@ -728,10 +728,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
   onclick="testAdminBonusPermission()">
   Admin Permission Test
 </button>
-    <button class="primary" type="button"
-  onclick="testAdminBonusPermission()">
-  Admin Permission Test
-</button>
     Bonus ڈرائیور کے Wallet میں جمع کریں
   </button>
 
@@ -2339,24 +2335,6 @@ async function submitDriverBonus(){
   $("adminBonusAmount").value = "";
   $("adminBonusDescription").value = "";
 }  
- async function testAdminBonusPermission(){
-
-  const {data,error} = await supabaseClient.rpc(
-    "admin_add_driver_bonus",
-    {
-      p_driver_id: "00000000-0000-0000-0000-000000000000",
-      p_amount: 1,
-      p_bonus_type: "bonus",
-      p_description: "Permission Test"
-    }
-  );
-
-  if(error){
-    alert("Test Result: " + error.message);
-  }else{
-    alert("Unexpected result. Please check.");
-  }
-} 
 /* ADMIN TOPUP APPROVAL */
 async function loadAdminTopups(){
   const {data,error} = await supabaseClient
