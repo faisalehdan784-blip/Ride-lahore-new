@@ -1650,6 +1650,14 @@ if(!earningsError){
   $("driverEarningsBalance").textContent =
     "Rs. " + amount.toFixed(2);
 }
+  const {data:bonusBalance,error:bonusError} =
+  await supabaseClient.rpc("get_my_bonus_balance");
+
+if(!bonusError){
+  const amount = Number(bonusBalance || 0);
+  $("driverBonusBalance").textContent =
+    "Rs. " + amount.toFixed(2);
+}
   await loadDriverPaymentAccounts();
   await loadAvailableRides();
   await loadMyDriverRides();
