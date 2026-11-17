@@ -623,20 +623,26 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 </div>
 <div class="card">
-  <h3>ڈرائیور اکاؤنٹ کے مزید آپشنز</h3>
-
-  <button class="primary" onclick="toggleDriverPanel('driverBonusSection')">
-    🎁 Bonus History
+  <button class="primary" onclick="toggleDriverMoreOptions()">
+    ⚙️ مزید آپشنز
   </button>
 
-  <button class="primary" onclick="toggleDriverPanel('driverWithdrawalSection')">
-    💰 Withdrawal
-  </button>
+  <div id="driverMoreOptions" class="hidden">
 
-  <button class="primary" onclick="toggleDriverPanel('driverTopupSection')">
-    💳 Top-up جمع کروائیں
-  </button>
-</div>    
+    <button class="primary" onclick="toggleDriverPanel('driverBonusSection')">
+      🎁 Bonus History
+    </button>
+
+    <button class="primary" onclick="toggleDriverPanel('driverWithdrawalSection')">
+      💰 Withdrawal
+    </button>
+
+    <button class="primary" onclick="toggleDriverPanel('driverTopupSection')">
+      💳 Top-up جمع کروائیں
+    </button>
+
+  </div>
+</div>
 <div class="card hidden" id="driverBonusSection">
   <h3>🎁 میری CEO Bonus / Overtime History</h3>
 
@@ -725,7 +731,15 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <div id="topupStatus" class="status"></div>
     </form>
   </div>
-
+<div class="card">
+  <h3>📍 ڈرائیور لوکیشن</h3>
+  <button class="success" type="button" onclick="manualUpdateDriverLocation()">
+    📍 Update My Location
+  </button>
+  <div id="driverLocationStatus" class="status">
+    GPS لوکیشن ابھی اپڈیٹ نہیں ہوئی۔
+  </div>
+</div>
   <div class="card">
     <h3>میرے لیے آنے والی رائیڈز</h3>
     <div id="availableRides"></div>
@@ -2288,6 +2302,10 @@ function toggleDriverPanel(panelId){
     selectedPanel.classList.remove("hidden");
   }
 }
+ function toggleDriverMoreOptions(){
+  document.getElementById("driverMoreOptions")
+    .classList.toggle("hidden");
+} 
 /* DRIVER TOPUP REQUEST */
 async function submitTopup(event){
   event.preventDefault();
