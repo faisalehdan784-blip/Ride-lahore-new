@@ -425,325 +425,367 @@ button:disabled{opacity:.55;cursor:not-allowed}
   </div>
 
 </section>
-
 <!-- DRIVER SCREEN -->
 <section id="driverScreen" class="app-screen">
 
-  <div class="card">
+  <!-- DRIVER ACCOUNT: LOGIN / SIGNUP -->
+  <div class="card" id="driverAccountCard">
     <h2>ڈرائیور اکاؤنٹ</h2>
+
     <div class="field">
       <label>نام</label>
       <input id="driverLoginName" placeholder="ڈرائیور کا نام">
     </div>
+
     <div class="field">
       <label>موبائل نمبر</label>
       <input id="driverLoginPhone" type="tel" placeholder="03XXXXXXXXX">
     </div>
+
     <div class="field">
       <label>ای میل</label>
       <input id="driverEmail" type="email" placeholder="Email">
     </div>
+
     <div class="field">
       <label>پاس ورڈ</label>
       <input id="driverPassword" type="password" placeholder="Password">
     </div>
+
     <div class="form-actions">
       <button class="success" onclick="signup('driver')">اکاؤنٹ بنائیں</button>
       <button class="primary" onclick="login('driver')">لاگ اِن</button>
       <button class="secondary" onclick="logout()">لاگ آؤٹ</button>
     </div>
-    <div id="driverAuthStatus" class="status">ڈرائیور لاگ اِن کریں یا نیا اکاؤنٹ بنائیں۔</div>
-  </div>
 
-  <div class="card">
-    <h2>ڈرائیور رجسٹریشن</h2>
-   <form id="driverRegistrationForm">
-
-  <div class="grid-2">
-
-    <div class="field">
-      <label>ڈرائیور کا نام</label>
-      <input id="regDriverName" required>
+    <div id="driverAuthStatus" class="status">
+      ڈرائیور لاگ اِن کریں یا نیا اکاؤنٹ بنائیں۔
     </div>
-
-    <div class="field">
-      <label>موبائل نمبر</label>
-      <input id="regDriverPhone" type="tel" required>
-    </div>
-
-    <div class="field">
-      <label>ای میل</label>
-      <input id="regDriverEmail" type="email" required>
-    </div>
-
-    <div class="field">
-      <label>گاڑی کی کمپنی</label>
-      <select id="carCompany" required>
-        <option value="">کمپنی منتخب کریں</option>
-        <option>Suzuki</option>
-        <option>Toyota</option>
-        <option>Honda</option>
-        <option>Kia</option>
-        <option>Hyundai</option>
-        <option>Changan</option>
-        <option>Other</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>گاڑی کا ماڈل</label>
-      <select id="carModel" required>
-        <option value="">پہلے کمپنی منتخب کریں</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>گاڑی کا نمبر</label>
-      <input id="carNumber" required>
-    </div>
-
-    <div class="field">
-      <label>ڈرائیونگ لائسنس نمبر</label>
-      <input id="licenseNumber" required>
-    </div>
-
-    <div class="field">
-      <label>ادائیگی کا طریقہ</label>
-      <select id="driverPaymentMethod" required>
-        <option value="JazzCash">JazzCash</option>
-        <option value="Easypaisa">Easypaisa</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>اکاؤنٹ ٹائٹل</label>
-      <input id="driverPaymentTitle" required>
-    </div>
-
-    <div class="field">
-      <label>اکاؤنٹ نمبر</label>
-      <input id="driverPaymentNumber" required>
-    </div>
-
   </div>
 
-  <hr>
+  <!-- DRIVER DASHBOARD -->
+  <div id="driverDashboardArea" class="hidden">
 
-  <h3>📄 ضروری دستاویزات اور تصاویر</h3>
-  <p>تمام تصاویر لازمی ہیں۔ صاف اور واضح تصاویر اپلوڈ کریں۔</p>
-
-  <div class="field">
-    <label>CNIC فرنٹ تصویر</label>
-    <input type="file" id="cnicFront" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>CNIC بیک تصویر</label>
-    <input type="file" id="cnicBack" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>گاڑی رجسٹریشن کارڈ فرنٹ</label>
-    <input type="file" id="vehicleRegistrationFront" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>گاڑی رجسٹریشن کارڈ بیک</label>
-    <input type="file" id="vehicleRegistrationBack" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>ڈرائیور کی Selfie</label>
-    <input type="file" id="driverSelfie" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>گاڑی کی فرنٹ تصویر</label>
-    <input type="file" id="vehicleFront" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>گاڑی کی بیک تصویر</label>
-    <input type="file" id="vehicleBack" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>Driving License فرنٹ</label>
-    <input type="file" id="licenseFront" accept="image/*" required>
-  </div>
-
-  <div class="field">
-    <label>Driving License بیک</label>
-    <input type="file" id="licenseBack" accept="image/*" required>
-  </div>
-
-  <button class="success" type="submit">
-    رجسٹریشن جمع کریں
-  </button>
-
-  <div id="driverRegistrationStatus" class="status"></div>
-
-</form> 
-  </div>
-
-  <div class="card">
-  <h2>ڈرائیور ڈیش بورڈ</h2>
-
-<button class="primary" onclick="loadDriverDashboard()">
-  ڈیش بورڈ لوڈ کریں
-</button>
-
-<button class="success" type="button" onclick="manualUpdateDriverLocation()">
-  📍 Update My Location
-</button>
-
-<div id="driverLocationStatus" class="status">
-  GPS لوکیشن ابھی اپڈیٹ نہیں ہوئی۔
-</div>
-
-<div id="driverDashboardStatus" class="status">
-  ڈرائیور لاگ اِن کرنے کے بعد ڈیش بورڈ لوڈ کریں۔
-</div> 
-<div id="driverProfile" class="hidden"></div>    
-<div class="grid-2 hidden">
-  <div class="stat">
-    موجودہ ٹاپ اَپ بیلنس
-    <strong id="driverTopupBalance">Rs. 0.00</strong>
-  </div>
-
-  <div class="stat">
-    میری رائیڈز کی کل کمائی
-    <strong id="driverEarningsBalance">Rs. 0.00</strong>
-  </div>
-
-  <div class="stat">
-    CEO Bonus / Overtime Balance
-    <strong id="driverBonusBalance">Rs. 0.00</strong>
-  </div>
-
-</div>
-<div class="card">
-  <button class="primary" onclick="toggleDriverMoreOptions()">
-    ⚙️ مزید آپشنز
-  </button>
-
-  <div id="driverMoreOptions" class="hidden">
-
-    <button class="primary" onclick="toggleDriverPanel('driverBonusSection')">
-      🎁 Bonus History
-    </button>
-
-    <button class="primary" onclick="toggleDriverPanel('driverWithdrawalSection')">
-      💰 Withdrawal
-    </button>
-
-    <button class="primary" onclick="toggleDriverPanel('driverTopupSection')">
-      💳 Top-up جمع کروائیں
-    </button>
-
-  </div>
-</div>
-<div class="card hidden" id="driverBonusSection">
-  <h3>🎁 میری CEO Bonus / Overtime History</h3>
-
-  <button class="primary" type="button"
-    onclick="loadMyBonusHistory()">
-    Bonus History دیکھیں
-  </button>
-
-  <div id="myBonusHistory">
-    Bonus History یہاں نظر آئے گی۔
-  </div>
-</div>
-<div class="card hidden" id="driverWithdrawalSection">
-  <h3>💰 CEO Bonus / Overtime Withdraw کریں</h3>
-
-  <p>کم از کم رقم: Rs. 1,000</p>
-
-  <label>Withdrawal Amount</label>
-  <input
-    type="number"
-    id="withdrawalAmount"
-    min="1000"
-    step="0.01"
-    placeholder="مثلاً 1000"
-  >
-
-  <label>Payment Method</label>
-  <select id="withdrawalMethod">
-    <option value="JazzCash">JazzCash</option>
-    <option value="Easypaisa">Easypaisa</option>
-  </select>
-
-  <label>Account Title</label>
-  <input
-    type="text"
-    id="withdrawalAccountTitle"
-    placeholder="اکاؤنٹ ہولڈر کا نام"
-  >
-
-  <label>Account Number</label>
-  <input
-    type="text"
-    id="withdrawalAccountNumber"
-    placeholder="موبائل اکاؤنٹ نمبر"
-  >
-
-  <button
-    type="button"
-    class="primary"
-    onclick="submitWithdrawalRequest()"
-  >
-    Withdraw Request جمع کریں
-  </button>
-
-  <div id="withdrawalStatus" class="status"></div>
-
-  <h3>میری Withdrawal Requests</h3>
-<div id="myWithdrawalRequests">
-    ابھی کوئی درخواست نہیں۔
-  </div>
-</div>
-
-</div>
-
-<div class="card hidden" id="driverTopupSection">
-    <h3>ٹاپ اَپ جمع کروائیں</h3>
-    <p>کم از کم 300 روپے اور زیادہ سے زیادہ 5000 روپے۔ رقم JazzCash یا Easypaisa میں بھیج کر ٹرانزیکشن کی تفصیل جمع کریں۔ ایڈمن تصدیق کے بعد بیلنس شامل کرے گا۔</p>
-    <div id="driverPaymentAccounts"></div>
-    <form id="driverTopupForm">
-      <div class="field">
-        <label>رقم (300 تا 5000 روپے)</label>
-        <input id="topupAmount" type="number" min="300" max="5000" required>
+    <div class="card">
+      <h2>ڈرائیور ڈیش بورڈ</h2>
+      <div id="driverDashboardStatus" class="status">
+        ڈیش بورڈ لوڈ ہو رہا ہے۔
       </div>
-      <div class="field">
-        <label>ادائیگی کا طریقہ</label>
-        <select id="topupMethod">
+
+      <button class="primary" onclick="showDriverSection('driverRidesPanel')">
+        🚘 میری رائیڈز دیکھیں
+      </button>
+
+      <button class="success" onclick="showDriverLocationPanel()">
+        📍 لوکیشن اپڈیٹ کریں
+      </button>
+
+      <button class="primary" onclick="showDriverSection('driverProfilePanel')">
+        👤 Driver Profile
+      </button>
+
+      <button class="secondary" onclick="logout()">
+        لاگ آؤٹ
+      </button>
+    </div>
+
+    <!-- RIDES PANEL -->
+    <div class="card hidden" id="driverRidesPanel">
+      <h3>🚘 میرے لیے آنے والی رائیڈز</h3>
+      <button class="primary" onclick="loadAvailableRides()">
+        رائیڈز ریفریش کریں
+      </button>
+      <div id="availableRides"></div>
+
+      <hr>
+
+      <h3>میری قبول شدہ رائیڈز</h3>
+      <div id="myDriverRides"></div>
+    </div>
+
+    <!-- LOCATION PANEL -->
+    <div class="card hidden" id="driverLocationPanel">
+      <h3>📍 ڈرائیور لوکیشن</h3>
+      <button class="success" onclick="manualUpdateDriverLocation()">
+        Update My Location
+      </button>
+      <div id="driverLocationStatus" class="status">
+        GPS لوکیشن ابھی اپڈیٹ نہیں ہوئی۔
+      </div>
+    </div>
+
+    <!-- DRIVER PROFILE PANEL -->
+    <div class="card hidden" id="driverProfilePanel">
+      <h3>👤 Driver Profile</h3>
+
+      <div id="driverProfile"></div>
+
+      <div class="grid-2">
+        <div class="stat">
+          موجودہ ٹاپ اَپ بیلنس
+          <strong id="driverTopupBalance">Rs. 0.00</strong>
+        </div>
+
+        <div class="stat">
+          میری رائیڈز کی کل کمائی
+          <strong id="driverEarningsBalance">Rs. 0.00</strong>
+        </div>
+
+        <div class="stat">
+          CEO Bonus / Overtime Balance
+          <strong id="driverBonusBalance">Rs. 0.00</strong>
+        </div>
+      </div>
+
+      <!-- DRIVER REGISTRATION -->
+      <div class="card">
+        <h3>ڈرائیور رجسٹریشن / معلومات</h3>
+
+        <form id="driverRegistrationForm">
+          <div class="grid-2">
+
+            <div class="field">
+              <label>ڈرائیور کا نام</label>
+              <input id="regDriverName" required>
+            </div>
+
+            <div class="field">
+              <label>موبائل نمبر</label>
+              <input id="regDriverPhone" type="tel" required>
+            </div>
+
+            <div class="field">
+              <label>ای میل</label>
+              <input id="regDriverEmail" type="email" required>
+            </div>
+
+            <div class="field">
+              <label>گاڑی کی کمپنی</label>
+              <select id="carCompany" required>
+                <option value="">کمپنی منتخب کریں</option>
+                <option>Suzuki</option>
+                <option>Toyota</option>
+                <option>Honda</option>
+                <option>Kia</option>
+                <option>Hyundai</option>
+                <option>Changan</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>گاڑی کا ماڈل</label>
+              <select id="carModel" required>
+                <option value="">پہلے کمپنی منتخب کریں</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>گاڑی کا نمبر</label>
+              <input id="carNumber" required>
+            </div>
+
+            <div class="field">
+              <label>ڈرائیونگ لائسنس نمبر</label>
+              <input id="licenseNumber" required>
+            </div>
+
+            <div class="field">
+              <label>ادائیگی کا طریقہ</label>
+              <select id="driverPaymentMethod" required>
+                <option value="JazzCash">JazzCash</option>
+                <option value="Easypaisa">Easypaisa</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>اکاؤنٹ ٹائٹل</label>
+              <input id="driverPaymentTitle" required>
+            </div>
+
+            <div class="field">
+              <label>اکاؤنٹ نمبر</label>
+              <input id="driverPaymentNumber" required>
+            </div>
+
+          </div>
+
+          <hr>
+
+          <h3>📄 ضروری دستاویزات اور تصاویر</h3>
+          <p>تمام تصاویر لازمی ہیں۔ صاف اور واضح تصاویر اپلوڈ کریں۔</p>
+
+          <div class="field">
+            <label>CNIC فرنٹ تصویر</label>
+            <input type="file" id="cnicFront" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>CNIC بیک تصویر</label>
+            <input type="file" id="cnicBack" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>گاڑی رجسٹریشن کارڈ فرنٹ</label>
+            <input type="file" id="vehicleRegistrationFront" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>گاڑی رجسٹریشن کارڈ بیک</label>
+            <input type="file" id="vehicleRegistrationBack" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>ڈرائیور کی Selfie</label>
+            <input type="file" id="driverSelfie" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>گاڑی کی فرنٹ تصویر</label>
+            <input type="file" id="vehicleFront" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>گاڑی کی بیک تصویر</label>
+            <input type="file" id="vehicleBack" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>Driving License فرنٹ</label>
+            <input type="file" id="licenseFront" accept="image/*" required>
+          </div>
+
+          <div class="field">
+            <label>Driving License بیک</label>
+            <input type="file" id="licenseBack" accept="image/*" required>
+          </div>
+
+          <button class="success" type="submit">
+            رجسٹریشن جمع کریں
+          </button>
+
+          <div id="driverRegistrationStatus" class="status"></div>
+        </form>
+      </div>
+
+      <!-- MORE OPTIONS -->
+      <div class="card">
+        <button class="primary" onclick="toggleDriverMoreOptions()">
+          ⚙️ مزید آپشنز
+        </button>
+
+        <div id="driverMoreOptions" class="hidden">
+
+          <button class="primary" onclick="toggleDriverPanel('driverBonusSection')">
+            🎁 Bonus History
+          </button>
+
+          <button class="primary" onclick="toggleDriverPanel('driverWithdrawalSection')">
+            💰 Withdrawal
+          </button>
+
+          <button class="primary" onclick="toggleDriverPanel('driverTopupSection')">
+            💳 Top-up جمع کروائیں
+          </button>
+
+        </div>
+      </div>
+
+      <!-- BONUS -->
+      <div class="card hidden" id="driverBonusSection">
+        <h3>🎁 میری CEO Bonus / Overtime History</h3>
+
+        <button class="primary" onclick="loadMyBonusHistory()">
+          Bonus History دیکھیں
+        </button>
+
+        <div id="myBonusHistory">
+          Bonus History یہاں نظر آئے گی۔
+        </div>
+      </div>
+
+      <!-- WITHDRAWAL -->
+      <div class="card hidden" id="driverWithdrawalSection">
+        <h3>💰 CEO Bonus / Overtime Withdraw کریں</h3>
+
+        <p>کم از کم رقم: Rs. 1,000</p>
+
+        <label>Withdrawal Amount</label>
+        <input type="number" id="withdrawalAmount"
+          min="1000" step="0.01" placeholder="مثلاً 1000">
+
+        <label>Payment Method</label>
+        <select id="withdrawalMethod">
           <option value="JazzCash">JazzCash</option>
           <option value="Easypaisa">Easypaisa</option>
         </select>
-      </div>
-      <div class="field">
-        <label>ٹرانزیکشن آئی ڈی / حوالہ نمبر</label>
-        <input id="topupReference" required>
-      </div>
-      <button class="success" type="submit">ٹاپ اَپ درخواست جمع کریں</button>
-      <div id="topupStatus" class="status"></div>
-    </form>
-  </div>
 
-  <div class="card">
-    <h3>میرے لیے آنے والی رائیڈز</h3>
-    <div id="availableRides"></div>
-  </div>
+        <label>Account Title</label>
+        <input type="text" id="withdrawalAccountTitle"
+          placeholder="اکاؤنٹ ہولڈر کا نام">
 
-  <div class="card">
-    <h3>میری قبول شدہ رائیڈز</h3>
-    <div id="myDriverRides"></div>
+        <label>Account Number</label>
+        <input type="text" id="withdrawalAccountNumber"
+          placeholder="موبائل اکاؤنٹ نمبر">
+
+        <button type="button" class="primary"
+          onclick="submitWithdrawalRequest()">
+          Withdraw Request جمع کریں
+        </button>
+
+        <div id="withdrawalStatus" class="status"></div>
+
+        <h3>میری Withdrawal Requests</h3>
+        <div id="myWithdrawalRequests">
+          ابھی کوئی درخواست نہیں۔
+        </div>
+      </div>
+
+      <!-- TOPUP -->
+      <div class="card hidden" id="driverTopupSection">
+        <h3>ٹاپ اَپ جمع کروائیں</h3>
+
+        <p>
+          کم از کم 300 روپے اور زیادہ سے زیادہ 5000 روپے۔
+          رقم JazzCash یا Easypaisa میں بھیج کر ٹرانزیکشن کی تفصیل جمع کریں۔
+          ایڈمن تصدیق کے بعد بیلنس شامل کرے گا۔
+        </p>
+
+        <div id="driverPaymentAccounts"></div>
+
+        <form id="driverTopupForm">
+
+          <div class="field">
+            <label>رقم (300 تا 5000 روپے)</label>
+            <input id="topupAmount" type="number"
+              min="300" max="5000" required>
+          </div>
+
+          <div class="field">
+            <label>ادائیگی کا طریقہ</label>
+            <select id="topupMethod">
+              <option value="JazzCash">JazzCash</option>
+              <option value="Easypaisa">Easypaisa</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>ٹرانزیکشن آئی ڈی / حوالہ نمبر</label>
+            <input id="topupReference" required>
+          </div>
+
+          <button class="success" type="submit">
+            ٹاپ اَپ درخواست جمع کریں
+          </button>
+
+          <div id="topupStatus" class="status"></div>
+        </form>
+      </div>
+
+    </div>
   </div>
 
 </section>
-
 <!-- ADMIN SCREEN -->
 <section id="adminScreen" class="app-screen">
 
@@ -1048,8 +1090,7 @@ async function signup(role){
     "ok"
   );
 }
-
-async function login(role){
+ async function login(role){
   if(!supabaseClient) return;
 
   let email,password,statusId;
@@ -1088,12 +1129,13 @@ async function login(role){
   currentUser = data.user;
   await loadCurrentProfile();
 
+  if(role === "driver"){
+    await loadDriverDashboard();
+    return;
+  }
+
   showStatus(statusId,"لاگ اِن کامیاب ہو گیا۔","ok");
 
-  if(role === "driver"){
-    updateDriverLocation();
-    loadDriverDashboard();
-  }
   if(role === "admin"){
     await checkAdminAccess();
   }
@@ -1117,30 +1159,192 @@ async function logout(){
   closeRideChat();
   stopDriverRideAutoRefresh();
 
+  if(driverLocationWatchId !== null){
+    navigator.geolocation.clearWatch(driverLocationWatchId);
+    driverLocationWatchId = null;
+  }
+
+  driverLocationWatchStarting = false;
+
   const {error} = await supabaseClient.auth.signOut();
-if(error){
-  alert(error.message);
-  return;
-}
 
-if(driverLocationWatchId !== null){
-  navigator.geolocation.clearWatch(driverLocationWatchId);
-  driverLocationWatchId = null;
-}
+  if(error){
+    alert(error.message);
+    return;
+  }
 
-driverLocationWatchStarting = false;
-
-currentUser = null;
+  currentUser = null;
   currentProfile = null;
-  showStatus("passengerAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
-  showStatus("driverAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
-  showStatus("adminStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
-  $("adminPanel").classList.add("hidden");
+
+  $("driverAccountCard").classList.remove("hidden");
+  $("driverDashboardArea").classList.add("hidden");
+
+  $("driverProfilePanel").classList.add("hidden");
+  $("driverRidesPanel").classList.add("hidden");
+  $("driverLocationPanel").classList.add("hidden");
+
+  $("driverMoreOptions").classList.add("hidden");
+
   $("driverProfile").innerHTML = "";
   $("availableRides").innerHTML = "";
   $("myDriverRides").innerHTML = "";
+  $("driverPaymentAccounts").innerHTML = "";
+
+  showStatus("passengerAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
+  showStatus("driverAuthStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
+  showStatus("adminStatus","آپ لاگ آؤٹ ہو گئے ہیں۔");
+
+  $("adminPanel").classList.add("hidden");
+
   alert("لاگ آؤٹ ہو گیا۔");
 }
+
+async function loadDriverDashboard(){
+
+  if(!currentUser){
+    showStatus("driverDashboardStatus","ڈرائیور لاگ اِن کریں۔","error");
+    return;
+  }
+
+  showStatus("driverAuthStatus","ڈرائیور پروفائل چیک ہو رہا ہے...");
+
+  const {data:application,error} = await supabaseClient
+    .from("driver_applications")
+    .select("*")
+    .eq("user_id",currentUser.id)
+    .order("created_at",{ascending:false})
+    .limit(1)
+    .maybeSingle();
+
+  if(error){
+    showStatus("driverAuthStatus",error.message,"error");
+    return;
+  }
+
+  $("driverAccountCard").classList.add("hidden");
+  $("driverDashboardArea").classList.remove("hidden");
+
+  if(!application){
+    showStatus(
+      "driverDashboardStatus",
+      "آپ کی ڈرائیور رجسٹریشن ابھی موجود نہیں۔ Driver Profile کھول کر رجسٹریشن مکمل کریں۔",
+      "error"
+    );
+    return;
+  }
+
+  $("driverProfile").innerHTML =
+    "<div class='item-card'><strong>" +
+    escapeHTML(application.driver_name) +
+    "</strong><p>گاڑی: " +
+    escapeHTML(application.car_company) + " " +
+    escapeHTML(application.car_model) +
+    "</p><p>نمبر: " +
+    escapeHTML(application.car_number) +
+    "</p><p>منظوری: " +
+    escapeHTML(application.status) +
+    "</p></div>";
+
+  if(application.status !== "approved"){
+    showStatus(
+      "driverDashboardStatus",
+      "آپ کی درخواست ابھی منظور نہیں ہوئی۔ منظوری کے بعد رائیڈز دستیاب ہوں گی۔"
+    );
+    return;
+  }
+
+  showStatus(
+    "driverDashboardStatus",
+    "خوش آمدید! آپ کا ڈرائیور ڈیش بورڈ تیار ہے۔",
+    "ok"
+  );
+
+  $("driverAccountCard").classList.add("hidden");
+
+  $("driverRidesPanel").classList.add("hidden");
+  $("driverLocationPanel").classList.add("hidden");
+  $("driverProfilePanel").classList.add("hidden");
+
+  stopDriverRideAutoRefresh();
+  startDriverRideAutoRefresh();
+
+  updateDriverLocation();
+}
+
+function showDriverSection(panelId){
+
+  const panels = [
+    "driverRidesPanel",
+    "driverLocationPanel",
+    "driverProfilePanel"
+  ];
+
+  panels.forEach(function(id){
+    const panel = document.getElementById(id);
+    if(panel) panel.classList.add("hidden");
+  });
+
+  const selected = document.getElementById(panelId);
+
+  if(selected){
+    selected.classList.remove("hidden");
+  }
+
+  if(panelId === "driverRidesPanel"){
+    loadAvailableRides();
+    loadMyDriverRides();
+  }
+}
+
+function showDriverLocationPanel(){
+  showDriverSection("driverLocationPanel");
+  manualUpdateDriverLocation();
+}
+
+function toggleDriverMoreOptions(){
+
+  const box = document.getElementById("driverMoreOptions");
+
+  if(box){
+    box.classList.toggle("hidden");
+  }
+}
+
+async function toggleDriverPanel(panelId){
+
+  const panels = [
+    "driverBonusSection",
+    "driverWithdrawalSection",
+    "driverTopupSection"
+  ];
+
+  const selected = document.getElementById(panelId);
+
+  if(!selected) return;
+
+  const wasOpen = !selected.classList.contains("hidden");
+
+  panels.forEach(function(id){
+    const panel = document.getElementById(id);
+    if(panel) panel.classList.add("hidden");
+  });
+
+  if(wasOpen) return;
+
+  selected.classList.remove("hidden");
+
+  if(panelId === "driverTopupSection"){
+    await loadDriverPaymentAccounts();
+  }
+
+  if(panelId === "driverWithdrawalSection"){
+    await loadMyWithdrawalRequests();
+  }
+
+  if(panelId === "driverBonusSection"){
+    await loadMyBonusHistory();
+  }
+} 
 /* DRIVER LOCATION */
 
 let driverLocationWatchId = null;
