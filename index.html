@@ -1133,7 +1133,10 @@ console.log("DRIVER LOGIN CHECK", currentUser);
 
  if(role === "driver"){
   showStatus(statusId,"Driver dashboard function started...");
-  await loadDriverDashboard();
+  loadDriverDashboard().catch(function(error){
+  showStatus(statusId,"Dashboard Error: " + error.message,"error");
+  console.error(error);
+}); 
   showStatus(statusId,"Driver dashboard function finished.");
   return;
 }
