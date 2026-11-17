@@ -457,66 +457,133 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
   <div class="card">
     <h2>ڈرائیور رجسٹریشن</h2>
-    <form id="driverRegistrationForm">
-      <div class="grid-2">
-        <div class="field">
-          <label>ڈرائیور کا نام</label>
-          <input id="regDriverName" required>
-        </div>
-        <div class="field">
-          <label>موبائل نمبر</label>
-          <input id="regDriverPhone" type="tel" required>
-        </div>
-        <div class="field">
-          <label>ای میل</label>
-          <input id="regDriverEmail" type="email" required>
-        </div>
-        <div class="field">
-          <label>گاڑی کی کمپنی</label>
-          <select id="carCompany" required>
-            <option value="">کمپنی منتخب کریں</option>
-            <option>Suzuki</option>
-            <option>Toyota</option>
-            <option>Honda</option>
-            <option>Kia</option>
-            <option>Hyundai</option>
-            <option>Changan</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>گاڑی کا ماڈل</label>
-          <select id="carModel" required>
-            <option value="">پہلے کمپنی منتخب کریں</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>گاڑی کا نمبر</label>
-          <input id="carNumber" required>
-        </div>
-        <div class="field">
-          <label>ڈرائیونگ لائسنس نمبر</label>
-          <input id="licenseNumber" required>
-        </div>
-        <div class="field">
-          <label>ادائیگی کا طریقہ</label>
-          <select id="driverPaymentMethod" required>
-            <option value="JazzCash">JazzCash</option>
-            <option value="Easypaisa">Easypaisa</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>اکاؤنٹ ٹائٹل</label>
-          <input id="driverPaymentTitle" required>
-        </div>
-        <div class="field">
-          <label>اکاؤنٹ نمبر</label>
-          <input id="driverPaymentNumber" required>
-        </div>
-      </div>
-      <button class="success" type="submit">رجسٹریشن جمع کریں</button>
-      <div id="driverRegistrationStatus" class="status"></div>
-    </form>
+   <form id="driverRegistrationForm">
+
+  <div class="grid-2">
+
+    <div class="field">
+      <label>ڈرائیور کا نام</label>
+      <input id="regDriverName" required>
+    </div>
+
+    <div class="field">
+      <label>موبائل نمبر</label>
+      <input id="regDriverPhone" type="tel" required>
+    </div>
+
+    <div class="field">
+      <label>ای میل</label>
+      <input id="regDriverEmail" type="email" required>
+    </div>
+
+    <div class="field">
+      <label>گاڑی کی کمپنی</label>
+      <select id="carCompany" required>
+        <option value="">کمپنی منتخب کریں</option>
+        <option>Suzuki</option>
+        <option>Toyota</option>
+        <option>Honda</option>
+        <option>Kia</option>
+        <option>Hyundai</option>
+        <option>Changan</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>گاڑی کا ماڈل</label>
+      <select id="carModel" required>
+        <option value="">پہلے کمپنی منتخب کریں</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>گاڑی کا نمبر</label>
+      <input id="carNumber" required>
+    </div>
+
+    <div class="field">
+      <label>ڈرائیونگ لائسنس نمبر</label>
+      <input id="licenseNumber" required>
+    </div>
+
+    <div class="field">
+      <label>ادائیگی کا طریقہ</label>
+      <select id="driverPaymentMethod" required>
+        <option value="JazzCash">JazzCash</option>
+        <option value="Easypaisa">Easypaisa</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>اکاؤنٹ ٹائٹل</label>
+      <input id="driverPaymentTitle" required>
+    </div>
+
+    <div class="field">
+      <label>اکاؤنٹ نمبر</label>
+      <input id="driverPaymentNumber" required>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <h3>📄 ضروری دستاویزات اور تصاویر</h3>
+  <p>تمام تصاویر لازمی ہیں۔ صاف اور واضح تصاویر اپلوڈ کریں۔</p>
+
+  <div class="field">
+    <label>CNIC فرنٹ تصویر</label>
+    <input type="file" id="cnicFront" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>CNIC بیک تصویر</label>
+    <input type="file" id="cnicBack" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>گاڑی رجسٹریشن کارڈ فرنٹ</label>
+    <input type="file" id="vehicleRegistrationFront" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>گاڑی رجسٹریشن کارڈ بیک</label>
+    <input type="file" id="vehicleRegistrationBack" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>ڈرائیور کی Selfie</label>
+    <input type="file" id="driverSelfie" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>گاڑی کی فرنٹ تصویر</label>
+    <input type="file" id="vehicleFront" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>گاڑی کی بیک تصویر</label>
+    <input type="file" id="vehicleBack" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>Driving License فرنٹ</label>
+    <input type="file" id="licenseFront" accept="image/*" required>
+  </div>
+
+  <div class="field">
+    <label>Driving License بیک</label>
+    <input type="file" id="licenseBack" accept="image/*" required>
+  </div>
+
+  <button class="success" type="submit">
+    رجسٹریشن جمع کریں
+  </button>
+
+  <div id="driverRegistrationStatus" class="status"></div>
+
+</form> 
   </div>
 
   <div class="card">
@@ -1607,14 +1674,63 @@ function closeRideChat(){
   chatBookingId = null;
   if($("chatModal")) $("chatModal").style.display = "none";
 }
-
 /* DRIVER REGISTRATION */
 async function submitDriverRegistration(event){
+
   event.preventDefault();
 
   if(!currentUser){
     showStatus("driverRegistrationStatus","پہلے ڈرائیور اکاؤنٹ سے لاگ اِن کریں۔","error");
     return;
+  }
+
+  const fileFields = [
+    ["cnicFront","cnic_front_path"],
+    ["cnicBack","cnic_back_path"],
+    ["vehicleRegistrationFront","vehicle_registration_front_path"],
+    ["vehicleRegistrationBack","vehicle_registration_back_path"],
+    ["driverSelfie","driver_selfie_path"],
+    ["vehicleFront","vehicle_front_path"],
+    ["vehicleBack","vehicle_back_path"],
+    ["licenseFront","license_front_path"],
+    ["licenseBack","license_back_path"]
+  ];
+
+  const files = [];
+
+  for(const [inputId,column] of fileFields){
+
+    const input = $(inputId);
+    const file = input && input.files ? input.files[0] : null;
+
+    if(!file){
+      showStatus(
+        "driverRegistrationStatus",
+        "تمام 9 تصاویر منتخب کرنا ضروری ہے۔",
+        "error"
+      );
+      return;
+    }
+
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+      showStatus(
+        "driverRegistrationStatus",
+        "صرف JPG، PNG یا WEBP تصاویر منتخب کریں۔",
+        "error"
+      );
+      return;
+    }
+
+    if(file.size > 5 * 1024 * 1024){
+      showStatus(
+        "driverRegistrationStatus",
+        "ہر تصویر کا سائز 5 MB سے کم ہونا چاہیے۔",
+        "error"
+      );
+      return;
+    }
+
+    files.push({file,column});
   }
 
   const application = {
@@ -1632,27 +1748,86 @@ async function submitDriverRegistration(event){
     status:"pending"
   };
 
-  showStatus("driverRegistrationStatus","درخواست جمع ہو رہی ہے...");
-
-  const {error} = await supabaseClient
-    .from("driver_applications")
-    .insert(application);
-
-  if(error){
-    showStatus("driverRegistrationStatus",error.message,"error");
-    return;
-  }
-
   showStatus(
     "driverRegistrationStatus",
-    "ڈرائیور رجسٹریشن جمع ہو گئی۔ ایڈمن کی منظوری کا انتظار کریں۔",
-    "ok"
+    "تمام 9 تصاویر اپلوڈ ہو رہی ہیں، انتظار کریں..."
   );
 
-  $("driverRegistrationForm").reset();
-  $("carModel").innerHTML = '<option value="">پہلے کمپنی منتخب کریں</option>';
-}
+  const uploadedPaths = [];
 
+  try{
+
+    const folder = currentUser.id + "/" + crypto.randomUUID();
+
+    for(const item of files){
+
+      const extension = item.file.type === "image/png"
+        ? "png"
+        : item.file.type === "image/webp"
+        ? "webp"
+        : "jpg";
+
+      const path = folder + "/" + item.column + "." + extension;
+
+      const {error:uploadError} = await supabaseClient
+        .storage
+        .from("driver-documents")
+        .upload(path,item.file,{
+          contentType:item.file.type,
+          upsert:false
+        });
+
+      if(uploadError){
+        throw uploadError;
+      }
+
+      uploadedPaths.push(path);
+      application[item.column] = path;
+    }
+
+    showStatus(
+      "driverRegistrationStatus",
+      "تصاویر اپلوڈ ہوگئیں، رجسٹریشن محفوظ ہو رہی ہے..."
+    );
+
+    const {error} = await supabaseClient
+      .from("driver_applications")
+      .insert(application);
+
+    if(error){
+      throw error;
+    }
+
+    showStatus(
+      "driverRegistrationStatus",
+      "ڈرائیور رجسٹریشن اور تمام 9 تصاویر کامیابی سے جمع ہوگئیں۔ ایڈمن کی منظوری کا انتظار کریں۔",
+      "ok"
+    );
+
+    $("driverRegistrationForm").reset();
+
+    $("carModel").innerHTML =
+      '<option value="">پہلے کمپنی منتخب کریں</option>';
+
+  }catch(error){
+
+    console.error("DRIVER REGISTRATION ERROR:",error);
+
+    if(uploadedPaths.length > 0){
+
+      await supabaseClient
+        .storage
+        .from("driver-documents")
+        .remove(uploadedPaths);
+    }
+
+    showStatus(
+      "driverRegistrationStatus",
+      "رجسٹریشن مکمل نہیں ہوئی: " + error.message,
+      "error"
+    );
+  }
+}
 /* DRIVER DASHBOARD */
 async function submitWithdrawalRequest(){
 
@@ -2147,9 +2322,10 @@ async function checkAdminAccess(){
   showStatus("adminStatus","ایڈمن تصدیق کامیاب۔","ok");
   return true;
 }
+ /* ADMIN DASHBOARD */
 
-/* ADMIN DASHBOARD */
 async function loadAdminDashboard(){
+
   const allowed = await checkAdminAccess();
   if(!allowed) return;
 
@@ -2167,7 +2343,9 @@ async function loadAdminDashboard(){
   showStatus("adminStatus","ایڈمن ڈیش بورڈ اپ ڈیٹ ہو گیا۔","ok");
 }
 
+
 async function loadAdminCustomers(){
+
   const {data,error} = await supabaseClient
     .from("profiles")
     .select("*")
@@ -2182,17 +2360,23 @@ async function loadAdminCustomers(){
   $("adminCustomers").innerHTML = "";
 
   (data || []).forEach(function(profile){
+
     const div = document.createElement("div");
     div.className = "item-card";
+
     div.textContent =
       (profile.full_name || "نام موجود نہیں")
       + " | " + (profile.phone || "")
       + " | " + (profile.role || "");
+
     $("adminCustomers").appendChild(div);
+
   });
 }
 
+
 async function loadAdminDrivers(){
+
   const {data,error} = await supabaseClient
     .from("driver_applications")
     .select("*")
@@ -2207,6 +2391,7 @@ async function loadAdminDrivers(){
   $("adminDrivers").innerHTML = "";
 
   (data || []).forEach(function(driver){
+
     const div = document.createElement("div");
     div.className = "item-card";
 
@@ -2217,29 +2402,57 @@ async function loadAdminDrivers(){
       "<p>گاڑی نمبر: " + escapeHTML(driver.car_number) + "</p>" +
       "<p>لائسنس: " + escapeHTML(driver.license_number) + "</p>" +
       "<p>حالت: " + escapeHTML(driver.status) + "</p>" +
+
+      "<button class='primary' data-view-documents='" +
+      escapeHTML(driver.id) +
+      "'>دستاویزات دیکھیں</button> " +
+
       (driver.status !== "approved"
         ? "<button class='success' data-approve-driver='" + escapeHTML(driver.id) + "'>منظور کریں</button> "
         : "") +
+
       (driver.status !== "rejected"
         ? "<button class='danger' data-reject-driver='" + escapeHTML(driver.id) + "'>رد کریں</button>"
         : "");
 
     $("adminDrivers").appendChild(div);
+
   });
+
+
+  $("adminDrivers").querySelectorAll("[data-view-documents]").forEach(function(button){
+
+    button.addEventListener("click",function(){
+
+      viewDriverDocuments(button.dataset.viewDocuments);
+
+    });
+
+  });
+
 
   $("adminDrivers").querySelectorAll("[data-approve-driver]").forEach(function(button){
+
     button.addEventListener("click",function(){
+
       updateDriverStatus(button.dataset.approveDriver,"approved");
+
     });
+
   });
+
 
   $("adminDrivers").querySelectorAll("[data-reject-driver]").forEach(function(button){
-    button.addEventListener("click",function(){
-      updateDriverStatus(button.dataset.rejectDriver,"rejected");
-    });
-  });
-}
 
+    button.addEventListener("click",function(){
+
+      updateDriverStatus(button.dataset.rejectDriver,"rejected");
+
+    });
+
+  });
+
+} 
 async function updateDriverStatus(driverId,newStatus){
   if(!await checkAdminAccess()) return;
 
@@ -2256,7 +2469,93 @@ async function updateDriverStatus(driverId,newStatus){
   alert("ڈرائیور کی درخواست اپ ڈیٹ ہو گئی۔");
   await loadAdminDrivers();
 }
+/* VIEW DRIVER DOCUMENTS */
 
+async function viewDriverDocuments(driverId){
+
+  const allowed = await checkAdminAccess();
+
+  if(!allowed){
+    alert("صرف ایڈمن دستاویزات دیکھ سکتا ہے۔");
+    return;
+  }
+
+  const {data:driver,error} = await supabaseClient
+    .from("driver_applications")
+    .select("*")
+    .eq("id",driverId)
+    .single();
+
+  if(error || !driver){
+    alert("ڈرائیور کی معلومات نہیں ملیں۔");
+    return;
+  }
+
+  const documents = [
+    ["شناختی کارڈ فرنٹ",driver.cnic_front_path],
+    ["شناختی کارڈ بیک",driver.cnic_back_path],
+    ["گاڑی رجسٹریشن فرنٹ",driver.vehicle_registration_front_path],
+    ["گاڑی رجسٹریشن بیک",driver.vehicle_registration_back_path],
+    ["ڈرائیور سیلفی",driver.driver_selfie_path],
+    ["گاڑی فرنٹ",driver.vehicle_front_path],
+    ["گاڑی بیک",driver.vehicle_back_path],
+    ["لائسنس فرنٹ",driver.license_front_path],
+    ["لائسنس بیک",driver.license_back_path]
+  ];
+
+  let html = "<h3>ڈرائیور کی دستاویزات</h3>";
+
+  for(const doc of documents){
+
+    html += "<div class='item-card'><strong>" +
+      escapeHTML(doc[0]) + "</strong>";
+
+    if(!doc[1]){
+      html += "<p>تصویر موجود نہیں</p></div>";
+      continue;
+    }
+
+    const {data,error} = await supabaseClient
+      .storage
+      .from("driver-documents")
+      .createSignedUrl(doc[1],300);
+
+    if(error || !data || !data.signedUrl){
+      html += "<p>تصویر نہیں کھل سکی</p></div>";
+      continue;
+    }
+
+    const safeUrl = escapeHTML(data.signedUrl);
+
+    html +=
+      "<p><a href='" + safeUrl +
+      "' target='_blank' rel='noopener'>تصویر دیکھیں</a></p>" +
+      "</div>";
+  }
+
+  const oldBox = document.getElementById("driverDocumentsBox");
+
+  if(oldBox){
+    oldBox.remove();
+  }
+
+  const box = document.createElement("div");
+  box.id = "driverDocumentsBox";
+  box.className = "card";
+  box.innerHTML = html;
+
+  const closeButton = document.createElement("button");
+  closeButton.className = "secondary";
+  closeButton.textContent = "بند کریں";
+  closeButton.onclick = function(){
+    box.remove();
+  };
+
+  box.appendChild(closeButton);
+
+  $("adminDrivers").prepend(box);
+
+}
 async function loadAdminRides(){
   const {data,error} = await supabaseClient
     .from("bookings")
