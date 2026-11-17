@@ -1029,9 +1029,6 @@ function showScreen(screenId){
 
   window.scrollTo({top:0,behavior:"smooth"});
 
-  if(screenId === "driverScreen" && currentUser){
-    loadDriverDashboard();
-  }
 
   if(screenId === "adminScreen" && currentUser){
     checkAdminAccess();
@@ -1131,11 +1128,11 @@ async function signup(role){
   showStatus(statusId,"Login successful. Driver dashboard loading...");
 console.log("DRIVER LOGIN CHECK", currentUser); 
 if(role === "driver"){
-  showStatus(statusId,"Driver dashboard function started...");
+
+  showScreen("driverScreen");
 
   try{
     await loadDriverDashboard();
-    showStatus(statusId,"Driver dashboard function finished.");
   }catch(error){
     showStatus(statusId,"Dashboard Error: " + error.message,"error");
     console.error(error);
@@ -1211,7 +1208,7 @@ async function logout(){
 
 async function loadDriverDashboard(){
 
-  if(!currentUser){
+  if(!currentUser){ 
     showStatus("driverDashboardStatus","ڈرائیور لاگ اِن کریں۔","error");
     return;
   }
