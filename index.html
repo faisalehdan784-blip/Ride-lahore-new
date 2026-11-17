@@ -1128,6 +1128,8 @@ async function signup(role){
 
   currentUser = data.user;
   await loadCurrentProfile();
+  showStatus(statusId,"Login successful. Driver dashboard loading...");
+console.log("DRIVER LOGIN CHECK", currentUser); 
 
   if(role === "driver"){
     await loadDriverDashboard();
