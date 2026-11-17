@@ -1235,6 +1235,7 @@ async function loadDriverDashboard(){
 
   $("driverAccountCard").classList.add("hidden");
   $("driverDashboardArea").classList.remove("hidden");
+  showStatus("driverAuthStatus","Dashboard screen opened.");
 
   if(!application){
     showStatus(
