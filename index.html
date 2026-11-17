@@ -1235,8 +1235,7 @@ async function updateDriverLocation(){
 
 
 /* MANUAL LOCATION UPDATE */
-
-async function manualUpdateDriverLocation(){
+ async function manualUpdateDriverLocation(){
 
   if(!currentUser){
     showStatus("driverLocationStatus","پہلے ڈرائیور لاگ اِن کریں۔","error");
@@ -1248,7 +1247,7 @@ async function manualUpdateDriverLocation(){
     return;
   }
 
-  showStatus("driverLocationStatus","تازہ GPS لوکیشن حاصل کی جا رہی ہے...");
+  showStatus("driverLocationStatus","GPS لوکیشن حاصل کی جا رہی ہے، انتظار کریں...");
 
   navigator.geolocation.getCurrentPosition(
 
@@ -1268,7 +1267,7 @@ async function manualUpdateDriverLocation(){
       if(error || data !== true){
         showStatus(
           "driverLocationStatus",
-          "لوکیشن محفوظ نہیں ہوئی۔ دوبارہ کوشش کریں۔",
+          "لوکیشن محفوظ نہیں ہوئی: " + (error?.message || "دوبارہ کوشش کریں"),
           "error"
         );
         return;
@@ -1276,7 +1275,7 @@ async function manualUpdateDriverLocation(){
 
       showStatus(
         "driverLocationStatus",
-        "آپ کی لوکیشن کامیابی سے محفوظ ہوگئی۔ وقت: " +
+        "لوکیشن کامیابی سے محفوظ ہوگئی۔ وقت: " +
         new Date().toLocaleTimeString(),
         "ok"
       );
@@ -1284,21 +1283,26 @@ async function manualUpdateDriverLocation(){
 
     function(error){
 
-      showStatus(
-        "driverLocationStatus",
-        "GPS اجازت دیں یا دوبارہ کوشش کریں: " + error.message,
-        "error"
-      );
+      let message = "GPS لوکیشن حاصل نہیں ہوئی۔";
+
+      if(error.code === 1){
+        message = "موبائل کی Settings میں Location اور Browser کی GPS اجازت ON کریں۔";
+      }else if(error.code === 2){
+        message = "GPS سگنل دستیاب نہیں۔ باہر یا کھلی جگہ پر کوشش کریں۔";
+      }else if(error.code === 3){
+        message = "GPS میں وقت لگ رہا ہے۔ دوبارہ کوشش کریں۔";
+      }
+
+      showStatus("driverLocationStatus",message,"error");
     },
 
     {
-      enableHighAccuracy:true,
-      maximumAge:0,
-      timeout:20000
+      enableHighAccuracy:false,
+      maximumAge:10000,
+      timeout:60000
     }
   );
-}
-
+} 
 
 /* DRIVER VEHICLE MODELS */
 const driverModels = {
