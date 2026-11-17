@@ -1217,6 +1217,8 @@ async function loadDriverDashboard(){
   }
 
   showStatus("driverAuthStatus","ڈرائیور پروفائل چیک ہو رہا ہے...");
+ console.log("DRIVER DASHBOARD FUNCTION STARTED");
+ showStatus("driverAuthStatus","Driver dashboard started successfully."); 
 
   const {data:application,error} = await supabaseClient
     .from("driver_applications")
