@@ -603,10 +603,9 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <div id="driverDashboardStatus" class="status">
   ڈرائیور لاگ اِن کرنے کے بعد ڈیش بورڈ لوڈ کریں۔
-</div>  
-    <div id="driverProfile"></div>
-<div class="grid-2">
-
+</div> 
+<div id="driverProfile" class="hidden"></div>    
+<div class="grid-2 hidden">
   <div class="stat">
     موجودہ ٹاپ اَپ بیلنس
     <strong id="driverTopupBalance">Rs. 0.00</strong>
@@ -624,6 +623,21 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 </div>
 <div class="card">
+  <h3>ڈرائیور اکاؤنٹ کے مزید آپشنز</h3>
+
+  <button class="primary" onclick="toggleDriverPanel('driverBonusSection')">
+    🎁 Bonus History
+  </button>
+
+  <button class="primary" onclick="toggleDriverPanel('driverWithdrawalSection')">
+    💰 Withdrawal
+  </button>
+
+  <button class="primary" onclick="toggleDriverPanel('driverTopupSection')">
+    💳 Top-up جمع کروائیں
+  </button>
+</div>    
+<div class="card hidden" id="driverBonusSection">
   <h3>🎁 میری CEO Bonus / Overtime History</h3>
 
   <button class="primary" type="button"
@@ -635,7 +649,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     Bonus History یہاں نظر آئے گی۔
   </div>
 </div>
-<div class="card" id="driverWithdrawalSection">
+<div class="card hidden" id="driverWithdrawalSection">
   <h3>💰 CEO Bonus / Overtime Withdraw کریں</h3>
 
   <p>کم از کم رقم: Rs. 1,000</p>
@@ -687,7 +701,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 </div>
 
-<div class="card">
+<div class="card hidden" id="driverTopupSection">
     <h3>ٹاپ اَپ جمع کروائیں</h3>
     <p>کم از کم 300 روپے اور زیادہ سے زیادہ 5000 روپے۔ رقم JazzCash یا Easypaisa میں بھیج کر ٹرانزیکشن کی تفصیل جمع کریں۔ ایڈمن تصدیق کے بعد بیلنس شامل کرے گا۔</p>
     <div id="driverPaymentAccounts"></div>
@@ -905,6 +919,7 @@ const COMMISSION_RATE = 0.05;
 
 let supabaseClient = null;
 let currentUser = null;
+let driverRideRefreshTimer = null;  
 let currentProfile = null;
 let lastRoute = null;
 let mapObject = null;
@@ -1094,6 +1109,7 @@ async function logout(){
   if(!supabaseClient) return;
 
   closeRideChat();
+  stopDriverRideAutoRefresh();
 
   const {error} = await supabaseClient.auth.signOut();
 if(error){
@@ -2065,6 +2081,7 @@ if(!bonusError){
 }
   await loadDriverPaymentAccounts();
   await loadAvailableRides();
+  startDriverRideAutoRefresh();
   await loadMyDriverRides();
   await loadMyWithdrawalRequests(); 
 
@@ -2157,7 +2174,24 @@ async function loadAvailableRides(){
     });
   });
 }
+function startDriverRideAutoRefresh(){
+  if(driverRideRefreshTimer){
+    clearInterval(driverRideRefreshTimer);
+  }
 
+  driverRideRefreshTimer = setInterval(function(){
+    if(currentUser){
+      loadAvailableRides();
+    }
+  }, 5000);
+}
+
+function stopDriverRideAutoRefresh(){
+  if(driverRideRefreshTimer){
+    clearInterval(driverRideRefreshTimer);
+    driverRideRefreshTimer = null;
+  }
+}
 async function loadMyDriverRides(){
   const box = $("myDriverRides");
   box.innerHTML = "آپ کی رائیڈز لوڈ ہو رہی ہیں...";
@@ -2231,7 +2265,29 @@ function rideIdNumber(value){
   const number = Number(value);
   return Number.isFinite(number) ? number : value;
 }
+function toggleDriverPanel(panelId){
 
+  const panels = [
+    "driverBonusSection",
+    "driverWithdrawalSection",
+    "driverTopupSection"
+  ];
+
+  const selectedPanel = document.getElementById(panelId);
+
+  if(!selectedPanel) return;
+
+  const wasOpen = !selectedPanel.classList.contains("hidden");
+
+  panels.forEach(function(id){
+    const panel = document.getElementById(id);
+    if(panel) panel.classList.add("hidden");
+  });
+
+  if(!wasOpen){
+    selectedPanel.classList.remove("hidden");
+  }
+}
 /* DRIVER TOPUP REQUEST */
 async function submitTopup(event){
   event.preventDefault();
