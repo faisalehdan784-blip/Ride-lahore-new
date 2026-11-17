@@ -1130,14 +1130,17 @@ async function signup(role){
   await loadCurrentProfile();
   showStatus(statusId,"Login successful. Driver dashboard loading...");
 console.log("DRIVER LOGIN CHECK", currentUser); 
-
- if(role === "driver"){
+if(role === "driver"){
   showStatus(statusId,"Driver dashboard function started...");
-  loadDriverDashboard().catch(function(error){
-  showStatus(statusId,"Dashboard Error: " + error.message,"error");
-  console.error(error);
-}); 
-  showStatus(statusId,"Driver dashboard function finished.");
+
+  try{
+    await loadDriverDashboard();
+    showStatus(statusId,"Driver dashboard function finished.");
+  }catch(error){
+    showStatus(statusId,"Dashboard Error: " + error.message,"error");
+    console.error(error);
+  }
+
   return;
 }
 
